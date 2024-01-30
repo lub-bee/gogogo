@@ -1,5 +1,3 @@
-
-
 <x-admin-layout>
     <h1
     class=

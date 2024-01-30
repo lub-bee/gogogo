@@ -1,5 +1,5 @@
-event show
 <x-admin-layout>
+    <h1>event show </h1>
 
     <div>
         {{$event->name}}
