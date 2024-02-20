@@ -32,6 +32,15 @@
         </div>
 
         <div>
+            <label>Start date</label>
+            <br>
+            <input type="date" name="start_at" value="{{old("start_at")}}"/>
+            @error("start_at")
+                <div>{{$message}}</div>
+            @enderror
+        </div>
+
+        <div>
             <label>Cost</label>
             <br>
             <input type="text" name="cost" value="{{old("cost")}}"/>
@@ -56,6 +65,8 @@
                 <div>{{$message}}</div>
             @enderror
         </div>
+
+
 
 
         {{-- <div>

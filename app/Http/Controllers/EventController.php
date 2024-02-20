@@ -3,41 +3,113 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
+use Illuminate\View\View as ViewView;
 use Ramsey\Uuid\Type\Integer;
 
 class EventController extends Controller
 {
 
-    //show all -> index
-    public function index()
+    /**
+     * Display event list
+     *
+     * @return View
+     */
+    public function index(): View
     {
-        $events = Event::all();//todo order?
+        $events = Event::orderBy("start_at","desc")
+            ->orderBy('name',"asc")->get();
+
         return view("admin/event/index")
             ->with("events", $events);
     }
 
+    /**
+     * Display one event detail
+     *
+     * @return View
+     */
     public function show(int $event_id)
     {
         $event = Event::findOrFail($event_id);
+        // $event->user();
+
         return view("admin/event/show")
             ->with("event", $event);
     }
 
-    //create -> create
+    /**
+     * Display create form
+     */
     public function create()
     {
-    ////HELP - CREATING
-        // $event = Event ;
         return view("admin/event/create");
     }
 
-    //Store in the DB -> store
+    /**
+     * Store new event instance
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
             "name" => "required|string|max:255",
+            "start_at" => "required|date",
+            "description_en" => [
+                "nullable",
+                "string",
+                "max:20000"
+            ],
+            "cost" => "numeric|nullable|max:90000",
+        ]);
+
+
+        $event = new Event();
+        $event->name = $validated["name"];
+        $event->start_at = $validated['start_at'];
+        // $event->end_at = $request->input("end_at");
+        $event->description_en = $validated["description_en"];
+        // $event->description_ja = $request->input("description_ja");
+        $event->cost = $validated["cost"];
+        $event->user_id = auth()->user()->id; //automatically design the author
+        $event->save();
+
+        return redirect(route('event.index'))
+            ->with("success", "Event saved successfully");
+    }
+
+    /**
+     * Display edit form
+     *
+     * @param int $event_id
+     * @return View
+     */
+    public function edit(int $event_id): View
+    {
+        $event = Event::findOrFail($event_id);
+        return view("admin/event/edit")
+                ->with('event', $event);
+    }
+
+
+    /**
+     * Update a specific event
+     *
+     * @param int $event_id
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function update(int $event_id, Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            "name" => "required|string|max:255",
+            "start_at" => "required|date",
             "description_en" => [
                 "nullable",
                 "string",
@@ -47,42 +119,32 @@ class EventController extends Controller
             // "user_id" => "required|exists:users,id"
         ]);
 
-
-        $event = new Event();
+        $event = Event::find($event_id);
         $event->name = $validated["name"];
-        // $event->end_at = $request->input("end_at");
-        // $event->end_at = $request->input("end_at");
+        $event->start_at = $validated['start_at'];
         $event->description_en = $validated["description_en"];
-        // $event->description_ja = $request->input("description_ja");
         $event->cost = $validated["cost"];
-
-        $event->user_id = auth()->user()->id;
-        // dd($event);
-
-        // $event->topic_id = $request->input("topic_id");
-        // $event->location_id = $request->input("location_id");
 
         $event->save();
 
-        return redirect()->route("event.show", $event->id);
+        return redirect(route("event.show", $event->id))
+            ->with("success", "Event saved successfully");
     }
 
-    //edit -> edit
-    public function edit($event_id)
+
+    /**
+     * Delete a specific event
+     * todo
+     *
+     * @param int $event_id
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function delete(Request $request, int $event_id): RedirectResponse
     {
-        return view("admin/event/edit");
-    }
-
-    //update
-    public function update(Request $request)
-    {
-
-    }
-
-    //delete
-    public function delete(Request $request)
-    {
-
+        //todo
+        return redirect(route("event.index"))
+            ->with('success',"Event deleted successfully");
     }
 
 }
