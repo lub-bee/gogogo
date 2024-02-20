@@ -33,7 +33,7 @@ class TagController extends Controller
 
     }
 
-    function store($request) : Response
+    function store(Request $request) : Response
     {
         $validated = $request->validate([
             "name" => "required|string|max:60",
