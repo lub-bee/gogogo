@@ -33,7 +33,7 @@ class LocationController extends Controller
 
     }
 
-    function store($request) : Response
+    public function store(Request $request)
     {
         $validated = $request->validate([
             "name" => "required|string|max:255",
@@ -50,8 +50,8 @@ class LocationController extends Controller
             //TO CHECK - Default value vs Nullable.
             "cost" => [
                 "nullable",
-                "enum",
-                "max:1000"
+                //"string",
+                //"max:1000"
             ]
 
         ]);
@@ -66,9 +66,9 @@ class LocationController extends Controller
 
         $location->user_id = auth()->user()->id;
 
-
-
-        return response()->redirect();
+        $location->save();
+        return redirect()->route("location.show", $location->id);
+        //return response()->redirect();
 
     }
 

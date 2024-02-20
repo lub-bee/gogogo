@@ -10,6 +10,7 @@ location show
                 SAVE
             </button>
         </div>
+        <a href="{{$location->id}}/edit" class = "btn btn-default">EDIT</a>
 
 
 </x-admin-layout>
