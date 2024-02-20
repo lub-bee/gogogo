@@ -11,7 +11,7 @@ class MediaController extends Controller
 {
     function index() : View
     {
-        //$medias = Media::all();
+
         $medias = Media::get();
 
         return view("admin.media.index")
