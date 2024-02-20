@@ -142,7 +142,7 @@ class EventController extends Controller
      */
     public function delete(Request $request, int $event_id): RedirectResponse
     {
-        //todo
+        //todo I will do that one
         return redirect(route("event.index"))
             ->with('success',"Event deleted successfully");
     }
