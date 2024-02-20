@@ -25,7 +25,7 @@
             @endif
 
             <!-- Page Content -->
-            <main>
+            <main class="mx-5 my-8">
                 {{ $slot }}
             </main>
         </div>
