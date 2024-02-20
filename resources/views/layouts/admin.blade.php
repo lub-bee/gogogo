@@ -18,6 +18,12 @@
         <div class="min-h-screen bg-gray-100">
             @include('layouts.navigation')
 
+            @if(session("success"))
+                <div class="border border-blue-500 bg-blue-50 text-blue-500 m-4 p-4">
+                    {{ session('success')}}
+                </div>
+            @endif
+
             <!-- Page Content -->
             <main>
                 {{ $slot }}
