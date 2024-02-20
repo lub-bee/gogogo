@@ -34,9 +34,9 @@ class DatabaseSeeder extends Seeder
         ]);
         User::factory(10)->create();
 
-        Event::factory(100)->create();
-        Topic::factory(20)->create();
-        Location:: factory(20)->create();
+        // Event::factory(100)->create();
+        // Topic::factory(20)->create();
+        // Location:: factory(20)->create();
         //Media:: factory(20)->create();
         //Tag:: factory(20)->create();
 
