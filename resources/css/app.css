@@ -1,3 +1,48 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.section{
+    @apply
+        max-w-7xl
+        mx-auto
+        sm:px-6 lg:px-8
+        mb-8
+}
+
+.container{
+    @apply
+        bg-white
+        overflow-hidden
+        shadow-sm sm:rounded-lg
+}
+
+.info{
+    @apply
+        grid grid-cols-4
+        divide-x divide-gray-200
+        border-b border-gray-200
+}
+.info > div{
+    @apply p-4
+    odd:bg-gray-300
+    text-gray-700
+}
+
+.btn{
+    @apply
+        inline-block
+        border border-gray-700 hover:bg-gray-700
+        p-4 py-2
+        text-gray-700 hover:text-white
+        rounded
+        uppercase
+        min-w-32
+        text-center
+}
+.btn-main{
+    @apply
+        bg-white hover:bg-blue-500
+        border-blue-500
+        text-blue-500 hover:text-white
+}

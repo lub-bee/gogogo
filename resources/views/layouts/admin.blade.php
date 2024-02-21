@@ -19,8 +19,10 @@
             @include('layouts.navigation')
 
             @if(session()->has("success"))
-                <div class="border border-blue-500 bg-blue-50 text-blue-500 m-4 p-4">
-                    {{ session('success')}}
+                <div class='mt-8 section'>
+                    <div class="container border border-blue-500 bg-blue-50 text-blue-500 p-4">
+                        {{ session('success')}}
+                    </div>
                 </div>
             @endif
 

@@ -1,86 +1,82 @@
 <x-admin-layout>
-    <h1
-    class=
-        "font-sans
-        text-red-300
-        antialiased
-        "
-    >
-    Create Event
-    </h1>
-    <form method="POST" action={{route('event.store')}}>
+    <div class='section'>
+        <a href={{ route('event.index')}} class="btn">Back</a>
+    </div>
 
-        @csrf
+    <div class='section'>
+        <div class='container p-4'>
 
-        {{-- @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif --}}
+            <form method="POST" action={{route('event.store')}}>
 
-        <div>
-            <label>Event Name</label>
-            <br>
-            <input type="text" name="name" value="{{old("name")}}"/>
-            @error("name")
-                <div>{{$message}}</div>
-            @enderror
+                @csrf
+
+                <div class="info">
+                    <div>Name</div>
+                    <div>
+                        <input type="text" name="name" value="{{old("name")}}"/>
+                        @error("name")
+                            <div>{{$message}}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="info">
+                    <div>Start</div>
+                    <div>
+                        <input type="date" name="start_at" value="{{old("start_at")}}" class="w-full"/>
+                        @error("start_at")
+                        <div>{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div>End</div>
+                    <div>
+
+                        <input type="date" name="end_at" value="{{old("end_at")}}" class="w-full"/>
+                        @error("end_at")
+                        <div>{{$message}}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="info">
+                    <div>Cost</div>
+                    <div>
+                        <input type="text" name="cost" value="{{old("cost")}}"/>
+                        @error("cost")
+                        <div>{{$message}}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="info">
+                    <div>Description (English)</div>
+                    <div class="col-span-3">
+                        <textarea name="description_en" class="w-full">{{old("description_en")}}</textarea>
+                        @error("description_en")
+                        <div>{{$message}}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="info">
+                    <div>Description (Japanese)</div>
+                    <div class="col-span-3">
+                        <textarea name="description_ja" class="w-full"> {{old("description_ja")}}</textarea>
+                        @error("description_ja")
+                        <div>{{$message}}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="flex justify-center gap-4 mt-5">
+                    <a class="btn" href={{ route('event.index') }}>
+                        CANCEL
+                    </a>
+                    <button type="submit" class="btn btn-main">
+                        SAVE
+                    </button>
+                </div>
+            </form>
+
         </div>
-
-        <div>
-            <label>Start date</label>
-            <br>
-            <input type="date" name="start_at" value="{{old("start_at")}}"/>
-            @error("start_at")
-                <div>{{$message}}</div>
-            @enderror
-        </div>
-
-        <div>
-            <label>Cost</label>
-            <br>
-            <input type="text" name="cost" value="{{old("cost")}}"/>
-            @error("cost")
-                <div>{{$message}}</div>
-            @enderror
-        </div>
-
-        <div>
-            <label>Description (English)</label>
-            <br>
-            <textarea name="description_en">{{old("description_en")}}</textarea>
-            @error("description_en")
-                <div>{{$message}}</div>
-            @enderror
-        </div>
-        <div>
-            <label>Description (Japanese)</label>
-            <br>
-            <textarea name="description_ja"> {{old("description_ja")}}</textarea>
-            @error("description_ja")
-                <div>{{$message}}</div>
-            @enderror
-        </div>
-
-
-
-
-        {{-- <div>
-            <select name="select">
-                <option>Value 1</option>
-                <option>Value 2</option>
-                <option>Value 3</option>
-            </select>
-        </div> --}}
-
-        <div>
-            <button type="submit">
-                SAVE
-            </button>
-        </div>
-    </form>
+    </div>
 </x-admin-layout>
