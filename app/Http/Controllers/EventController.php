@@ -29,11 +29,11 @@ class EventController extends Controller
     }
 
     /**
-     * Display one event detail
+     * Display one specific event detail
      *
      * @return View
      */
-    public function show(int $event_id)
+    public function show(int $event_id) : View
     {
         $event = Event::findOrFail($event_id);
         // $event->user();
@@ -45,7 +45,7 @@ class EventController extends Controller
     /**
      * Display create form
      */
-    public function create()
+    public function create() : View
     {
         return view("admin/event/create");
     }
@@ -59,23 +59,42 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            "name" => "required|string|max:255",
-            "start_at" => "required|date",
+            "name" => [
+                "required",
+                "string",
+                "max:255"
+            ],
+            "start_at" => [
+                "required",
+                "date"
+            ],
+            "end_at" => [
+                "nullable",
+                "date",
+            ],
             "description_en" => [
                 "nullable",
                 "string",
                 "max:20000"
             ],
-            "cost" => "numeric|nullable|max:90000",
+            "description_ja" => [
+                "nullable",
+                "string",
+                "max:20000"
+            ],
+            "cost" => [
+                "nullable",
+                "numeric",
+                "max:100000"
+            ],
         ]);
-
 
         $event = new Event();
         $event->name = $validated["name"];
         $event->start_at = $validated['start_at'];
-        // $event->end_at = $request->input("end_at");
+        $event->end_at = $validated['end_at'];
         $event->description_en = $validated["description_en"];
-        // $event->description_ja = $request->input("description_ja");
+        $event->description_ja = $validated["description_ja"];
         $event->cost = $validated["cost"];
         $event->user_id = auth()->user()->id; //automatically design the author
         $event->save();
@@ -97,7 +116,6 @@ class EventController extends Controller
                 ->with('event', $event);
     }
 
-
     /**
      * Update a specific event
      *
@@ -108,21 +126,42 @@ class EventController extends Controller
     public function update(int $event_id, Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            "name" => "required|string|max:255",
-            "start_at" => "required|date",
+            "name" => [
+                "required",
+                "string",
+                "max:255"
+            ],
+            "start_at" => [
+                "required",
+                "date"
+            ],
+            "end_at" => [
+                "nullable",
+                "date",
+            ],
             "description_en" => [
                 "nullable",
                 "string",
                 "max:20000"
             ],
-            "cost" => "numeric|nullable|max:90000",
-            // "user_id" => "required|exists:users,id"
+            "description_ja" => [
+                "nullable",
+                "string",
+                "max:20000"
+            ],
+            "cost" => [
+                "nullable",
+                "numeric",
+                "max:100000"
+            ],
         ]);
 
         $event = Event::find($event_id);
         $event->name = $validated["name"];
         $event->start_at = $validated['start_at'];
+        $event->end_at = $validated['end_at'];
         $event->description_en = $validated["description_en"];
+        $event->description_ja = $validated["description_ja"];
         $event->cost = $validated["cost"];
 
         $event->save();
@@ -130,7 +169,6 @@ class EventController extends Controller
         return redirect(route("event.show", $event->id))
             ->with("success", "Event saved successfully");
     }
-
 
     /**
      * Delete a specific event
