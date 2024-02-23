@@ -12,40 +12,75 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
 
-    function index() : View
+    /**
+     * Display user list
+     *
+     * @return View
+     */
+    public function index() : View
     {
-
-        $users = ModelsUser::get();
+        $users = User::orderBy("name", "desc")
+            ->orderBy('email_verified_at', 'asc')->get();
 
         return view("admin.user.index")
-            ->with("users", $users);
-
+        ->with("users", $users);
     }
 
-    function show(int $user_id) : View
+    /**
+     * Display one specific user
+     *
+     * @return View
+     */
+    public function show(int $user_id) : View
     {
         $user = User::findOrFail($user_id);
         return view("admin/user/show")
            ->with("user", $user);
-
     }
 
-    function create() : View
+    /**
+     * Display create form
+     *
+     * @return View
+     */
+    public function create() : View
     {
         return view("admin.user.create");
-
     }
 
-    function store(Request $request) : RedirectResponse
+    /**
+     * Store new user instance
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function store(Request $request) : RedirectResponse
     {
         $validated = $request->validate([
-            "name" => "required|string|max:60",
-            "email" => ["required","string","max:100"],
+            "name" => [
+                "required",
+                "string",
+                "max:60"
+            ],
+            "email" => [
+                "required",
+                "string",
+                "max:100"
+            ],
+            /**
+             * "password" => [
+             *      "required",
+             *      "string",
+             *      "max:30"
+             *  ],
+             */
+
         ]);
 
         $user = new User();
         $user->name = $validated["name"];
         $user->email = $validated["email"];
+        $user->password = $validated["password"];
 
         $password = "abcd";//generateRandPassword()
 
@@ -54,35 +89,78 @@ class UserController extends Controller
 
         //TODO add email job to the queue with the password in it;
 
-        return redirect()->route("user.index");
-
+        return redirect()->route("user.index")
+            ->with("success", "User saved successfully");
     }
 
-    function edit($user_id) : View
+    /**
+     * Display user edit form
+     *
+     * @param int $user_id
+     * @return View
+     */
+    public function edit(int $user_id) : View
     {
-        $user = ModelsUser::where('id',$user_id)->firstOrFail();
-
-        // $user = User::find($user_id);
-
-        // $user = "user";
-
-        // dd($user_id);
+        $user = User::findOrFail($user_id);
         return view("admin.user.edit")
-            ->with('user_id', $user_id)
             ->with('user', $user);
 
     }
 
-    function update(Request $request) : RedirectResponse
+    /**
+     * Update a specific user
+     *
+     * @param int $user_id
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function update(int $user_id, Request $request): RedirectResponse
     {
-        return redirect()->route("user.index");
+        $validated = $request->validate([
+            "name" => [
+                "required",
+                "string",
+                "max:60"
+            ],
+            "email" => [
+                "required",
+                "string",
+                "max:100"
+            ],
+            /**
+             * "password" => [
+             *      "required",
+             *      "string",
+             *      "max:30"
+             *  ],
+             */
+
+        ]);
+
+        $user = User::find($user_id);
+        $user->name = $validated["name"];
+        $user->email = $validated["email"];
+        $user->password = $validated["password"];
+
+        $user->save();
+
+        return redirect(route("user.show", $user->id))
+            ->with("success","User updated successfully");
 
     }
-
-    function delete(Request $request) : RedirectResponse
+    /**
+     * Delete a specific user
+     * todo
+     *
+     * @param int $user_id
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function delete(int $user_id, Request $request) : RedirectResponse
     {
-
-        return redirect()->route("user.index");
+        //todo
+        return redirect(route("user.index"))
+            ->with("success", "User deleted successfully");
 
     }
 }
