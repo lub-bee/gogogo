@@ -3,40 +3,66 @@
 namespace App\Http\Controllers;
 
 use App\Models\Media;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class MediaController extends Controller
 {
-    function index() : View
+    /**
+     * Display all Media as a list
+     *
+     * @return View
+     */
+    public function index() : View
     {
-
-        $medias = Media::get();
-
+        $medias = Media::orderBy("timestamps", "desc")->get();
+            //to check
+            //->orderBy("","");
         return view("admin.media.index")
             ->with("medias", $medias);
 
     }
 
-    function show(int $media_id) : View
+    /**
+     * Display a specific piece of Media
+     *
+     * @return View
+     */
+    public function show(int $media_id) : View
     {
         $media = Media::findOrFail($media_id);
         return view("admin/media/show")
            ->with("media", $media);
-
     }
 
-    function create() : View
+    /**
+     * Display create form
+     *
+     * @return View
+     */
+    public function create() : View
     {
         return view("admin.media.create");
-
     }
 
-    function store(Request $request) : Response
+    /**
+     * Store a new Media file
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function store(Request $request) : RedirectResponse
     {
         $validated = $request->validate([
-            "name" => "required|string|max:60",
+            //to check - Media migration table does not have a "name" for media
+            //do I need to add one?
+            "name" => [
+                "required",
+                "string",
+                "max:60",
+            ],
             "description_en" => [
                 "nullable",
                 "string",
@@ -47,50 +73,86 @@ class MediaController extends Controller
                 "string",
                 "max:2000"
             ],
-
         ]);
 
         $media = new Media();
         $media->name = $validated["name"];
         $media->description_en = $validated["description_en"];
         $media->description_ja = $validated["description_ja"];
-
-
-
         $media->user_id = auth()->user()->id;
 
+        $media->save();
 
 
-        return response()->redirect();
-
+        return redirect(route("media.index"))
+            ->with("success", "Media file saved successfully");
     }
 
-    function edit($media_id) : View
+    /**
+     * Display edit form
+     *
+     * @param int $media_id
+     * @return View
+     */
+    public function edit(int $media_id): View
     {
-        $media = Media::where('id',$media_id)->firstOrFail();
-
-        // $media = Media::find($media_id);
-        //by author
-
-        // $media = "media";
-
-        // dd($media_id);
+        $media = Media::findOrFail($media_id);
         return view("admin.media.edit")
-            ->with('media_id', $media_id)
             ->with('media', $media);
-
     }
 
-    function update($request) : Response
+    /**
+     * Update a specific event
+     *
+     * @param int $media_id
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function update(int $media_id, Request $request) : RedirectResponse
     {
-        return response()->redirect();
+        $validated = $request->validate([
+            //to check - Media migration table does not have a "name" for media
+            //do I need to add one?
+            "name" => [
+                "required",
+                "string",
+                "max:60",
+            ],
+            "description_en" => [
+                "nullable",
+                "string",
+                "max:2000"
+            ],
+            "description_ja" => [
+                "nullable",
+                "string",
+                "max:2000"
+            ],
+        ]);
 
+        $media = Media::find($media_id);
+        $media->name = $validated["name"];
+        $media->description_en = $validated["description_en"];
+        $media->description_ja = $validated["description_ja"];
+
+        $media->save();
+
+        return redirect(route("media.show", $media->id))
+            ->with("success", "Media file updated successfully");
     }
 
-    function delete($request) : Response
+    /**
+     * Delete a specific Media file
+     *
+     * @param int $media_id
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function delete(int $media_id, Request $request) : RedirectResponse
     {
-
-        return response()->redirect();
+        //todo - Need to check how to delete
+        return redirect(route("media.index"))
+            ->with("success", "Media file  deleted successfully");
 
     }
 }
