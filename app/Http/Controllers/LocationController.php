@@ -185,7 +185,7 @@ class LocationController extends Controller
         //  TO CHECK - $location->user_id = auth()->user()->id;
 
         return redirect(route("location.show", $location->id))
-            ->with("success", "Event saved successfully");
+            ->with("success", "Location updated successfully");
     }
 
     /**
