@@ -180,7 +180,7 @@ class EventController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function delete(Request $request, int $event_id): RedirectResponse
+    public function delete(int $event_id, Request $request): RedirectResponse
     {
         //todo I will do that one
         return redirect(route("event.index"))
