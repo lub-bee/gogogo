@@ -44,6 +44,8 @@ class EventController extends Controller
 
     /**
      * Display create form
+     *
+     * @return View
      */
     public function create() : View
     {
@@ -56,7 +58,7 @@ class EventController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request) : RedirectResponse
     {
         $validated = $request->validate([
             "name" => [
