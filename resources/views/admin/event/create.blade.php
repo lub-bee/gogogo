@@ -2,7 +2,6 @@
     <div class='section'>
         <a href={{ route('event.index')}} class="btn">Back</a>
     </div>
-
     <div class='section'>
         <div class='container p-4'>
 
@@ -11,7 +10,7 @@
                 @csrf
 
                 <div class="info">
-                    <div>Name</div>
+                    <div>Event Name</div>
                     <div>
                         <input type="text" name="name" value="{{old("name")}}"/>
                         @error("name")
@@ -25,7 +24,7 @@
                     <div>
                         <input type="date" name="start_at" value="{{old("start_at")}}" class="w-full"/>
                         @error("start_at")
-                        <div>{{$message}}</div>
+                            <div>{{$message}}</div>
                         @enderror
                     </div>
                     <div>End</div>
@@ -33,7 +32,7 @@
 
                         <input type="date" name="end_at" value="{{old("end_at")}}" class="w-full"/>
                         @error("end_at")
-                        <div>{{$message}}</div>
+                            <div>{{$message}}</div>
                         @enderror
                     </div>
                 </div>
@@ -43,7 +42,7 @@
                     <div>
                         <input type="text" name="cost" value="{{old("cost")}}"/>
                         @error("cost")
-                        <div>{{$message}}</div>
+                            <div>{{$message}}</div>
                         @enderror
                     </div>
                 </div>
@@ -53,7 +52,7 @@
                     <div class="col-span-3">
                         <textarea name="description_en" class="w-full">{{old("description_en")}}</textarea>
                         @error("description_en")
-                        <div>{{$message}}</div>
+                            <div>{{$message}}</div>
                         @enderror
                     </div>
                 </div>
@@ -76,7 +75,6 @@
                     </button>
                 </div>
             </form>
-
         </div>
     </div>
 </x-admin-layout>
