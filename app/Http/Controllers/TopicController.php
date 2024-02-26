@@ -123,7 +123,7 @@ class TopicController extends Controller
             ],
         ]);
 
-        $topic = new Topic();
+        $topic =  Topic::find($topic_id);
         $topic->name = $validated["name"];
         $topic->description_en = $validated["description_en"];
         $topic->description_ja = $validated["description_ja"];

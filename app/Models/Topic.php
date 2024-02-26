@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Topic extends Model
 {
     use HasFactory;
+    protected $casts = [
 
+    ];
     public function user(): BelongsTo
     {
 
