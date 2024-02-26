@@ -1,7 +1,6 @@
 <x-admin-layout>
 
-
-    <div class='section'>
+    <div class='section flex justify'>
         <div class="text-right">
             <a href={{ route('event.create')}} class="btn">Create</a>
         </div>

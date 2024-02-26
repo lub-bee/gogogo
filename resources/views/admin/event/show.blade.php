@@ -10,7 +10,7 @@
 
             <div class='info'>
                 <div>Name</div>
-                <div >
+                <div>
                     {{$event->name}}
                 </div>
             </div>
