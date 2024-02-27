@@ -62,11 +62,11 @@ class UserController extends Controller
                 "string",
                 "max:60"
             ],
-            "email" => [
-                "required",
-                "string",
-                "max:100"
-            ],
+            // "email" => [
+            //     "required",
+            //     "string",
+            //     "max:100"
+            // ],
             /**
              * "password" => [
              *      "required",
@@ -79,12 +79,19 @@ class UserController extends Controller
 
         $user = new User();
         $user->name = $validated["name"];
-        $user->email = $validated["email"];
-        $user->password = $validated["password"];
+        // $user->email = $validated["email"];
+        /**
+         *
+         * to check
+         * how to integrate password/ verified login details whilst still hashed and protected for privacy
+         * guessing I need to read upon tokens
+         */
 
-        $password = "abcd";//generateRandPassword()
+        //$user->password = $validated["password"];
 
-        $user->password = Hash::make($password);
+        // $password = "abcd";//generateRandPassword()
+
+        // $user->password = Hash::make($password);
         $user->save();
 
         //TODO add email job to the queue with the password in it;
@@ -156,7 +163,7 @@ class UserController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function delete(int $user_id, Request $request) : RedirectResponse
+    public function destroy(int $user_id, Request $request) : RedirectResponse
     {
         //todo
         return redirect(route("user.index"))

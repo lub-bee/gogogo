@@ -1,40 +1,56 @@
 <x-admin-layout>
-    <h1 class="font-sans text-red-300 antialiased">
-        Create User
-    </h1>
 
-    <form method="POST" action={{route('user.update')}}>
-        @method("PUT")
+    <div class='section'>
+        <a href={{ route('user.show', $user->id)}} class="btn">Back</a>
+    </div>
 
-        @csrf
+    <div class='section'>
+        <div class='container p-4 '>
 
-        <div>
-            <label>User Name</label>
-            <br>
-            <input type="text" name="name" value="{{old("name")}}"/>
-            @error("name")
-                <div>{{$message}}</div>
-            @enderror
+            <form method="POST" action={{route('user.update',  $user->id)}}>
+                @csrf
+                @method('PUT')
+
+                <div class="info">
+                    <div>User Name</div>
+                    <div>
+                        <input type="text" name="name" value="{{$user->name}}"/>
+                        @error("name")
+                            <div>{{$message}}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="info">
+                    <div>Email</div>
+                    <div>
+                        <input type="text" name="name" value="{{$user->email}}"/>
+                        @error("name")
+                        <div>{{$message}}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="flex mt-5 gap-4 justify-center">
+                    <a href={{ route('user.show', $user->id)}} class="btn">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-main">
+                        Edit
+                    </button>
+
+                </div>
+
+            </form>
         </div>
+    </div>
 
-        <div>
-            <label>Email</label>
-            <br>
-            <input type="text" name="email" value="{{old("email")}}"/>
-            @error("email")
-                <div>{{$message}}</div>
-            @enderror
+    <div class="section">
+        <div class="container">
+            <a href={{ route('user.destroy', $user->id)}} class="btn">
+                Delete
+            </a>
         </div>
-            {{--
-            REGISTERING A NEW USER - SEPARATE LARAVEL SYSTEM?
-            HASH - TO HIDE PASSWORD?
+    </div>
 
-            --}}
-
-        <div>
-            <button type="submit">
-                UPDATE
-            </button>
-        </div>
-    </form>
 </x-admin-layout>
