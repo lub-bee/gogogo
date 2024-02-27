@@ -30,15 +30,15 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             "name" => "Mahul",
             "email" => "mahul@patel.com",
-            "password" => Hash::make('gonow'),
+            "password" => Hash::make('hello'),
         ]);
-        User::factory(10)->create();
+        User::factory(5)->create();
 
-        // Event::factory(100)->create();
-        // Topic::factory(20)->create();
-        // Location:: factory(20)->create();
-        //Media:: factory(20)->create();
-        //Tag:: factory(20)->create();
+        Event::factory(5)->create();
+        Topic::factory(5)->create();
+        Location:: factory(5)->create();
+        Media:: factory(5)->create();
+        Tag:: factory(5)->create();
 
 
     }
