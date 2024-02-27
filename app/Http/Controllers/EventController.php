@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EventCreateRequest;
+use App\Http\Requests\EventDeleteRequest;
 use App\Models\Event;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -55,41 +57,12 @@ class EventController extends Controller
     /**
      * Store new event instance
      *
-     * @param Request $request
+     * @param EventCreateRequest $request
      * @return RedirectResponse
      */
-    public function store(Request $request) : RedirectResponse
+    public function store(EventCreateRequest $request) : RedirectResponse
     {
-        $validated = $request->validate([
-            "name" => [
-                "required",
-                "string",
-                "max:255"
-            ],
-            "start_at" => [
-                "required",
-                "date"
-            ],
-            "end_at" => [
-                "nullable",
-                "date",
-            ],
-            "description_en" => [
-                "nullable",
-                "string",
-                "max:20000"
-            ],
-            "description_ja" => [
-                "nullable",
-                "string",
-                "max:20000"
-            ],
-            "cost" => [
-                "nullable",
-                "numeric",
-                "max:100000"
-            ],
-        ]);
+        $validated = $request->validated();
 
         $event = new Event();
         $event->name = $validated["name"];
@@ -122,41 +95,12 @@ class EventController extends Controller
      * Update a specific event
      *
      * @param int $event_id
-     * @param Request $request
+     * @param EventCreateRequest $request
      * @return RedirectResponse
      */
-    public function update(int $event_id, Request $request): RedirectResponse
+    public function update(int $event_id, EventCreateRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            "name" => [
-                "required",
-                "string",
-                "max:255"
-            ],
-            "start_at" => [
-                "required",
-                "date"
-            ],
-            "end_at" => [
-                "nullable",
-                "date",
-            ],
-            "description_en" => [
-                "nullable",
-                "string",
-                "max:20000"
-            ],
-            "description_ja" => [
-                "nullable",
-                "string",
-                "max:20000"
-            ],
-            "cost" => [
-                "nullable",
-                "numeric",
-                "max:100000"
-            ],
-        ]);
+        $validated = $request->validated();
 
         $event = Event::find($event_id);
         $event->name = $validated["name"];
@@ -176,15 +120,18 @@ class EventController extends Controller
      * Delete a specific event
      * todo
      *
-     * @param int $event_id
-     * @param Request $request
+     * @param EventDeleteRequest $request
      * @return RedirectResponse
      */
-    public function delete(int $event_id, Request $request): RedirectResponse
+    public function destroy(EventDeleteRequest $request): RedirectResponse
     {
-        //todo I will do that one
+        $validated = $request->validated();
+
+        $event = Event::findOrFail($validated['event_id']);
+        $event->delete();
+
         return redirect(route("event.index"))
-            ->with('success',"Event deleted successfully");
+            ->with('success',"Event [$event->name] deleted successfully");
     }
 
 }

@@ -23,14 +23,14 @@
                 <div class="info">
                     <div>Start</div>
                     <div>
-                        <input type="text" name="start_at" value="{{$event->start_at}}"/>
+                        <input type="date" name="start_at" value="{{$event->start_at}}" />
                         @error("start_at")
                             <div>{{$message}}</div>
                         @enderror
                     </div>
                     <div>End</div>
                     <div>
-                        <input type="text" name="end_at" value="{{$event->end_at}}"/>
+                        <input type="date" name="end_at" value="{{$event->end_at}}"/>
                         @error("end_at")
                             <div>{{$message}}</div>
                         @enderror
@@ -78,7 +78,22 @@
 
             </div>
         </div>
+    </form>
 
+    <form method="POST" action={{ route('event.destroy') }} >
+        <div class='section'>
+            <div class='container p-4 '>
+                @csrf
+                @method("delete")
+
+                <input type="hidden" name="event_id" value={{$event->id}} />
+
+                <div class="text-xl">
+                    Delete the event
+                </div>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
     </form>
 
 </x-admin-layout>
