@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserCreateRequest;
+use App\Http\Requests\UserDeleteRequest;
 use App\Models\User as ModelsUser;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\User;
@@ -51,31 +53,19 @@ class UserController extends Controller
     /**
      * Store new user instance
      *
-     * @param Request $request
+     * @param UserCreateRequest $request
      * @return RedirectResponse
      */
-    public function store(Request $request) : RedirectResponse
+    public function store(UserCreateRequest $request) : RedirectResponse
     {
-        $validated = $request->validate([
-            "name" => [
-                "required",
-                "string",
-                "max:60"
-            ],
+        $validated = $request->validated();
+
             // "email" => [
             //     "required",
             //     "string",
             //     "max:100"
             // ],
-            /**
-             * "password" => [
-             *      "required",
-             *      "string",
-             *      "max:30"
-             *  ],
-             */
-
-        ]);
+        //]);
 
         $user = new User();
         $user->name = $validated["name"];
@@ -87,11 +77,6 @@ class UserController extends Controller
          * guessing I need to read upon tokens
          */
 
-        //$user->password = $validated["password"];
-
-        // $password = "abcd";//generateRandPassword()
-
-        // $user->password = Hash::make($password);
         $user->save();
 
         //TODO add email job to the queue with the password in it;
@@ -118,31 +103,12 @@ class UserController extends Controller
      * Update a specific user
      *
      * @param int $user_id
-     * @param Request $request
+     * @param UserCreateRequest $request
      * @return RedirectResponse
      */
-    public function update(int $user_id, Request $request): RedirectResponse
+    public function update(int $user_id, UserCreateRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            "name" => [
-                "required",
-                "string",
-                "max:60"
-            ],
-            "email" => [
-                "required",
-                "string",
-                "max:100"
-            ],
-            /**
-             * "password" => [
-             *      "required",
-             *      "string",
-             *      "max:30"
-             *  ],
-             */
-
-        ]);
+        $validated = $request->validated();
 
         $user = User::find($user_id);
         $user->name = $validated["name"];
@@ -157,17 +123,19 @@ class UserController extends Controller
     }
     /**
      * Delete a specific user
-     * todo
      *
-     * @param int $user_id
-     * @param Request $request
+     * @param UserDeleteRequest $request
      * @return RedirectResponse
      */
-    public function destroy(int $user_id, Request $request) : RedirectResponse
+    public function destroy(UserDeleteRequest $request) : RedirectResponse
     {
-        //todo
+        $validated = $request->validated();
+
+        $user = User::findOrFail($validated['$user_id']);
+        $user->delete();
+
         return redirect(route("user.index"))
-            ->with("success", "User deleted successfully");
+            ->with("success", "User [$user->name] deleted successfully");
 
     }
 }

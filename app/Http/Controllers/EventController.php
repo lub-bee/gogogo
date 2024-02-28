@@ -113,12 +113,11 @@ class EventController extends Controller
         $event->save();
 
         return redirect(route("event.show", $event->id))
-            ->with("success", "Event saved successfully");
+            ->with("success", "Event updated successfully");
     }
 
     /**
      * Delete a specific event
-     * todo
      *
      * @param EventDeleteRequest $request
      * @return RedirectResponse

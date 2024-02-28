@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TopicCreateRequest;
+use App\Http\Requests\TopicDeleteRequest;
 use App\Models\Topic;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -49,28 +51,12 @@ class TopicController extends Controller
     /**
      * Store new topic instance
      *
-     * @param Request $request
+     * @param TopicCreateRequest $request
      * @return RedirectResponse
      */
-    public function store(Request $request) : RedirectResponse
+    public function store(TopicCreateRequest $request) : RedirectResponse
     {
-        $validated = $request->validate([
-            "name" => [
-                "required",
-                "string",
-                "max:60"
-            ],
-            "description_en" => [
-                "nullable",
-                "string",
-                "max:2000"
-            ],
-            "description_ja" => [
-                "nullable",
-                "string",
-                "max:2000"
-            ],
-        ]);
+        $validated = $request->validated();
 
         $topic = new Topic();
         $topic->name = $validated["name"];
@@ -100,28 +86,12 @@ class TopicController extends Controller
      * Update a specific Topic
      *
      * @param int $topic_id
-     * @param Request $request
+     * @param TopicCreateRequest $request
      * @return RedirectResponse
      */
-    public function update(int $topic_id , Request $request) : RedirectResponse
+    public function update(int $topic_id , TopicCreateRequest $request) : RedirectResponse
     {
-        $validated = $request->validate([
-            "name" => [
-                "required",
-                "string",
-                "max:60"
-            ],
-            "description_en" => [
-                "nullable",
-                "string",
-                "max:2000"
-            ],
-            "description_ja" => [
-                "nullable",
-                "string",
-                "max:2000"
-            ],
-        ]);
+        $validated = $request->validated();
 
         $topic =  Topic::find($topic_id);
         $topic->name = $validated["name"];
@@ -135,16 +105,18 @@ class TopicController extends Controller
     }
     /**
      * Delete a specific topic
-     * todo
      *
-     * @param int $topic_id
-     * @param Request $request
+     * @param TopicDeleteRequest $request
      * @return RedirectResponse
      */
-    public function delete(int $topic_id, Request $request) : RedirectResponse
+    public function destroy(TopicDeleteRequest $request) : RedirectResponse
     {
-        //todo
+        $validated = $request->validated();
+
+        $topic = Topic::findOrFail($validated['$topic_id']);
+        $topic->delete();
+
         return redirect(route("topic.index"))
-        ->with('success','Event deleted successfully');
+            ->with('success',"Topic [$topic->name] deleted successfully");
     }
 }

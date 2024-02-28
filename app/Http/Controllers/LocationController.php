@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LocationCreateRequest;
+use App\Http\Requests\LocationDeleteRequest;
 use App\Models\Location;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -41,8 +43,10 @@ class LocationController extends Controller
 
 /**
  * Display the create form
+ *
+ * @return View
  */
-    function create() : View
+    public function create() : View
     {
         return view("admin.location.create");
 
@@ -51,49 +55,13 @@ class LocationController extends Controller
     /**
      * Store a new location
      *
-     * @param Request $request
+     * @param LocationCreateRequest $request
      * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(LocationCreateRequest $request) : RedirectResponse
     {
-        $validated = $request->validate([
-            "name" => [
-                "required",
-                "string",
-                "max:255"
-            ],
-            "description_en" => [
-                "nullable",
-                "string",
-                "max:2000"
-            ],
-            "description_ja" => [
-                "nullable",
-                "string",
-                "max:2000"
-            ],
-            "gps_long" => [
-                "nullable",
-                "string",
-                "max:15"
-            ],
-            "gps_lat" => [
-                "nullable",
-                "string",
-                "max:15"
-            ],
-            "website_url" => [
-                "nullable",
-                "string",
-                "max:200"
-            ],
-            //TO CHECK - Default value vs Nullable.
-            "cost" => [
-                "nullable",
-                "string",
-                "max:100000"
-            ]
-        ]);
+        $validated = $request->validated();
+
 
         $location = new Location();
         $location->name = $validated["name"];
@@ -127,49 +95,12 @@ class LocationController extends Controller
      * Update a specific location
      *
      * @param int $location_id
-     * @param Request $request
+     * @param LocationCreateRequest $request
      * @return RedirectResponse
      */
-    public function update(int $location_id, Request $request): RedirectResponse
+    public function update(int $location_id, LocationCreateRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            "name" => [
-                "required",
-                "string",
-                "max:255"
-            ],
-            "description_en" => [
-                "nullable",
-                "string",
-                "max:2000"
-            ],
-            "description_ja" => [
-                "nullable",
-                "string",
-                "max:2000"
-            ],
-            "gps_long" => [
-                "nullable",
-                "string",
-                "max:15"
-            ],
-            "gps_lat" => [
-                "nullable",
-                "string",
-                "max:15"
-            ],
-            "website_url" => [
-                "nullable",
-                "string",
-                "max:200"
-            ],
-            //TO CHECK - Default value vs Nullable.
-            "cost" => [
-                "nullable",
-                "string",
-                "max:100000"
-            ]
-        ]);
+        $validated = $request->validated();
 
         $location = Location::find($location_id);
         $location->name = $validated["name"];
@@ -190,16 +121,18 @@ class LocationController extends Controller
 
     /**
      * Delete a specific location
-     * todo
      *
-     * @param int $location_id
-     * @param Request $request
+     * @param LocationDeleteRequest $request
      * @return RedirectResponse
      */
-    public function delete(Request $request, int $location_id): RedirectResponse
+    public function destroy(LocationDeleteRequest $request): RedirectResponse
     {
-        //TODO
+        $validated = $request->validated();
+
+        $location = Location::findOrFail($validated['location_id']);
+        $location->delete();
+
         return redirect(route("location.index"))
-            ->with('success', "Location deleted successfully");
+            ->with('success', "Location [$location->name} deleted successfully");
     }
 }
