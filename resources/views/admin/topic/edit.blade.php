@@ -22,7 +22,7 @@
                 <div class="info">
                     <div>Description (English)</div>
                     <div>
-                        <input type="text" name="name" value="{{$topic->description_en}}"/>
+                        <input type="text" name="description_en" value="{{$topic->description_en}}"/>
                         @error("name")
                             <div>{{$message}}</div>
                         @enderror
@@ -32,7 +32,7 @@
                 <div class="info">
                     <div>Description (Japanese)</div>
                     <div>
-                        <input type="text" name="name" value="{{$topic->description_ja}}"/>
+                        <input type="text" name="description_ja" value="{{$topic->description_ja}}"/>
                         @error("name")
                             <div>{{$message}}</div>
                         @enderror
