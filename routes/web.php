@@ -50,7 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/topic/{topic_id}/edit',[TopicController::class,"edit"])->name("topic.edit");
     Route::get('/topic/{topic_id}', [TopicController::class, "show"])->name('topic.show');
     Route::put('/topic/{topic_id}',[TopicController::class,"update"])->name('topic.update');
-    Route::delete('/topic/{topic_id}',[TopicController::class,"destroy"])->name('topic.destroy');
+    Route::delete('/topic',[TopicController::class,"destroy"])->name('topic.destroy');
 
 
     //Location
@@ -60,7 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/location/{location_id}/edit',[LocationController::class,"edit"])->name('location.edit');
     Route::get('/location/{location_id}', [LocationController::class, "show"])->name('location.show');
     Route::put('/location/{location_id}',[LocationController::class,"update"])->name('location.update');
-    Route::delete('/location/{location_id}',[LocationController::class,"destroy"])->name('location.destroy');
+    Route::delete('/location',[LocationController::class,"destroy"])->name('location.destroy');
 
 
     //User
@@ -70,7 +70,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/user/{user_id}/edit',[UserController::class,"edit"])->name('user.edit');
     Route::get('/user/{user_id}', [UserController::class, "show"])->name('user.show');
     Route::put('/user/{user_id}',[UserController::class,"update"])->name('user.update');
-    Route::delete('/user/{user_id}',[UserController::class,"destroy"])->name('user.destroy');
+    Route::delete('/user',[UserController::class,"destroy"])->name('user.destroy');
 
 
     //Media
@@ -80,7 +80,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/media/{media_id}/edit',[MediaController::class,"edit"])->name('media.edit');
     Route::get('/media/{media_id}', [MediaController::class, "show"])->name('media.show');
     Route::put('/media/{media_id}',[MediaController::class,"update"])->name('media.update');
-    Route::delete('/media/{media_id}',[MediaController::class,"destroy"])->name('media.destroy');
+    Route::delete('/media',[MediaController::class,"destroy"])->name('media.destroy');
 
     //Tag
     Route::get('/tag',[TagController::class, "index"])->name('tag.index');
@@ -89,7 +89,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/tag/{tag_id}/edit',[TagController::class,"edit"])->name('tag.edit');
     Route::get('/tag/{tag_id}', [TagController::class, "show"])->name('tag.show');
     Route::put('/tag/{tag_id}',[TagController::class,"update"])->name('tag.update');
-    Route::delete('/tag/{tag_id}',[TagController::class,"destroy"])->name('tag.destroy');
+    Route::delete('/tag',[TagController::class,"destroy"])->name('tag.destroy');
 
 });
 
