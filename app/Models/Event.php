@@ -36,12 +36,12 @@ class Event extends Model
 
     public function topic(): HasOne
     {
-        return $this->hasOne(Topic::class);
+        return $this->hasOne(Topic::class, "id", "topic_id");
     }
 
     public function location(): HasOne
     {
-        return $this->hasOne(Location::class);
+        return $this->hasOne(Location::class, "id", "location_id");
     }
 
     public function media(): HasMany
