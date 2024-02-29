@@ -7,7 +7,7 @@
     </div>
 
     <div class='section'>
-        <div class='container'>
+        <div class='block-container'>
             <table class="table mt-5">
                 <tr>
                     <th>User Name</th>

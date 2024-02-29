@@ -5,8 +5,21 @@
         <a href={{ route('topic.edit', $topic->id)}} class="btn">Edit</a>
     </div>
 
+    @if($topic->status == 'draft')
     <div class='section'>
-        <div class='container p-4'>
+        <div class='block-container p-4'>
+            <form class="flex justify-between items-center gap-5">
+                <x-input-info level="warning" class="flex-1">
+                    This topic is currently still in the Draft state.
+                </x-input-info>
+                <button type="submit" class="btn btn-main">Publish Now</button>
+            </form>
+        </div>
+    </div>
+    @endif
+
+    <div class='section'>
+        <div class='block-container p-4'>
 
             <div class='info'>
                 <div>Name</div>
@@ -15,23 +28,35 @@
                 </div>
             </div>
 
-            <div class="info">
-                <div>Description (English)</div>
-                <div class=''>
-                    {{$topic->description_en}}
+            <div class='info'>
+                <div>Memo</div>
+                <div>
+                    {{$topic->memo}}
                 </div>
             </div>
 
             <div class="info">
-                <div>Description (Japanese)</div>
-                <div class=''>
-                    {{$topic->description_ja}}
+                <div>Content (EN)</div>
+                <div class='formated-content col-span-3'>
+                    {!! $topic->description_en !!}
+                </div>
+            </div>
+
+            <div class="info">
+                <div>Content (JA)</div>
+                <div class='formated-content col-span-3'>
+                    {!! $topic->description_ja !!}
                 </div>
             </div>
 
             <div class="info">
                 <div>Author</div>
-                <div><a href={{route('topic.show',$topic->user->id)}}>{{ $topic->user->name}}</a></div>
+                <div><a href={{route('topic.show',$topic->user->id)}} class="link">{{ $topic->user->name}}</a></div>
+            </div>
+
+            <div class="info">
+                <div>Created at</div>
+                <div>{{ $topic->created_at }}</div>
                 <div>Last Update</div>
                 <div>{{ $topic->updated_at }}</div>
             </div>

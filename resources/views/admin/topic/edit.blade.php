@@ -1,4 +1,6 @@
 <x-admin-layout>
+    <x-editor-loader/>
+
     <form method="POST" action={{route("topic.update", $topic->id)}}>
         @csrf
         @method("PUT")
@@ -7,44 +9,72 @@
             <a href={{ route('topic.show', $topic->id)}} class="btn">Back</a>
         </div>
         <div class="section">
-            <div class="container p-4">
+            <div class="block-container p-4">
 
                 <div class="info">
                     <div>Name</div>
-                    <div>
-                        <input type="text" name="name" value="{{$topic->name}}"/>
-                        @error("name")
-                            <div>{{$message}}</div>
-                        @enderror
+                    <div class="col-span-3">
+                        <x-input-error :messages="$errors->get('name')" class="mb-2" />
+                        <input type="text" name="name" class="w-full" value="{{$topic->name}}"/>
                     </div>
                 </div>
 
                 <div class="info">
-                    <div>Description (English)</div>
-                    <div>
-                        <input type="text" name="description_en" value="{{$topic->description_en}}"/>
-                        @error("name")
-                            <div>{{$message}}</div>
-                        @enderror
+                    <div>Memo</div>
+                    <div class="col-span-3">
+                        <x-input-error :messages="$errors->get('memo')" class="mb-2" />
+                        <input type="text" name="memo" class="w-full" value="{{$topic->memo}}"/>
+                        <x-input-info level="warning" class="mt-2">Only visible by admin</x-input-info>
                     </div>
                 </div>
 
                 <div class="info">
-                    <div>Description (Japanese)</div>
-                    <div>
-                        <input type="text" name="description_ja" value="{{$topic->description_ja}}"/>
-                        @error("name")
-                            <div>{{$message}}</div>
-                        @enderror
+                    <div>Content (EN)</div>
+                    <div class="col-span-3">
+                        <x-input-error :messages="$errors->get('description_en')" class="mb-2" />
+                        <textarea name="description_en" class="editor">{{ $topic->description_en}}</textarea>
                     </div>
                 </div>
 
-            <div>
-                Last modification : {{$topic->updated_at}}
+                <div class="info">
+                    <div>Content (JA)</div>
+                    <div class="col-span-3">
+                        <x-input-error :messages="$errors->get('description_ja')" class="mb-2" />
+                        <textarea name="description_ja" class="editor">{{$topic->description_ja}}</textarea>
+                    </div>
+                </div>
+
+                <div class="info">
+                    <div>Status</div>
+                    <div class="col-span-3">
+                        <div>
+                            <label><input type="radio" name="status" value="draft" {{ old($topic->status, 'draft') == 'draft' ? 'checked' : '' }}> Draft</label>
+                        </div>
+                        <div>
+                            <label><input type="radio" name="status" value="published" {{ old($topic->status, 'draft') == 'published' ? 'checked' : '' }}> Published</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info">
+                    <div>Author</div>
+                    <div class="col-span-3">
+                        {{ $topic->user->name }}
+                    </div>
+                </div>
+
+                <div class="info">
+                    <div>Created at</div>
+                    <div>
+                        {{ $topic->created_at->format('Y-m-d H:i:s') }}
+                    </div>
+                    <div>Updated at</div>
+                    <div>
+                        {{ $topic->updated_at->format('Y-m-d H:i:s') }}
+                    </div>
+                </div>
             </div>
-            <div>
-                Author : {{$topic->user->name}}
-            </div>
+
             <div class="flex mt-5 gap-4 justify-center">
                 <a href={{ route('topic.show', $topic->id)}} class="btn">
                     Cancel

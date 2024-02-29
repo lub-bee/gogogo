@@ -5,7 +5,7 @@
     </div>
 
     <div class='section'>
-        <div class='container p-4 '>
+        <div class='block-container p-4 '>
 
             <form method="POST" action={{route('user.update',  $user->id)}}>
                 @csrf
@@ -46,7 +46,7 @@
     </div>
 
     <div class="section">
-        <div class="container">
+        <div class="block-container">
             <a href={{ route('user.destroy', $user->id)}} class="btn">
                 Delete
             </a>

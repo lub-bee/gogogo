@@ -3,7 +3,7 @@
         <a href={{ route('event.index')}} class="btn">Back</a>
     </div>
     <div class='section'>
-        <div class='container p-4'>
+        <div class='block-container p-4'>
 
             <form method="POST" action={{route('event.store')}}>
 
