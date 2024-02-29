@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Event extends Model
 {
@@ -18,17 +20,32 @@ class Event extends Model
     public function user(): BelongsTo
     {
 
-/*
- how to use in the view?
- $model->relatedtable()-> ...
- this comes before the database request
+        /*
+        how to use in the view?
+        $model->relatedtable()-> ...
+        this comes before the database request
 
- $model->relatedtable->property
- this comes after the database request
- this gives you the model entity/property which you can use or see easily.
- */
+        $model->relatedtable->property
+        this comes after the database request
+        this gives you the model entity/property which you can use or see easily.
+        */
 
 
         return $this->belongsTo(User::class);
+    }
+
+    public function topic(): HasOne
+    {
+        return $this->hasOne(Topic::class, "id", "topic_id");
+    }
+
+    public function location(): HasOne
+    {
+        return $this->hasOne(Location::class, "id", "location_id");
+    }
+
+    public function media(): HasMany
+    {
+        return $this->hasMany(Media::class);
     }
 }
