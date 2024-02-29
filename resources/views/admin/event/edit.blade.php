@@ -8,7 +8,7 @@
         </div>
 
         <div class='section'>
-            <div class='container p-4 '>
+            <div class='block-container p-4 '>
 
                 <div class="info">
                     <div>Name</div>
@@ -82,7 +82,7 @@
 
     <form method="POST" action={{ route('event.destroy') }} >
         <div class='section'>
-            <div class='container p-4 '>
+            <div class='block-container p-4 '>
                 @csrf
                 @method("delete")
 

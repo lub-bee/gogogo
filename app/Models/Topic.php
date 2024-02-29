@@ -9,12 +9,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Topic extends Model
 {
     use HasFactory;
-    protected $casts = [
 
-    ];
+    const STATUS_PUBLISH = "published";
+    const STATUS_DRAFT = "draft";
+    const STATUS = [ self::STATUS_PUBLISH, self::STATUS_DRAFT ];
+
+
     public function user(): BelongsTo
     {
-
-    return $this->belongsTo((User::class));
+        return $this->belongsTo((User::class));
     }
 }

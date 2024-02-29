@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Topic;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,6 +15,8 @@ return new class extends Migration
         Schema::create('topics', function (Blueprint $table) {
             $table->id();
             $table->string('name', 60);
+            $table->string('memo', 255)->nullable();
+            $table->enum("status", Topic::STATUS)->default(Topic::STATUS_DRAFT);
             $table->text('description_en')->nullable();
             $table->text('description_ja')->nullable();
             $table->timestamps();

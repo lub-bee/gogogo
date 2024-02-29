@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Topic;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TopicCreateRequest extends FormRequest
 {
@@ -27,6 +29,11 @@ class TopicCreateRequest extends FormRequest
                 "string",
                 "max:60"
             ],
+            "memo" => [
+                "nullable",
+                "string",
+                "max:255"
+            ],
             "description_en" => [
                 "nullable",
                 "string",
@@ -37,6 +44,10 @@ class TopicCreateRequest extends FormRequest
                 "string",
                 "max:2000"
             ],
+            "status" => [
+                "required",
+                Rule::in(Topic::STATUS)
+            ]
         ];
     }
 }

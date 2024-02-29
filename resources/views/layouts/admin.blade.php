@@ -20,7 +20,7 @@
 
             @if(session()->has("success"))
                 <div class='mt-8 section'>
-                    <div class="container border border-blue-500 bg-blue-50 text-blue-500 p-4">
+                    <div class="block-container border border-blue-500 bg-blue-50 text-blue-500 p-4">
                         {{ session('success')}}
                     </div>
                 </div>
