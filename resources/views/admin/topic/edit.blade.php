@@ -48,10 +48,17 @@
                     <div>Status</div>
                     <div class="col-span-3">
                         <div>
-                            <label><input type="radio" name="status" value="draft" {{ old($topic->status, 'draft') == 'draft' ? 'checked' : '' }}> Draft</label>
+                            <label>
+                                <input type="radio" name="status" value="draft" {{ old("published_at", $topic->published_at) == null ? 'checked' : '' }}>
+                                Draft (Only visible from the administration)
+                            </label>
                         </div>
                         <div>
-                            <label><input type="radio" name="status" value="published" {{ old($topic->status, 'draft') == 'published' ? 'checked' : '' }}> Published</label>
+                            <label>
+                                <input type="radio" name="status" value="published" {{ old("published_at", $topic->published_at) !== null ? 'checked' : '' }}>
+                                Published
+                                <input type="date" name="published_at" value="{{old("published_at", Carbon\Carbon::now()->format('Y-m-d'))}}" />
+                            </label>
                         </div>
                     </div>
                 </div>

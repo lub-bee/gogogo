@@ -49,14 +49,15 @@
                     <div class="col-span-3">
                         <div>
                             <label>
-                                <input type="radio" name="status" value="draft" {{ old("status", "draft") == 'draft' ? 'checked' : '' }}>
+                                <input type="radio" name="status" value="draft" {{ old("published_at", null) == null ? 'checked' : '' }}>
                                 Draft (Only visible from the administration)
                             </label>
                         </div>
                         <div>
                             <label>
-                                <input type="radio" name="status" value="published" {{ old("status", "draft") == 'published' ? 'checked' : '' }}>
+                                <input type="radio" name="status" value="published" {{ old("published_at", null) !== null ? 'checked' : '' }}>
                                 Published
+                                <input type="date" name="published_at" value="{{old("published_at", Carbon\Carbon::now()->format('Y-m-d'))}}" />
                             </label>
                         </div>
                     </div>

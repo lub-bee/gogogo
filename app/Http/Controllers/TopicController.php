@@ -60,9 +60,16 @@ class TopicController extends Controller
 
         $topic = new Topic();
         $topic->name = $validated["name"];
+        $topic->memo = $validated["memo"];
         $topic->description_en = $validated["description_en"];
         $topic->description_ja = $validated["description_ja"];
+
+        if($validated["status"] == "published"){
+            $topic->published_at = $validated["published_at"];
+        }
+
         $topic->user_id = auth()->user()->id;
+
         $topic->save();
 
         return redirect()->route("topic.index")
@@ -95,8 +102,16 @@ class TopicController extends Controller
 
         $topic =  Topic::find($topic_id);
         $topic->name = $validated["name"];
+        $topic->memo = $validated["memo"];
         $topic->description_en = $validated["description_en"];
         $topic->description_ja = $validated["description_ja"];
+
+        // overwrite the published_at when unpublished
+        if($validated["status"] == "published"){
+            $topic->published_at = $validated["published_at"];
+        } else {
+            $topic->published_at = null;
+        }
 
         $topic->save();
 

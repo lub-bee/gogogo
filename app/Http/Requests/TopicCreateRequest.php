@@ -44,10 +44,14 @@ class TopicCreateRequest extends FormRequest
                 "string",
                 "max:2000"
             ],
+            "published_at" => [
+                "nullable",
+                "date",
+            ],
             "status" => [
                 "required",
-                Rule::in(Topic::STATUS)
-            ]
+                "in:published,draft"
+            ],
         ];
     }
 }

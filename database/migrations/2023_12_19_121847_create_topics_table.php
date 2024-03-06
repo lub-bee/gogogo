@@ -16,9 +16,9 @@ return new class extends Migration
             $table->id();
             $table->string('name', 60);
             $table->string('memo', 255)->nullable();
-            $table->enum("status", Topic::STATUS)->default(Topic::STATUS_DRAFT);
             $table->text('description_en')->nullable();
             $table->text('description_ja')->nullable();
+            $table->date("published_at")->nullable();
             $table->timestamps();
 
             $table->foreignId("user_id")->constrained("users");

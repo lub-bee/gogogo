@@ -55,6 +55,21 @@
             </div>
 
             <div class="info">
+                <div>Status</div>
+                <div>{{ $topic->publish_status }}</div>
+                @if ($topic->isPublished())
+                    <div>Published at</div>
+                @endif
+                @if($topic->isScheduled())
+                    <div>Scheduled at</div>
+                @endif
+
+                @if( $topic->isPublished() || $topic->isScheduled())
+                    <div>{{ $topic->published_at }}</div>
+                @endif
+            </div>
+
+            <div class="info">
                 <div>Created at</div>
                 <div>{{ $topic->created_at }}</div>
                 <div>Last Update</div>

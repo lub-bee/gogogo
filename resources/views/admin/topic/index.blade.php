@@ -13,10 +13,9 @@
             <table class="table mt-5">
                 <tr>
                     <th>Name</th>
-                    <th>Status</th>
-                    <th>Author</th>
                     <th>Memo</th>
-                    <th></th>
+                    <th>Status</th>
+                    <th>Last used</th>
                 </tr>
 
                 @foreach ($topics as $topic)
@@ -26,16 +25,11 @@
                                 {{$topic->name}}
                             </a>
                         </td>
-                        <td class="uppercase text-center text-sm font-bold text-gray-500">
-                            {{ $topic->status }}
-                        </td>
-                        <td>
-                            <a href={{route('user.show', $topic->user->id)}} class="link" title="See author's contents">
-                                {{$topic->user->name}}
-                            </a>
-                        </td>
                         <td>{{$topic->memo}}</td>
-                        <td>{{$topic->updated_at->format('Y-m-d')}}</td>
+                        <td class="uppercase text-center text-sm font-bold text-gray-500">
+                            {{ $topic->publish_status }}
+                        </td>
+                        <td>todo</td>
                     </tr>
                 @endforeach
             </table>
