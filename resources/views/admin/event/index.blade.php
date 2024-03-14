@@ -11,24 +11,46 @@
             <table class="table mt-5">
                 <tr>
                     <th>Name</th>
-                    <th>Author</th>
+                    <!-- <th>Status</th> -->
+                    <th>Topic</th>
+                    <th>Location</th>
+                    <th>Media</th>
                     <th>Start at</th>
-                    <th>Last Update</th>
                 </tr>
                 @foreach ($events as $event)
                     <tr>
-                        <td><a href={{route('event.show', $event->id)}} class="hover:text-blue-500 cursor-pointer">{{$event->name}}</a></td>
                         <td>
-                            <a href={{route('user.show', $event->user->id)}} class="hover:text-blue-500 cursor-pointer">
-                                {{$event->user->name}}
+                            <a href={{route('event.show', $event->id)}} class="hover:text-blue-500 cursor-pointer">
+                                {{$event->name}}
                             </a>
+                        </td>
+                        <!-- <td class="uppercase text-center text-sm font-bold text-gray-500">
+                            {{ $event->status }}
+                        </td> -->
+                        <td>
+                            @if( $event->topic )
+                            <a href={{route('topic.show', $event->topic->id)}} class="hover:text-blue-500 cursor-pointer">
+                                {{$event->topic->name}}
+                            </a>
+                            @endif
+                        </td>
+                        <td>
+                            @if ( $event->location )
+                            <a href={{route('location.show', $event->location->id)}} class="hover:text-blue-500 cursor-pointer">
+                                {{$event->location->name}}
+                            </a>
+                            @endif
+                        </td>
+                        <td>
+                            {{-- <a href={{route('media.show', $event->media->id)}} class="hover:text-blue-500 cursor-pointer">
+                                {{$event->media->name}}
+                            </a> --}}
                         </td>
                         <td>
                             @if($event->start_at)
                                 {{$event->start_at->format('y-m-d')}}
                             @endif
                         </td>
-                        <td>{{$event->updated_at->format("y-m-d H:i")}}</td>
                     </tr>
                 @endforeach
             </table>

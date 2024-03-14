@@ -23,7 +23,16 @@
                 <div class="info">
                     <div>Start</div>
                     <div>
-                        <input type="date" name="start_at" value="{{$event->start_at}}" />
+                        <input type="date" name="start_at" value={{old('start_at',$event->start_at)}}/>
+
+                        <!--
+                        @php
+                            echo old('test', "something"); //=> if the value $test is not set, then use "something" as default value
+                            echo old("name", $event->name);
+                        @endphp
+                        -->
+
+
                         @error("start_at")
                             <div>{{$message}}</div>
                         @enderror
@@ -64,6 +73,18 @@
                         @error("description_ja")
                             <div>{{$message}}</div>
                         @enderror
+                    </div>
+                </div>
+
+                <div class="info">
+                    <div>Status</div>
+                    <div class="col-span-3">
+                        <div>
+                            <label><input type="radio" name="status" value="draft" {{ old("status",$event->status, 'draft') == 'draft' ? 'checked' : '' }}> Draft</label>
+                        </div>
+                        <div>
+                            <label><input type="radio" name="status" value="published" {{ old("status",$event->status, 'draft') == 'published' ? 'checked' : '' }}> Published</label>
+                        </div>
                     </div>
                 </div>
 

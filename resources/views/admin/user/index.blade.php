@@ -12,7 +12,7 @@
                 <tr>
                     <th>User Name</th>
                     <th>Email</th>
-                    <th>Last Updated</th>
+                    <th>Rank</th>
                 </tr>
                 @foreach ($users as $user)
                     <tr>
@@ -22,7 +22,7 @@
                             </a>
                         </td>
                         <td>{{$user->email}}</td>
-                        <td>{{$user->updated_at->format('y-m-d H:i')}}</td>
+                        <td>{{$user->rank}}</td>
                     </tr>
                 @endforeach
             </table>
