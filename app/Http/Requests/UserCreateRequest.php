@@ -27,6 +27,11 @@ class UserCreateRequest extends FormRequest
                 "string",
                 "max:60"
             ],
+            "email" => [
+                "required",
+                "string",
+                "email",
+            ],
         ];
     }
 }

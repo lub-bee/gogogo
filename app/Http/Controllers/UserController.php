@@ -113,7 +113,7 @@ class UserController extends Controller
         $user = User::find($user_id);
         $user->name = $validated["name"];
         $user->email = $validated["email"];
-        $user->password = $validated["password"];
+        // $user->password = $validated["password"];
 
         $user->save();
 

@@ -22,6 +22,13 @@
                 </div>
             </div>
 
+            <div class='info'>
+                <div>Rank</div>
+                <div>
+                    {{$user->rank}}
+                </div>
+            </div>
+
             <div class="info">
                 <div>Author</div>
                 <div><a href={{route('user.show',$user->id)}}>{{ $user->name}}</a></div>

@@ -12,11 +12,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Referee</th>
-                    <th>Website URL</th>
-                    <th>Description (English)</th>
-                    <th>Description (Japanese)</th>
-                    <th>Cost</th>
-                    <th>Updated at:</th>
+                    <th>Last Used</th>
                 </tr>
                 @foreach ($locations as $location)
                     <tr>
@@ -27,16 +23,8 @@
                             </a>
                         </td>
                         <td>
-                            {{--to check--}}
-                            {{--@if($location->website_url)
-                                {{$location->website_url->format('url')}}
-                            @endif--}}
+                            {{--{{$location->last_used->format('y-m-d')}}--}}
                         </td>
-                        <td>{{$location->website_url}}</td>
-                        <td>{{$location->description_en}}</td>
-                        <td>{{$location->description_ja}}</td>
-                        <td>{{$location->cost}}</td>
-                        <td>{{$location->updated_at->format('y-m-d H:i')}}</td>
                     </tr>
                 @endforeach
             </table>

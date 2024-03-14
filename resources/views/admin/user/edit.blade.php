@@ -24,8 +24,8 @@
                 <div class="info">
                     <div>Email</div>
                     <div>
-                        <input type="text" name="name" value="{{$user->email}}"/>
-                        @error("name")
+                        <input type="text" name="email" value="{{$user->email}}"/>
+                        @error("email")
                         <div>{{$message}}</div>
                         @enderror
                     </div>
