@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TopicCreateRequest;
 use App\Http\Requests\TopicDeleteRequest;
+use App\Http\Requests\TopicPublishRequest;
 use App\Models\Topic;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -118,6 +119,14 @@ class TopicController extends Controller
         return redirect(route("topic.show", $topic->id))
             ->with("success", "Topic saved successfully");
     }
+
+    public function publish(Topic $topic, TopicPublishRequest $request) : RedirectResponse
+    {
+        $topic->published_at = now();
+        $topic->save();
+        return redirect(route("topic.show", $topic->id));
+    }
+
     /**
      * Delete a specific topic
      *

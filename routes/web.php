@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/topic/{topic_id}', [TopicController::class, "show"])->name('topic.show');
     Route::put('/topic/{topic_id}',[TopicController::class,"update"])->name('topic.update');
     Route::delete('/topic',[TopicController::class,"destroy"])->name('topic.destroy');
+    Route::patch('/topic/{topic}',[TopicController::class,"publish"])->name('topic.publish');
 
 
     //Location

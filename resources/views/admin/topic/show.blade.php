@@ -5,10 +5,12 @@
         <a href={{ route('topic.edit', $topic->id)}} class="btn">Edit</a>
     </div>
 
-    @if($topic->status == 'draft')
+    @if($topic->isDraft())
     <div class='section'>
         <div class='block-container p-4'>
-            <form class="flex justify-between items-center gap-5">
+            <form class="flex justify-between items-center gap-5" action="{{route('topic.publish', $topic->id)}}" method="POST">
+                @csrf
+                @method('PATCH')
                 <x-input-info level="warning" class="flex-1">
                     This topic is currently still in the Draft state.
                 </x-input-info>
