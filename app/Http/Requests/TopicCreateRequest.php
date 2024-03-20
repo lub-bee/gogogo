@@ -46,6 +46,9 @@ class TopicCreateRequest extends FormRequest
             ],
             "published_at" => [
                 "nullable",
+                Rule::requiredIf(function () {
+                    return $this->status === 'published'; // Only required if status is "published"
+                }),
                 "date",
             ],
             "status" => [
