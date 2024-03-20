@@ -10,7 +10,7 @@
     <div class='section'>
         <div class='block-container'>
 
-            <table class="table mt-5">
+            <table class="table my-5">
                 <tr>
                     <th>Name</th>
                     <th>Memo</th>

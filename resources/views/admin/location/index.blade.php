@@ -8,7 +8,7 @@
 
     <div class='section'>
         <div class='block-container'>
-            <table class="table mt-5 p-4">
+            <table class="table my-5 p-4">
                 <tr>
                     <th>Name</th>
                     <th>Referee</th>
