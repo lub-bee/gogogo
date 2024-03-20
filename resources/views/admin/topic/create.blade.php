@@ -58,6 +58,7 @@
                                 <input type="radio" name="status" value="published" {{ old("published_at", null) !== null ? 'checked' : '' }}>
                                 Published
                                 <input type="date" name="published_at" value="{{old("published_at", Carbon\Carbon::now()->format('Y-m-d'))}}" />
+                                <x-input-error :messages="$errors->get('published_at')" class="mb-2" />
                             </label>
                         </div>
                     </div>
