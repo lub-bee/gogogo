@@ -1,10 +1,8 @@
 <x-admin-layout>
-    <x-editor-loader/>
-
-
     <div class='section'>
         <a href={{route('topic.index')}} class="btn">Back</a>
     </div>
+
     <div class='section'>
         <div class='block-container p-4'>
 
@@ -28,19 +26,22 @@
                     </div>
                 </div>
 
-                <div class="info">
+                <div class="info h-fit">
                     <div>Content (EN)</div>
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('description_en')" class="mb-2" />
-                        <textarea name="description_en" class="editor w-full">{{old("description_en")}}</textarea>
+                        <textarea id="description_en" name="description_en" class="hidden"></textarea>
+                        <div id="editor_en" class="">{!! old('description_en') !!}</div>
                     </div>
                 </div>
 
-                <div class="info">
+
+                <div class="info h-fit">
                     <div>Content (JA)</div>
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('description_ja')" class="mb-2" />
-                        <textarea name="description_ja" class="editor w-full">{{old("description_ja")}}</textarea>
+                        <textarea id="description_ja" name="description_ja" class="hidden"></textarea>
+                        <div id="editor_ja" class="">{!! old('description_ja') !!}</div>
                     </div>
                 </div>
 
@@ -75,4 +76,6 @@
             </form>
         </div>
     </div>
+
+    <x-editor-loader/>
 </x-admin-layout>

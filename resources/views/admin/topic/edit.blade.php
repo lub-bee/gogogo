@@ -1,6 +1,4 @@
 <x-admin-layout>
-    <x-editor-loader/>
-
     <form method="POST" action={{route("topic.update", $topic->id)}}>
         @csrf
         @method("PUT")
@@ -32,7 +30,8 @@
                     <div>Content (EN)</div>
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('description_en')" class="mb-2" />
-                        <textarea name="description_en" class="editor">{{ $topic->description_en}}</textarea>
+                        <textarea id="description_en" name="description_en" class="hidden"></textarea>
+                        <div id="editor_en" class="">{!! old('description_en', $topic->description_en) !!}</div>
                     </div>
                 </div>
 
@@ -40,7 +39,8 @@
                     <div>Content (JA)</div>
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('description_ja')" class="mb-2" />
-                        <textarea name="description_ja" class="editor">{{$topic->description_ja}}</textarea>
+                        <textarea id="description_ja" name="description_ja" class="hidden"></textarea>
+                        <div id="editor_ja" class="">{!! old('description_ja', $topic->description_ja) !!}</div>
                     </div>
                 </div>
 
@@ -92,5 +92,6 @@
                 </button>
             </div>
 
+    <x-editor-loader/>
 
 </x-admin-layout>

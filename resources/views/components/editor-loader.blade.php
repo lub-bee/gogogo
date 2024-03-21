@@ -1,8 +1,18 @@
-<script src="https://cdn.tiny.cloud/1/{{ Config::get('tinymce.api_key') }}/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
+
 <script>
-    tinymce.init({
-        selector: 'textarea.editor', // Replace this CSS selector to match the placeholder element for TinyMCE
-        plugins: 'code table lists',
-        toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table'
+    const quillEN = new Quill('#editor_en', { theme: 'snow' });
+    const quillJA = new Quill('#editor_ja', { theme: 'snow' });
+
+    // add default height to avoid css bug
+    document.getElementById("editor_en").style.height = '200px';
+    document.getElementById("editor_ja").style.height = '200px';
+
+    quillJA.on('text-change', function() {
+        document.getElementById("description_ja").value = quillJA.root.innerHTML;
+    });
+
+    quillEN.on('text-change', function() {
+        document.getElementById("description_en").value = quillEN.root.innerHTML;
     });
 </script>
