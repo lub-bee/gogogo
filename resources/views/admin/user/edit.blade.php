@@ -14,7 +14,7 @@
                 <div class="info">
                     <div>User Name</div>
                     <div>
-                        <input type="text" name="name" value="{{$user->name}}"/>
+                        <input type="text" name="name" value="{{old('name',$user->name)}}">
                         @error("name")
                             <div>{{$message}}</div>
                         @enderror
@@ -24,7 +24,7 @@
                 <div class="info">
                     <div>Email</div>
                     <div>
-                        <input type="text" name="email" value="{{$user->email}}"/>
+                        <input type="text" name="email" value="{{old('email',$user->email)}}">
                         @error("email")
                         <div>{{$message}}</div>
                         @enderror

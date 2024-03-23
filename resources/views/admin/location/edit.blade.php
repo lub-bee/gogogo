@@ -13,7 +13,7 @@
                 <div class="info">
                     <div>Name</div>
                     <div>
-                        <input type="text" name="name" value="{{$location->name}}"/>
+                        <input type="text" name="name" value="{{old('name',$location->name)}}">
                         @error("name")
                             <div>{{$message}}</div>
                         @enderror
@@ -23,7 +23,7 @@
                 <div class="info">
                     <div>Location Description (English)</div>
                     <div class="col-span-3">
-                        <textarea name="description_en" class="w-full">{{$location->description_en}}</textarea>
+                        <textarea name="description_en" class="w-full">"{{old('description_en', $location->description_en)}}"</textarea>
                         @error("description_en")
                             <div>{{$message}}</div>
                         @enderror
@@ -33,7 +33,7 @@
                 <div class="info">
                     <div>Location Description (Japanese)</div>
                     <div class="col-span-3">
-                        <textarea name="description_ja" class="w-full"> {{$location->description_ja}}</textarea>
+                        <textarea name="description_ja" class="w-full"> "{{old('description_ja', $location->description_ja)}}"</textarea>
                         @error("description_ja")
                             <div>{{$message}}</div>
                         @enderror
@@ -43,7 +43,7 @@
                 <div class="info">
                     <div>GPS-Long</div>
                     <div>
-                        <input type="text" name="gps_long" value={{$location->gps_long}} class="w-full"/>
+                        <input type="text" name="gps_long" value="{{old('gps_long', $location->gps_long)}}" class="w-full"/>
                         @error("gps_long")
                             <div>{{$message}}</div>
                         @enderror
@@ -53,7 +53,7 @@
                 <div class="info">
                     <div>GPS-Lat</div>
                     <div>
-                        <input type="text" name="gps_lat" value={{$location->gps_lat}} class="w-full"/>
+                        <input type="text" name="gps_lat" value="{{old('gps_lat', $location->gps_lat)}}" class="w-full"/>
                         @error("gps_lat")
                             <div>{{$message}}</div>
                         @enderror
@@ -63,7 +63,7 @@
                 <div class="info">
                     <div>Website URL</div>
                     <div>
-                        <input type="url" name="website_url" value={{$location->website_url}} class="w-full"/>
+                        <input type="url" name="website_url" value="{{old('website_url',$location->website_url)}}" class="w-full"/>
                         @error("website_url")
                             <div>{{$message}}</div>
                         @enderror
@@ -73,7 +73,7 @@
                 <div class="info">
                     <div>Cost</div>
                     <div>
-                        <input type="text" name="cost" value={{$location->cost}} class="w-full"/>
+                        <input type="text" name="cost" value="{{old('cost', $location->cost)}}" class="w-full"/>
                         @error("cost")
                             <div>{{$message}}</div>
                         @enderror

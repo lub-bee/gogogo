@@ -13,7 +13,7 @@
                     <div>Name</div>
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('name')" class="mb-2" />
-                        <input type="text" name="name" class="w-full" value="{{$topic->name}}"/>
+                        <input type="text" name="name" class="w-full" value="{{old("name", $topic->name)}}">
                     </div>
                 </div>
 
@@ -21,7 +21,7 @@
                     <div>Memo</div>
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('memo')" class="mb-2" />
-                        <input type="text" name="memo" class="w-full" value="{{$topic->memo}}"/>
+                        <input type="text" name="memo" class="w-full" value="{{old("memo", $topic->memo)}}">
                         <x-input-info level="warning" class="mt-2">Only visible by admin</x-input-info>
                     </div>
                 </div>

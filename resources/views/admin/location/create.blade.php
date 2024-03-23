@@ -12,7 +12,7 @@
                 <div class="info">
                     <div>Location Name</div>
                     <div>
-                        <input type="text" name="name" value="{{old("name")}}"/>
+                        <input type="text" name="name" value="{{old("name")}}">
                         @error("name")
                             <div>{{$message}}</div>
                         @enderror
@@ -42,7 +42,7 @@
                 <div class="info">
                     <div>GPS-Long</div>
                     <div>
-                        <input type="text" name="gps_long" value="{{old("gps_long")}}" class="w-full"/>
+                        <input type="text" name="gps_long" value="{{old("gps_long")}}" class="w-full">
                         @error("gps_long")
                             <div>{{$message}}</div>
                         @enderror
@@ -52,7 +52,7 @@
                 <div class="info">
                     <div>GPS-Lat</div>
                     <div>
-                        <input type="text" name="gps_lat" value="{{old("gps_lat")}}" class="w-full"/>
+                        <input type="text" name="gps_lat" value="{{old("gps_lat")}}" class="w-full">
                         @error("gps_lat")
                             <div>{{$message}}</div>
                         @enderror
@@ -62,7 +62,7 @@
                 <div class="info">
                     <div>Website URL</div>
                     <div>
-                        <input type="url" name="website_url" value="{{old("website_url")}}" class="w-full"/>
+                        <input type="url" name="website_url" value="{{old("website_url")}}" class="w-full">
                         @error("website_url")
                             <div>{{$message}}</div>
                         @enderror
@@ -72,7 +72,7 @@
                 <div class="info">
                     <div>Cost</div>
                     <div>
-                        <input type="text" name="cost" value="{{old("cost")}}" class="w-full"/>
+                        <input type="text" name="cost" value="{{old("cost")}}" class="w-full">
                         @error("cost")
                             <div>{{$message}}</div>
                         @enderror

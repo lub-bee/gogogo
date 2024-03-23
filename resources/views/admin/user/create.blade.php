@@ -12,7 +12,7 @@
                 <div>
                     <label>User Name</label>
                     <br>
-                    <input type="text" name="name" value="{{old("name")}}"/>
+                    <input type="text" name="name" value={{old("name")}}>
                     @error("name")
                         <div>{{$message}}</div>
                     @enderror
@@ -21,7 +21,7 @@
                 <div>
                     <label>Email</label>
                     <br>
-                    <input type="text" name="email" value="{{old("email")}}"/>
+                    <input type="text" name="email" value={{old("email")}}>
                     @error("email")
                         <div>{{$message}}</div>
                     @enderror
