@@ -13,7 +13,7 @@
                 <div class="info">
                     <div>Name</div>
                     <div>
-                        <input type="text" name="name" value="{{$event->name}}"/>
+                        <input type="text" name="name" value={{old("name", $event->name)}}>
                         @error("name")
                             <div>{{$message}}</div>
                         @enderror
@@ -23,7 +23,7 @@
                 <div class="info">
                     <div>Start</div>
                     <div>
-                        <input type="date" name="start_at" value={{old('start_at',$event->start_at)}}/>
+                        <input type="date" name="start_at" value={{old('start_at',$event->start_at)}}>
 
                         <!--
                         @php
@@ -39,7 +39,7 @@
                     </div>
                     <div>End</div>
                     <div>
-                        <input type="date" name="end_at" value="{{$event->end_at}}"/>
+                        <input type="date" name="end_at" value={{old('end_at', $event->end_at)}}>
                         @error("end_at")
                             <div>{{$message}}</div>
                         @enderror
@@ -49,7 +49,7 @@
                 <div class="info">
                     <div>Cost</div>
                     <div>
-                        <input type="text" name="cost" value="{{$event->cost}}"/>
+                        <input type="text" name="cost" value={{old('cost', $event->cost)}}>
                         @error("cost")
                             <div>{{$message}}</div>
                         @enderror
@@ -59,7 +59,7 @@
                 <div class="info">
                     <div>Description (English)</div>
                     <div class="col-span-3">
-                        <textarea name="description_en" class="w-full">{{$event->description_en}}</textarea>
+                        <textarea name="description_en" class="w-full">{{old('descriotion_en', $event->description_en)}}</textarea>
                         @error("description_en")
                             <div>{{$message}}</div>
                         @enderror
@@ -69,7 +69,7 @@
                 <div class="info">
                     <div>Description (Japanese)</div>
                     <div class="col-span-3">
-                        <textarea name="description_ja" class="w-full"> {{$event->description_ja}}</textarea>
+                        <textarea name="description_ja" class="w-full"> {{old('descriotion_ja',$event->description_ja)}}</textarea>
                         @error("description_ja")
                             <div>{{$message}}</div>
                         @enderror

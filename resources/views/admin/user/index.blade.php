@@ -1,6 +1,6 @@
 <x-admin-layout>
 
-    <div class="section flex justify">
+    <div class="section">
         <div class="text-right">
             <a href={{route("user.create")}} class="btn">Create</a>
         </div>

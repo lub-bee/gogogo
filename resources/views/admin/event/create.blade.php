@@ -12,7 +12,7 @@
                 <div class="info">
                     <div>Event Name</div>
                     <div>
-                        <input type="text" name="name" value="{{old("name")}}"/>
+                        <input type="text" name="name" value={{old("name")}}>
                         @error("name")
                             <div>{{$message}}</div>
                         @enderror
@@ -22,15 +22,14 @@
                 <div class="info">
                     <div>Start</div>
                     <div>
-                        <input type="date" name="start_at" value="{{old("start_at")}}" class="w-full"/>
+                        <input type="date" name="start_at" value={{old("start_at")}} class="w-full">
                         @error("start_at")
                             <div>{{$message}}</div>
                         @enderror
                     </div>
                     <div>End</div>
                     <div>
-
-                        <input type="date" name="end_at" value="{{old("end_at")}}" class="w-full"/>
+                        <input type="date" name="end_at" value={{old("end_at")}} class="w-full">
                         @error("end_at")
                             <div>{{$message}}</div>
                         @enderror
@@ -40,7 +39,7 @@
                 <div class="info">
                     <div>Cost</div>
                     <div>
-                        <input type="text" name="cost" value="{{old("cost")}}"/>
+                        <input type="text" name="cost" value={{old("cost")}}>
                         @error("cost")
                             <div>{{$message}}</div>
                         @enderror

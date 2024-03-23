@@ -29,11 +29,11 @@ class EventCreateRequest extends FormRequest
             ],
             "start_at" => [
                 "required",
-                "date"
+                "dateTime"
             ],
             "end_at" => [
                 "nullable",
-                "date",
+                "dateTime"
             ],
             "description_en" => [
                 "nullable",
@@ -47,7 +47,7 @@ class EventCreateRequest extends FormRequest
             ],
             "cost" => [
                 "nullable",
-                "numeric",
+                "string",
                 "max:100000"
             ],
         ];
