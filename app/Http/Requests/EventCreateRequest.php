@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class EventCreateRequest extends FormRequest
 {
@@ -49,6 +50,17 @@ class EventCreateRequest extends FormRequest
                 "nullable",
                 "string",
                 "max:100000"
+            ],
+            "published_at" => [
+                "nullable",
+                Rule::requiredIf(function () {
+                    return $this->status === 'published';
+                }),
+                "date",
+            ],
+            "status" => [
+                "required",
+                "in:published,draft"
             ],
         ];
     }
