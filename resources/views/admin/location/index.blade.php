@@ -16,7 +16,11 @@
                 </tr>
                 @foreach ($locations as $location)
                     <tr>
-                        <td><a href={{route('location.show',$location->id)}} class="hover:text-blue-500 transition">{{$location->name}}</a></td>
+                        <td>
+                            <a href={{route('location.show',$location->id)}} class="hover:text-blue-500 transition">
+                                {{$location->name}}
+                            </a>
+                        </td>
                         <td>
                             <a href={{route("user.show", $location->user->id)}} class="hover:text-blue-500 cursor-pointer">
                                 {{$location->user->name}}

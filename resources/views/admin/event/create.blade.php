@@ -22,14 +22,14 @@
                 <div class="info">
                     <div>Start</div>
                     <div>
-                        <input type="date" name="start_at" value={{old("start_at")}} class="w-full">
+                        <input type="datetime-local" name="start_at" value={{old("start_at")}} class="w-full">
                         @error("start_at")
                             <div>{{$message}}</div>
                         @enderror
                     </div>
                     <div>End</div>
                     <div>
-                        <input type="date" name="end_at" value={{old("end_at")}} class="w-full">
+                        <input type="datetime-local" name="end_at" value={{old("end_at")}} class="w-full">
                         @error("end_at")
                             <div>{{$message}}</div>
                         @enderror

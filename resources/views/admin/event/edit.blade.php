@@ -23,7 +23,7 @@
                 <div class="info">
                     <div>Start</div>
                     <div>
-                        <input type="date" name="start_at" value={{old('start_at',$event->start_at)}}>
+                        <input type="datetime-local" name="start_at" value={{old('start_at',$event->start_at)}}>
 
                         <!--
                         @php
@@ -39,7 +39,7 @@
                     </div>
                     <div>End</div>
                     <div>
-                        <input type="date" name="end_at" value={{old('end_at', $event->end_at)}}>
+                        <input type="datetime-local" name="end_at" value={{old('end_at', $event->end_at)}}>
                         @error("end_at")
                             <div>{{$message}}</div>
                         @enderror
