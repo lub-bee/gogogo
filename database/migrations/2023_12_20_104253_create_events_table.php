@@ -14,16 +14,17 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->string('name',255);
-            $table->dateTime("start_at", $precision = 8)->required();
-            $table->dateTime("end_at", $precision = 8)->nullable();
+            $table->dateTime("start_at", $precision = 5)->required();
+            $table->dateTime("end_at", $precision = 5)->nullable();
             $table->text("description_en")->nullable();
             $table->text("description_ja")->nullable();
-            $table->text("cost")->nullable();
+            $table->date('published_at') ->nullable();
+            $table->string("cost", 255)->nullable();
             $table->timestamps();
 
             $table->foreignId("user_id")->constrained("users");
-            $table->foreignId("topic_id")->nullable()->constrained("topics");
-            $table->foreignId("location_id")->nullable()->constrained("locations");
+            $table->foreignId("topic_id")->constrained("topics")->nullable();
+            $table->foreignId("location_id")->constrained("locations")->nullable();
         });
     }
 
