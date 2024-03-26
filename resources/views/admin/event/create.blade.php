@@ -10,7 +10,7 @@
                 @csrf
 
                 <div class="info">
-                    <div>Event Name</div>
+                    <div>Event Name (Required) </div>
                     <div>
                         <input type="text" name="name" value={{old("name")}}>
                         @error("name")
@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="info">
-                    <div>Start</div>
+                    <div>Start (Required) </div>
                     <div>
                         <input type="datetime-local" name="start_at" value={{old("start_at")}} class="w-full">
                         @error("start_at")

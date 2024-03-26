@@ -12,7 +12,7 @@
                 @method('PUT')
 
                 <div class="info">
-                    <div>User Name</div>
+                    <div>User Name (Required) </div>
                     <div>
                         <input type="text" name="name" value="{{old('name',$user->name)}}">
                         @error("name")
@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="info">
-                    <div>Email</div>
+                    <div>Email (Required) </div>
                     <div>
                         <input type="text" name="email" value="{{old('email',$user->email)}}">
                         @error("email")

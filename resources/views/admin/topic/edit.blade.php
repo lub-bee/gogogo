@@ -10,7 +10,7 @@
             <div class="block-container p-4">
 
                 <div class="info">
-                    <div>Name</div>
+                    <div>Name (Required) </div>
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('name')" class="mb-2" />
                         <input type="text" name="name" class="w-full" value="{{old("name", $topic->name)}}">
