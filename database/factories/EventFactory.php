@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Location;
+use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -27,7 +29,10 @@ class EventFactory extends Factory
          */
         return [
             "name" => fake()->sentence(6, true),
+            "start_at" => fake()->dateTime(),
             "user_id" => User::all()->random()->id,
+            "topic_id" => Topic::all()->random()->id,
+            "location_id" => Location::all()->random()->id,
         ];
     }
 }
