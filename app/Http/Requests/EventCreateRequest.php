@@ -30,11 +30,11 @@ class EventCreateRequest extends FormRequest
             ],
             "start_at" => [
                 "required",
-                "dateTime"
+                "date"
             ],
             "end_at" => [
                 "nullable",
-                "dateTime"
+                "date"
             ],
             "description_en" => [
                 "nullable",
