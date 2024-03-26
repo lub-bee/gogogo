@@ -1,8 +1,8 @@
 <x-admin-layout>
 
     <div class='section flex justify-between'>
-        <a href={{ route('user.index')}} class="btn">Back</a>
-        <a href={{ route('user.edit', $user->id)}} class="btn">Edit</a>
+        <a href="{{ route('user.index')}}" class="btn">Back</a>
+        <a href="{{ route('user.edit', $user->id)}}" class="btn">Edit</a>
     </div>
 
     <div class='section'>
@@ -31,7 +31,7 @@
 
             <div class="info">
                 <div>Author</div>
-                <div><a href={{route('user.show',$user->id)}}>{{ $user->name}}</a></div>
+                <div><a href="{{route('user.show',$user->id)}}">{{ $user->name}}</a></div>
                 <div>Last Updated</div>
                 <div>{{ $user->updated_at }}</div>
             </div>

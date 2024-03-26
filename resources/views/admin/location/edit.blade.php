@@ -1,10 +1,10 @@
 <x-admin-layout>
-    <form method="POST" action={{route('location.update', $location->id)}}>
+    <form method="POST" action="{{route('location.update', $location->id)}}">
         @csrf
         @method('PUT')
 
         <div class='section'>
-            <a href={{route('location.show', $location->id)}} class="btn">Back</a>
+            <a href="{{route('location.show', $location->id)}}" class="btn">Back</a>
         </div>
 
         <div class='section'>
@@ -81,13 +81,13 @@
                 </div>
 
                 <div class="flex mt-5 gap-4 justify-center">
-                    <a href={{ route('location.show', $location->id) }} class="btn">
+                    <a href="{{ route('location.show', $location->id) }}" class="btn">
                         Cancel
                     </a>
                     <button type="submit" class="btn btn-main">
                         Edit
                     </button>
-                    <a href={{ route('location.destroy', $location->id) }} class="btn">
+                    <a href="{{ route('location.destroy', $location->id) }}" class="btn">
                         Delete
                     </a>
                 </div>

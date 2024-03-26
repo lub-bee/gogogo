@@ -1,10 +1,10 @@
 <x-admin-layout>
-    <form method="POST" action={{route("topic.update", $topic->id)}}>
+    <form method="POST" action="{{route('topic.update', $topic->id)}}">
         @csrf
         @method("PUT")
 
         <div class="section">
-            <a href={{ route('topic.show', $topic->id)}} class="btn">Back</a>
+            <a href="{{ route('topic.show', $topic->id)}}" class="btn">Back</a>
         </div>
         <div class="section">
             <div class="block-container p-4">
@@ -13,7 +13,7 @@
                     <div>Name (Required) </div>
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('name')" class="mb-2" />
-                        <input type="text" name="name" class="w-full" value="{{old("name", $topic->name)}}">
+                        <input type="text" name="name" class="w-full" value='{{old("name", $topic->name)}}'>
                     </div>
                 </div>
 
@@ -21,7 +21,7 @@
                     <div>Memo</div>
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('memo')" class="mb-2" />
-                        <input type="text" name="memo" class="w-full" value="{{old("memo", $topic->memo)}}">
+                        <input type="text" name="memo" class="w-full" value='{{old("memo", $topic->memo)}}'>
                         <x-input-info level="warning" class="mt-2">Only visible by admin</x-input-info>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                             <label>
                                 <input type="radio" name="status" value="published" {{ old("published_at", $topic->published_at) !== null ? 'checked' : '' }}>
                                 Published
-                                <input type="date" name="published_at" value="{{old("published_at", Carbon\Carbon::now()->format('Y-m-d'))}}" />
+                                <input type="date" name="published_at" value='{{old("published_at", Carbon\Carbon::now()->format("Y-m-d"))}}' />
                                 <x-input-error :messages="$errors->get('published_at')" class="mb-2" />
                             </label>
                         </div>
@@ -84,7 +84,7 @@
             </div>
 
             <div class="flex mt-5 gap-4 justify-center">
-                <a href={{ route('topic.show', $topic->id)}} class="btn">
+                <a href="{{ route('topic.show', $topic->id)}}" class="btn">
                     Cancel
                 </a>
                 <button type="submit" class="btn btn-main">

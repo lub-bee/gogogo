@@ -1,18 +1,18 @@
 <x-admin-layout>
     <div class='section'>
-        <a href={{ route('event.index')}} class="btn">Back</a>
+        <a href="{{ route('event.index')}}" class="btn">Back</a>
     </div>
     <div class='section'>
         <div class='block-container p-4'>
 
-            <form method="POST" action={{route('event.store')}}>
+            <form method="POST" action="{{route('event.store')}}">
 
                 @csrf
 
                 <div class="info">
                     <div>Event Name (Required) </div>
                     <div>
-                        <input type="text" name="name" value={{old("name")}}>
+                        <input type="text" name="name" value='{{old("name")}}'>
                         @error("name")
                             <div>{{$message}}</div>
                         @enderror
@@ -22,14 +22,14 @@
                 <div class="info">
                     <div>Start (Required) </div>
                     <div>
-                        <input type="datetime-local" name="start_at" value={{old("start_at")}} class="w-full">
+                        <input type="datetime-local" name="start_at" value='{{old("start_at")}}' class="w-full">
                         @error("start_at")
                             <div>{{$message}}</div>
                         @enderror
                     </div>
                     <div>End</div>
                     <div>
-                        <input type="datetime-local" name="end_at" value={{old("end_at")}} class="w-full">
+                        <input type="datetime-local" name="end_at" value='{{old("end_at")}}' class="w-full">
                         @error("end_at")
                             <div>{{$message}}</div>
                         @enderror
@@ -39,7 +39,7 @@
                 <div class="info">
                     <div>Cost</div>
                     <div>
-                        <input type="text" name="cost" value={{old("cost")}}>
+                        <input type="text" name="cost" value='{{old("cost")}}'>
                         @error("cost")
                             <div>{{$message}}</div>
                         @enderror
@@ -66,7 +66,7 @@
                 </div>
 
                 <div class="flex justify-center gap-4 mt-5">
-                    <a class="btn" href={{ route('event.index') }}>
+                    <a class="btn" href="{{ route('event.index') }}">
                         CANCEL
                     </a>
                     <button type="submit" class="btn btn-main">
