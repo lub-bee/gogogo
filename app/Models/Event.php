@@ -59,31 +59,31 @@ class Event extends Model
     {
         if($this->published_at == null)
         {
-            return "draft";
+            return "Draft";
         }
         elseif ( Carbon::now() < $this->published_at)
         {
-            return "scheduled";
+            return "Scheduled";
         }
         else
         {
-            return "published";
+            return "Published";
         }
     }
 
     public function isPublished(): bool
     {
-        return $this->publish_status == "published";
+        return $this->publish_status == "Published";
     }
 
     public function isScheduled(): bool
     {
-        return $this->publish_status == "scheduled";
+        return $this->publish_status == "Scheduled";
     }
 
     public function isDraft(): bool
     {
-        return $this->publish_status == "draft";
+        return $this->publish_status == "Draft";
     }
 
 
