@@ -6,13 +6,13 @@
 
     <div class='section'>
         <div class='block-container p-4'>
-            <form method="POST" action={{route('user.store')}}>
+            <form method="POST" action="{{route('user.store')}}">
                 @csrf
 
                 <div>
                     <label>User Name</label>
                     <br>
-                    <input type="text" name="name" value={{old("name")}}>
+                    <input type="text" name="name" value='{{old("name")}}'>
                     @error("name")
                         <div>{{$message}}</div>
                     @enderror
@@ -21,14 +21,14 @@
                 <div>
                     <label>Email</label>
                     <br>
-                    <input type="text" name="email" value={{old("email")}}>
+                    <input type="text" name="email" value='{{old("email")}}'>
                     @error("email")
                         <div>{{$message}}</div>
                     @enderror
                 </div>
 
                 <div class="flex justify-center gap-4 mt-5">
-                    <a class="btn" href={{ route('user.index') }}>
+                    <a class="btn" href="{{ route('user.index') }}">
                         CANCEL
                     </a>
                     <button type="submit" class="btn btn-main">

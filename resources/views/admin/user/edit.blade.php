@@ -1,13 +1,13 @@
 <x-admin-layout>
 
     <div class='section'>
-        <a href={{ route('user.show', $user->id)}} class="btn">Back</a>
+        <a href="{{ route('user.show', $user->id)}}" class="btn">Back</a>
     </div>
 
     <div class='section'>
         <div class='block-container p-4 '>
 
-            <form method="POST" action={{route('user.update',  $user->id)}}>
+            <form method="POST" action="{{route('user.update',  $user->id)}}">
                 @csrf
                 @method('PUT')
 
@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="flex mt-5 gap-4 justify-center">
-                    <a href={{ route('user.show', $user->id)}} class="btn">
+                    <a href="{{ route('user.show', $user->id)}}" class="btn">
                         Cancel
                     </a>
                     <button type="submit" class="btn btn-main">
@@ -47,7 +47,7 @@
 
     <div class="section">
         <div class="block-container">
-            <a href={{ route('user.destroy', $user->id)}} class="btn">
+            <a href="{{ route('user.destroy', $user->id)}}" class="btn">
                 Delete
             </a>
         </div>

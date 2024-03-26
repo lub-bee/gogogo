@@ -2,7 +2,7 @@
 
     <div class='section'>
         <div class="text-right">
-            <a href={{ route('topic.create')}} class="btn">Create</a>
+            <a href="{{ route('topic.create')}}" class="btn">Create</a>
         </div>
     </div>
 
@@ -21,7 +21,7 @@
                 @foreach ($topics as $topic)
                     <tr>
                         <td>
-                            <a href={{route('topic.show', $topic->id)}} class="link" title="See topic">
+                            <a href="{{route('topic.show', $topic->id)}}" class="link" title="See topic">
                                 {{$topic->name}}
                             </a>
                         </td>

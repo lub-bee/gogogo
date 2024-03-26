@@ -2,7 +2,7 @@
 
     <div class="section">
         <div class="text-right">
-            <a href={{route("user.create")}} class="btn">Create</a>
+            <a href='{{route("user.create")}}' class="btn">Create</a>
         </div>
     </div>
 
@@ -17,7 +17,7 @@
                 @foreach ($users as $user)
                     <tr>
                         <td>
-                            <a href={{route('user.show',$user->id)}} class="block hover:text-blue-500 transition">
+                            <a href="{{route('user.show',$user->id)}}" class="block hover:text-blue-500 transition">
                                 {{$user->name}}
                             </a>
                         </td>

@@ -4,7 +4,7 @@
         @method('PUT')
 
         <div class='section'>
-            <a href={{ route('event.show', $event->id)}} class="btn">Back</a>
+            <a href="{{ route('event.show', $event->id)}}" class="btn">Back</a>
         </div>
 
         <div class='section'>
@@ -23,8 +23,11 @@
                 <div class="info">
                     <div>Start</div>
                     <div>
-                        <input type="datetime-local" name="start_at" value={{old('start_at',$event->start_at)}}>
-
+                        <input
+                            type="datetime-local"
+                            name="start_at"
+                            value="{{old('start_at',$event->start_at)}}"
+                        />
                         <!--
                         @php
                             echo old('test', "something"); //=> if the value $test is not set, then use "something" as default value
@@ -39,7 +42,7 @@
                     </div>
                     <div>End</div>
                     <div>
-                        <input type="datetime-local" name="end_at" value={{old('end_at', $event->end_at)}}>
+                        <input type="datetime-local" name="end_at" value="{{old('end_at', $event->end_at)}}"/>
                         @error("end_at")
                             <div>{{$message}}</div>
                         @enderror
@@ -49,7 +52,7 @@
                 <div class="info">
                     <div>Cost</div>
                     <div>
-                        <input type="text" name="cost" value={{old('cost', $event->cost)}}>
+                        <input type="text" name="cost" value="{{old('cost', $event->cost)}}"/>
                         @error("cost")
                             <div>{{$message}}</div>
                         @enderror
@@ -80,16 +83,39 @@
                     <div>Status</div>
                     <div class="col-span-3">
                         <div>
-                            <label><input type="radio" name="status" value="draft" {{ old("status",$event->status, 'draft') == 'draft' ? 'checked' : '' }}> Draft</label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="status"
+                                    value="draft"
+                                    {{ old("status",$event->publish_status) == 'draft' ? 'checked' : '' }}
+                                />
+                                Draft
+                            </label>
+                            @error("status")
+                                <div>{{$message}}</div>
+                            @enderror
                         </div>
                         <div>
-                            <label><input type="radio" name="status" value="published" {{ old("status",$event->status, 'draft') == 'published' ? 'checked' : '' }}> Published</label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="status"
+                                    value="published"
+                                    {{ old("status",$event->publish_status) == 'published' ? 'checked' : '' }}
+                                />
+                                Published
+                            </label>
+                            <input type="date" name="published_at"/>
+                            @error("published_at")
+                                <div>{{$message}}</div>
+                            @enderror
                         </div>
                     </div>
                 </div>
 
                 <div class="flex mt-5 gap-4 justify-center">
-                    <a href={{ route('event.show', $event->id)}} class="btn">
+                    <a href="{{ route('event.show', $event->id)}}" class="btn">
                         Cancel
                     </a>
                     <button type="submit" class="btn btn-main">
@@ -101,13 +127,13 @@
         </div>
     </form>
 
-    <form method="POST" action={{ route('event.destroy') }} >
+    <form method="POST" action="{{ route('event.destroy') }}" >
         <div class='section'>
             <div class='block-container p-4 '>
                 @csrf
                 @method("delete")
 
-                <input type="hidden" name="event_id" value={{$event->id}} />
+                <input type="hidden" name="event_id" value="{{$event->id}}" />
 
                 <div class="text-xl">
                     Delete the event

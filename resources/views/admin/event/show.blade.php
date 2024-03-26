@@ -1,8 +1,8 @@
 <x-admin-layout>
 
     <div class='section flex justify-between'>
-        <a href={{ route('event.index')}} class="btn">Back</a>
-        <a href={{ route('event.edit', $event->id)}} class="btn">Edit</a>
+        <a href="{{ route('event.index')}}" class="btn">Back</a>
+        <a href="{{ route('event.edit', $event->id)}}" class="btn">Edit</a>
     </div>
 
     <!-- @if($event->status == 'draft')
@@ -60,7 +60,7 @@
 
             <div class="info">
                 <div>Author</div>
-                <div><a href={{route('user.show',$event->user->id)}}>{{ $event->user->name}}</a></div>
+                <div><a href="{{route('user.show',$event->user->id)}}">{{ $event->user->name}}</a></div>
                 <div>Last Update</div>
                 <div>{{ $event->updated_at }}</div>
             </div>

@@ -2,7 +2,7 @@
 
     <div class='section'>
         <div class="text-right">
-            <a href={{ route('event.create')}} class="btn">Create</a>
+            <a href="{{ route('event.create')}}" class="btn">Create</a>
         </div>
     </div>
 
@@ -20,7 +20,7 @@
                 @foreach ($events as $event)
                     <tr>
                         <td>
-                            <a href={{route('event.show', $event->id)}} class="hover:text-blue-500 cursor-pointer">
+                            <a href="{{route('event.show', $event->id)}}" class="hover:text-blue-500 cursor-pointer">
                                 {{$event->name}}
                             </a>
                         </td>
@@ -29,20 +29,20 @@
                         </td> -->
                         <td>
                             @if( $event->topic )
-                            <a href={{route('topic.show', $event->topic->id)}} class="hover:text-blue-500 cursor-pointer">
+                            <a href="{{route('topic.show', $event->topic->id)}}" class="hover:text-blue-500 cursor-pointer">
                                 {{$event->topic->name}}
                             </a>
                             @endif
                         </td>
                         <td>
                             @if ( $event->location )
-                            <a href={{route('location.show', $event->location->id)}} class="hover:text-blue-500 cursor-pointer">
+                            <a href="{{route('location.show', $event->location->id)}}" class="hover:text-blue-500 cursor-pointer">
                                 {{$event->location->name}}
                             </a>
                             @endif
                         </td>
                         <td>
-                            {{-- <a href={{route('media.show', $event->media->id)}} class="hover:text-blue-500 cursor-pointer">
+                            {{-- <a href="{{route('media.show', $event->media->id)}}" class="hover:text-blue-500 cursor-pointer">
                                 {{$event->media->name}}
                             </a> --}}
                         </td>

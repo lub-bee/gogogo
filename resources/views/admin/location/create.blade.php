@@ -1,9 +1,9 @@
 <x-admin-layout>
-    <form method ="POST" action={{route('location.store')}}>
+    <form method ="POST" action="{{route('location.store')}}">
         @csrf
 
         <div class= 'section'>
-            <a href={{ route('location.index')}} class="btn">Back</a>
+            <a href="{{ route('location.index')}}" class="btn">Back</a>
         </div>
 
         <div class='section'>
@@ -80,7 +80,7 @@
                 </div>
 
                 <div class="flex justify-center gap-4 mt-5">
-                    <a href={{ route('location.index') }} class="btn">CANCEL</a>
+                    <a href="{{ route('location.index') }}" class="btn">CANCEL</a>
                     <button type="submit" class="btn btn-main">SAVE</button>
                 </div>
             </div>
