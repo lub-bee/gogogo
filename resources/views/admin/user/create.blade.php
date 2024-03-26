@@ -10,7 +10,7 @@
                 @csrf
 
                 <div>
-                    <label>User Name</label>
+                    <label>User Name (Required) </label>
                     <br>
                     <input type="text" name="name" value='{{old("name")}}'>
                     @error("name")
@@ -19,7 +19,7 @@
                 </div>
 
                 <div>
-                    <label>Email</label>
+                    <label>Email (Required) </label>
                     <br>
                     <input type="text" name="email" value='{{old("email")}}'>
                     @error("email")

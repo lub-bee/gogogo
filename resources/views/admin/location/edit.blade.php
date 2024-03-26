@@ -11,7 +11,7 @@
             <div class='block-container p-4 '>
 
                 <div class="info">
-                    <div>Name</div>
+                    <div>Location Name (Required) </div>
                     <div>
                         <input type="text" name="name" value="{{old('name',$location->name)}}">
                         @error("name")
@@ -23,7 +23,7 @@
                 <div class="info">
                     <div>Location Description (English)</div>
                     <div class="col-span-3">
-                        <textarea name="description_en" class="w-full">"{{old('description_en', $location->description_en)}}"</textarea>
+                        <textarea name="description_en" class="w-full">{{old('description_en', $location->description_en)}}</textarea>
                         @error("description_en")
                             <div>{{$message}}</div>
                         @enderror
@@ -33,7 +33,7 @@
                 <div class="info">
                     <div>Location Description (Japanese)</div>
                     <div class="col-span-3">
-                        <textarea name="description_ja" class="w-full"> "{{old('description_ja', $location->description_ja)}}"</textarea>
+                        <textarea name="description_ja" class="w-full"> {{old('description_ja', $location->description_ja)}}</textarea>
                         @error("description_ja")
                             <div>{{$message}}</div>
                         @enderror

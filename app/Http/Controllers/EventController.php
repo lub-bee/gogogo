@@ -70,8 +70,15 @@ class EventController extends Controller
         $event->end_at = $validated['end_at'];
         $event->description_en = $validated["description_en"];
         $event->description_ja = $validated["description_ja"];
+        $event->status = $validated["status"];
         $event->cost = $validated["cost"];
+
+        if($validated["status"] == "published"){
+            $event->published_at = $validated["published_at"];
+        }
+
         $event->user_id = auth()->user()->id; //automatically design the author
+
         $event->save();
 
         return redirect(route('event.index'))
@@ -110,6 +117,11 @@ class EventController extends Controller
         $event->description_ja = $validated["description_ja"];
         $event->cost = $validated["cost"];
 
+        if($validated["status"] == "published"){
+            $event->published_at = $validated["published_at"];
+        } else {
+            $event->published_at = null;
+        }
         $event->save();
 
         return redirect(route("event.show", $event->id))

@@ -48,4 +48,43 @@ class Event extends Model
     {
         return $this->hasMany(Media::class);
     }
+
+    public function scopeIsPublished($builder): void
+    {
+        $builder->whereNotNull("published_at")
+            ->where("published_at", "<=", Carbon::now());
+    }
+
+    public function getPublishStatusAttribute(): string
+    {
+        if($this->published_at == null)
+        {
+            return "Draft";
+        }
+        elseif ( Carbon::now() < $this->published_at)
+        {
+            return "Scheduled";
+        }
+        else
+        {
+            return "Published";
+        }
+    }
+
+    public function isPublished(): bool
+    {
+        return $this->publish_status == "Published";
+    }
+
+    public function isScheduled(): bool
+    {
+        return $this->publish_status == "Scheduled";
+    }
+
+    public function isDraft(): bool
+    {
+        return $this->publish_status == "Draft";
+    }
+
+
 }

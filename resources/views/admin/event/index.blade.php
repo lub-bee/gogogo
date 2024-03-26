@@ -11,7 +11,7 @@
             <table class="table my-5">
                 <tr>
                     <th>Name</th>
-                    <!-- <th>Status</th> -->
+                    <th>Status</th>
                     <th>Topic</th>
                     <th>Location</th>
                     <th>Media</th>
@@ -24,9 +24,9 @@
                                 {{$event->name}}
                             </a>
                         </td>
-                        <!-- <td class="uppercase text-center text-sm font-bold text-gray-500">
-                            {{ $event->status }}
-                        </td> -->
+                        <td class="uppercase text-center text-sm font-bold text-gray-500">
+                            {{$event->publish_status}}
+                        </td>
                         <td>
                             @if( $event->topic )
                             <a href="{{route('topic.show', $event->topic->id)}}" class="hover:text-blue-500 cursor-pointer">

@@ -1,5 +1,5 @@
 <x-admin-layout>
-    <form method="POST" action={{route('event.update',  $event->id)}}>
+    <form method="POST" action="{{route('event.update',  $event->id)}}">
         @csrf
         @method('PUT')
 
@@ -11,9 +11,10 @@
             <div class='block-container p-4 '>
 
                 <div class="info">
-                    <div>Name</div>
+                    <div>Name (Required) </div>
                     <div>
-                        <input type="text" name="name" value={{old("name", $event->name)}}>
+                        <input type="text" name="name" value="{{old('name', $event->name)}}">
+
                         @error("name")
                             <div>{{$message}}</div>
                         @enderror
@@ -21,7 +22,7 @@
                 </div>
 
                 <div class="info">
-                    <div>Start</div>
+                    <div>Start (Required) </div>
                     <div>
                         <input
                             type="datetime-local"
@@ -62,7 +63,7 @@
                 <div class="info">
                     <div>Description (English)</div>
                     <div class="col-span-3">
-                        <textarea name="description_en" class="w-full">{{old('descriotion_en', $event->description_en)}}</textarea>
+                        <textarea name="description_en" class="w-full">{{old('description_en', $event->description_en)}}</textarea>
                         @error("description_en")
                             <div>{{$message}}</div>
                         @enderror
@@ -72,7 +73,7 @@
                 <div class="info">
                     <div>Description (Japanese)</div>
                     <div class="col-span-3">
-                        <textarea name="description_ja" class="w-full"> {{old('descriotion_ja',$event->description_ja)}}</textarea>
+                        <textarea name="description_ja" class="w-full"> {{old('description_ja',$event->description_ja)}}</textarea>
                         @error("description_ja")
                             <div>{{$message}}</div>
                         @enderror

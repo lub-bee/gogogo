@@ -40,11 +40,11 @@ class DatabaseSeeder extends Seeder
 
         User::factory(5)->create();
 
-        Event::factory(5)->create();
+        // Tag::factory(5)->create();
         Topic::factory(5)->create();
-        Location:: factory(5)->create();
-        Media:: factory(5)->create();
-        Tag:: factory(5)->create();
+        Location::factory(5)->create();
+        // Media::factory(5)->create();
+        Event::factory(5)->create();
 
 
     }

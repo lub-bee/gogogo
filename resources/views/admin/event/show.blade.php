@@ -59,6 +59,13 @@
             </div>
 
             <div class="info">
+                <div>Status</div>
+                <div class=''>
+                    {{$event->publish_status}}
+                </div>
+            </div>
+
+            <div class="info">
                 <div>Author</div>
                 <div><a href="{{route('user.show',$event->user->id)}}">{{ $event->user->name}}</a></div>
                 <div>Last Update</div>

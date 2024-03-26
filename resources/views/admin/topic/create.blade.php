@@ -10,7 +10,7 @@
                 @csrf
 
                 <div class="info">
-                    <div>Title</div>
+                    <div>Title (Required) </div>
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('name')" class="mb-2" />
                         <input type="text" name="name" class="w-full" value='{{old("name")}}'>
