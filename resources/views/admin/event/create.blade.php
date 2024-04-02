@@ -58,11 +58,55 @@
                 <div class="info">
                     <div>Description (Japanese)</div>
                     <div class="col-span-3">
-                        <textarea name="description_ja" class="w-full"> {{old("description_ja")}}</textarea>
+                        <textarea name="description_ja" class="w-full">{{old("description_ja")}}</textarea>
                         @error("description_ja")
                         <div>{{$message}}</div>
                         @enderror
                     </div>
+                </div>
+
+                <div class="info">
+                    <div>Status</div>
+                    <div class="col-span-3">
+                        <div>
+                            <label>
+                                <input
+                                type="radio"
+                                name="status"
+                                value="draft" {{old('published_at', null) == null ? 'checked' : '' }}
+                                >
+                                Draft (Only visible from the administator)
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                <input
+                                type="radio"
+                                name="status"
+                                value="published" {{old('published_at', null) !== null ? 'checked' : '' }}
+                                >
+                                Published
+                                <input
+                                type="date"
+                                name="published_at"
+                                value='{{old("published_at", Carbon\Carbon::now()->format("Y-m-d"))}}'
+                                >
+                                <x-input-error :messages="$errors->get('published_at')" class="mb-2" />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info">
+                    <div>Topic</div>
+                    TODO - pluck - dropdown
+
+                </div>
+
+                <div class="info">
+                    <div>Location</div>
+                    TODO - pluck - dropdown
+
                 </div>
 
                 <div class="flex justify-center gap-4 mt-5">
