@@ -53,7 +53,7 @@
 
             <div class="info">
                 <div>Author</div>
-                <div><a href="{{route('topic.show',$topic->user->id)}}" class="link">{{ $topic->user->name}}</a></div>
+                <div><a href="{{route('user.show',$topic->user->id)}}" class="hover:text-blue-500 cursor-pointer" class="link">{{ $topic->user->name}}</a></div>
             </div>
 
             <div class="info">
