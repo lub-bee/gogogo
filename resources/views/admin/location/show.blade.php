@@ -61,7 +61,7 @@
 
         <div class="info">
             <div>Author</div>
-            <div><a href='{{route("location.show", $location->user->id)}}'>{{ $location->user->name}}</a></div>
+            <div><a href='{{route("user.show", $location->user->id)}}' class="hover:text-blue-500 cursor-pointer">{{ $location->user->name}}</a></div>
             <div>Last Update</div>
             <div>{{$location->updated_at}}</div>
         </div>
