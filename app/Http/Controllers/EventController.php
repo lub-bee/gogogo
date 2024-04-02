@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EventCreateRequest;
 use App\Http\Requests\EventDeleteRequest;
 use App\Models\Event;
+use App\Models\Location;
+use App\Models\Topic;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -70,7 +72,6 @@ class EventController extends Controller
         $event->end_at = $validated['end_at'];
         $event->description_en = $validated["description_en"];
         $event->description_ja = $validated["description_ja"];
-        $event->status = $validated["status"];
         $event->cost = $validated["cost"];
 
         if($validated["status"] == "published"){
@@ -78,6 +79,8 @@ class EventController extends Controller
         }
 
         $event->user_id = auth()->user()->id; //automatically design the author
+        $event->topic_id = Topic::topic()->id;
+        $event->location_id = Location::location()->id;
 
         $event->save();
 

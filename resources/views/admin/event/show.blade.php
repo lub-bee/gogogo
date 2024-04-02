@@ -67,7 +67,7 @@
 
             <div class="info">
                 <div>Author</div>
-                <div><a href="{{route('user.show',$event->user->id)}}">{{ $event->user->name}}</a></div>
+                <div><a href="{{route('user.show',$event->user->id)}}" class="hover:text-blue-500 cursor-pointer">{{ $event->user->name}}</a></div>
                 <div>Last Update</div>
                 <div>{{ $event->updated_at }}</div>
             </div>
