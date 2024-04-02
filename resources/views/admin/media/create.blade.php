@@ -6,22 +6,15 @@
     <div class='section'>
         <div class='block-container p-4'>
 
-            <form method="POST" action="{{route('media.store')}}">
+            <form method="POST" action="{{route('media.store')}}" enctype="multipart/form-data">
                 @csrf
 
                 <div class="info">
-                    <div>Path</div>
+                    <div>File</div>
                     {{--TODO--}}
                     <div class="">
-
-                    </div>
-                </div>
-
-                <div class="info">
-                    <div>Name</div>
-                    <div class="col-span-3">
-                        <input type="text" name="name" value='{{old("name")}}'>
-                        @error("name")
+                        <input type="file" name="file"/>
+                        @error("file")
                             <div>{{$message}}</div>
                         @enderror
                     </div>

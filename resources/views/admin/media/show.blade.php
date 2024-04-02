@@ -2,8 +2,8 @@
 
     <div class='section flex justify-between'>
         <a href="{{ route('media.index')}}" class="btn">Back</a>
-        <a href="{{ route('media.edit', $location->id)}}" class="btn">Edit</a>
-        <a href="{{ route('media.destroy', $location->id) }}" class="btn">Delete</a>
+        <a href="{{ route('media.edit', $media->id)}}" class="btn">Edit</a>
+        <a href="{{ route('media.destroy', $media->id) }}" class="btn">Delete</a>
     </div>
 
     <div class="section">
@@ -12,13 +12,8 @@
             <div class='info'>
                 <div>Preview</div>
                 <div>
-                    {{$media->}} {{--TODO--}}
-                </div>
-            </div>
-            <div class='info'>
-                <div>Name</div>
-                <div>
-                    {{$media->name}}
+                    <img src='{{asset($media->path)}}'/>
+                    {{--{{$media->}} {{--TODO--}}
                 </div>
             </div>
             <div class='info'>

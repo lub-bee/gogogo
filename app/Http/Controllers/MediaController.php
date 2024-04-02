@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
 
 class MediaController extends Controller
 {
@@ -56,28 +57,12 @@ class MediaController extends Controller
      */
     public function store(MediaCreateRequest $request) : RedirectResponse
     {
-        $validated = $request->validate([
-            //to check - Media migration table does not have a "name" for media
-            //do I need to add one?
-            "name" => [
-                "required",
-                "string",
-                "max:60",
-            ],
-            "description_en" => [
-                "nullable",
-                "string",
-                "max:2000"
-            ],
-            "description_ja" => [
-                "nullable",
-                "string",
-                "max:2000"
-            ],
-        ]);
+        $validated = $request->validated();
+
+        $path = $request->file('file')->store('pictures');
 
         $media = new Media();
-        $media->name = $validated["name"];
+        $media->path = $path;
         $media->description_en = $validated["description_en"];
         $media->description_ja = $validated["description_ja"];
         $media->user_id = auth()->user()->id;
@@ -111,28 +96,9 @@ class MediaController extends Controller
      */
     public function update(int $media_id, MediaCreateRequest $request) : RedirectResponse
     {
-        $validated = $request->validate([
-            //to check - Media migration table does not have a "name" for media
-            //do I need to add one?
-            "name" => [
-                "required",
-                "string",
-                "max:60",
-            ],
-            "description_en" => [
-                "nullable",
-                "string",
-                "max:2000"
-            ],
-            "description_ja" => [
-                "nullable",
-                "string",
-                "max:2000"
-            ],
-        ]);
+        $validated = $request->validated();
 
         $media = Media::find($media_id);
-        $media->name = $validated["name"];
         $media->description_en = $validated["description_en"];
         $media->description_ja = $validated["description_ja"];
 

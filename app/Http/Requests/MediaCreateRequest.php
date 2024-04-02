@@ -22,10 +22,11 @@ class MediaCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => [
+            "file" => [
                 "required",
-                "string",
-                "max:60",
+                "image",
+                "file",
+                "max:5000"
             ],
             "description_en" => [
                 "nullable",

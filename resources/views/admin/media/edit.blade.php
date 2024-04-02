@@ -19,15 +19,6 @@
                 </div>
 
                 <div class="info">
-                    <div>Name</div>
-                    <div class="col-span-3">
-                        <textarea name="name" class="w-full">{{old("name")}}</textarea>
-                        @error("name")
-                            <div>{{$message}}</div>
-                        @enderror
-                    </div>
-                </div>
-                <div class="info">
                     <div>Description (English)</div>
                     <div class="col-span-3">
                         <textarea name="description_en" class="w-full">{{old("description_en")}}</textarea>
@@ -47,7 +38,7 @@
                 </div>
 
                 <div class="flex justify-center gap-4 mt-5">
-                    <a class="btn" href="{{ route('media.index') }}">
+                    <a class="btn" href="{{ route('media.show', $media->id) }}">
                         CANCEL
                     </a>
                     <button type="submit" class="btn btn-main">

@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('medias', function (Blueprint $table) {
             $table->id();
             $table->string("path", 100);
-            $table->string("name");
             $table->text("description_en")->nullable();
             $table->text("description_ja")->nullable();
             $table->timestamps();
