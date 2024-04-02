@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MediaCreateRequest;
 use App\Models\Media;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class MediaController extends Controller
      */
     public function index() : View
     {
-        $medias = Media::orderBy("timestamps", "desc")->get();
+        $medias = Media::orderBy("id", "asc")->get();
             //to check
             //->orderBy("","");
         return view("admin.media.index")
@@ -50,10 +51,10 @@ class MediaController extends Controller
     /**
      * Store a new Media file
      *
-     * @param Request $request
+     * @param MediaCreateRequest $request
      * @return RedirectResponse
      */
-    public function store(Request $request) : RedirectResponse
+    public function store(MediaCreateRequest $request) : RedirectResponse
     {
         $validated = $request->validate([
             //to check - Media migration table does not have a "name" for media
@@ -105,10 +106,10 @@ class MediaController extends Controller
      * Update a specific event
      *
      * @param int $media_id
-     * @param Request $request
+     * @param MediaCreateRequest $request
      * @return RedirectResponse
      */
-    public function update(int $media_id, Request $request) : RedirectResponse
+    public function update(int $media_id, MediaCreateRequest $request) : RedirectResponse
     {
         $validated = $request->validate([
             //to check - Media migration table does not have a "name" for media
