@@ -11,11 +11,9 @@
                 @method('PUT')
 
                 <div class="info">
-                    <div>Path</div>
-                    {{--TODO--}}
-                    <div class="">
-
-                    </div>
+                    <div>Preview</div>
+                    <img src='{{asset($media->path)}}' />
+                    {{--TO CHECK--}}
                 </div>
 
                 <div class="info">
