@@ -184,3 +184,11 @@ section{
         leading-[3rem]
         text-center
 }
+
+.media-tile{
+    @apply
+        flex-1
+        rounded
+        max-h-full
+        w-auto
+}

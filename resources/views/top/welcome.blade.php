@@ -4,7 +4,7 @@
             Top
         </section>
 
-        <section id="event" class="high-contrast flex flex-col relative" x-data="{mode: 'media'}">
+        <section id="event" class="high-contrast flex flex-col relative" x-data="{mode: 'topic'}">
             <header class="relative z-20">
                 Event
             </header>
@@ -16,75 +16,79 @@
                 <x-event.event-info-card/>
             </main>
 
+            {{-- gallery --}}
             <div class="flex-1 relative flex flex-col bg-slate-900 media-gallery text-gray-400" :class="mode === 'media' ? '' : 'hidden'">
-                <div class='absolute right-5 top-2 text-8xl z-20 hover:bg-white/20 cursor-pointer transition-all group' @click="mode = 'default'">
+                <div class='absolute right-5 top-2 text-8xl z-20 hover:text-white cursor-pointer transition-all group' @click="mode = 'default'">
                     <i class='fa-solid fa-xmark group-hover:rotate-90 transition-all'></i>
                 </div>
 
                 <div class='flex-1 w-full p-4'>
-                    <div class='bg-white/10 w-fill h-fill overflow-y-scroll overflow-x-hidden'>
-                        <div class='flex flex-col'>
-                            <img src="https://picsum.photos/200/300?randow=1"/>
-                        </div>
+                    <div class='bg-white/10 w-full h-full overflow-x-auto flex gap-4 items-center snap-x'>
+                            <img src="https://picsum.photos/400/300?randow=1" class="media-tile shrink-0 snap-center"/>
+                            <img src="https://picsum.photos/200/300?randow=2" class="media-tile shrink-0 snap-center"/>
+                            <img src="https://picsum.photos/240/360?randow=3" class="media-tile shrink-0 snap-center"/>
+                            <img src="https://picsum.photos/600/300?randow=4" class="media-tile shrink-0 snap-center"/>
+                            <img src="https://picsum.photos/360/240?randow=5" class="media-tile shrink-0 snap-center"/>
+                            <img src="https://picsum.photos/840/600?randow=6" class="media-tile shrink-0 snap-center"/>
+                            <img src="https://picsum.photos/300/300?randow=7" class="media-tile shrink-0 snap-center"/>
+                            <img src="https://picsum.photos/300/630?randow=8" class="media-tile shrink-0 snap-center"/>
+                            <img src="https://picsum.photos/240/480?randow=9" class="media-tile shrink-0 snap-center"/>
+                            <img src="https://picsum.photos/200/300?randow=10" class="media-tile shrink-0 snap-center"/>
+                            <img src="https://picsum.photos/200/300?randow=11" class="media-tile shrink-0 snap-center"/>
+                            <img src="https://picsum.photos/200/300?randow=12" class="media-tile shrink-0 snap-center"/>
+                            <img src="https://picsum.photos/840/600?randow=13" class="media-tile shrink-0 snap-center"/>
+                            <img src="https://picsum.photos/600/300?randow=14" class="media-tile shrink-0 snap-center"/>
+                            <img src="https://picsum.photos/360/240?randow=15" class="media-tile shrink-0 snap-center"/>
+                            <img src="https://picsum.photos/240/360?randow=16" class="media-tile shrink-0 snap-center"/>
+                            <img src="https://picsum.photos/200/300?randow=17" class="media-tile shrink-0 snap-center"/>
+                            <img src="https://picsum.photos/400/300?randow=18" class="media-tile shrink-0 snap-center"/>
                     </div>
 
                 </div>
-                {{-- <div class="flex-1 grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="grid gap-4">
-                        <div>
-                            <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image.jpg" alt="">
-                        </div>
-                        <div>
-                            <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-1.jpg" alt="">
-                        </div>
-                        <div>
-                            <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-2.jpg" alt="">
-                        </div>
-                    </div>
-                    <div class="grid gap-4">
-                        <div>
-                            <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-3.jpg" alt="">
-                        </div>
-                        <div>
-                            <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-4.jpg" alt="">
-                        </div>
-                        <div>
-                            <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-5.jpg" alt="">
-                        </div>
-                    </div>
-                    <div class="grid gap-4">
-                        <div>
-                            <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-6.jpg" alt="">
-                        </div>
-                        <div>
-                            <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-7.jpg" alt="">
-                        </div>
-                        <div>
-                            <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-8.jpg" alt="">
-                        </div>
-                    </div>
-                    <div class="grid gap-4">
-                        <div>
-                            <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-9.jpg" alt="">
-                        </div>
-                        <div>
-                            <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-10.jpg" alt="">
-                        </div>
-                        <div>
-                            <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-11.jpg" alt="">
-                        </div>
-                    </div>
-                </div> --}}
 
             </div>
 
-            <div class="flex-1 relative bg-slate-900 topic-display text-gray-400" :class="mode === 'topic' ? '' : 'hidden'">
+            {{-- topic --}}
+            <div class="fixed z-40 top-0 left-0 h-full w-full bg-slate-900 topic-display text-gray-400" :class="mode === 'topic' ? '' : 'hidden'">
                 <div class='absolute right-2 top-2 text-8xl z-20 hover:bg-white/20 cursor-pointer transition-all group' @click="mode = 'default'">
                     <i class='fa-solid fa-xmark fa-fw group-hover:rotate-90 transition-all'></i>
                 </div>
-                Topic here
+
+                <div class='h-full'>
+                    <div class='mx-8 text-[5rem] mr-32 leading-[5.5rem]'>
+                        Super topic title with a lot of text to see how it looks like
+                    </div>
+
+                    <div class='flex gap-8 max-h-full overflow-y-auto'>
+                        <div class='formated-content p-8'>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione et pariatur, ducimus impedit esse voluptate reiciendis ipsa. Saepe, unde. Quisquam eveniet ab non blanditiis, odit magni deserunt iusto ipsum voluptatum?<br/>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione et pariatur, ducimus impedit esse voluptate reiciendis ipsa. Saepe, unde. Quisquam eveniet ab non blanditiis, odit magni deserunt iusto ipsum voluptatum?<br/>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione et pariatur, ducimus impedit esse voluptate reiciendis ipsa. Saepe, unde. Quisquam eveniet ab non blanditiis, odit magni deserunt iusto ipsum voluptatum?<br/><br/>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione et pariatur, ducimus impedit esse voluptate reiciendis ipsa. Saepe, unde. Quisquam eveniet ab non blanditiis, odit magni deserunt iusto ipsum voluptatum?<br/>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione et pariatur, ducimus impedit esse voluptate reiciendis ipsa. Saepe, unde. Quisquam eveniet ab non blanditiis, odit magni deserunt iusto ipsum voluptatum?<br/><br/><br/>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione et pariatur, ducimus impedit esse voluptate reiciendis ipsa. Saepe, unde. Quisquam eveniet ab non blanditiis, odit magni deserunt iusto ipsum voluptatum?<br/>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione et pariatur, ducimus impedit esse voluptate reiciendis ipsa. Saepe, unde. Quisquam eveniet ab non blanditiis, odit magni deserunt iusto ipsum voluptatum?<br/><br/>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione et pariatur, ducimus impedit esse voluptate reiciendis ipsa. Saepe, unde. Quisquam eveniet ab non blanditiis, odit magni deserunt iusto ipsum voluptatum?<br/>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione et pariatur, ducimus impedit esse voluptate reiciendis ipsa. Saepe, unde. Quisquam eveniet ab non blanditiis, odit magni deserunt iusto ipsum voluptatum?<br/><br/><br/>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione et pariatur, ducimus impedit esse voluptate reiciendis ipsa. Saepe, unde. Quisquam eveniet ab non blanditiis, odit magni deserunt iusto ipsum voluptatum?<br/>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione et pariatur, ducimus impedit esse voluptate reiciendis ipsa. Saepe, unde. Quisquam eveniet ab non blanditiis, odit magni deserunt iusto ipsum voluptatum?<br/>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione et pariatur, ducimus impedit esse voluptate reiciendis ipsa. Saepe, unde. Quisquam eveniet ab non blanditiis, odit magni deserunt iusto ipsum voluptatum?<br/><br/><br/>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione et pariatur, ducimus impedit esse voluptate reiciendis ipsa. Saepe, unde. Quisquam eveniet ab non blanditiis, odit magni deserunt iusto ipsum voluptatum?<br/>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione et pariatur, ducimus impedit esse voluptate reiciendis ipsa. Saepe, unde. Quisquam eveniet ab non blanditiis, odit magni deserunt iusto ipsum voluptatum?<br/><br/><br/>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione et pariatur, ducimus impedit esse voluptate reiciendis ipsa. Saepe, unde. Quisquam eveniet ab non blanditiis, odit magni deserunt iusto ipsum voluptatum?<br/>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione et pariatur, ducimus impedit esse voluptate reiciendis ipsa. Saepe, unde. Quisquam eveniet ab non blanditiis, odit magni deserunt iusto ipsum voluptatum?<br/>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione et pariatur, ducimus impedit esse voluptate reiciendis ipsa. Saepe, unde. Quisquam eveniet ab non blanditiis, odit magni deserunt iusto ipsum voluptatum?<br/><br/><br/>
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione et pariatur, ducimus impedit esse voluptate reiciendis ipsa. Saepe, unde. Quisquam eveniet ab non blanditiis, odit magni deserunt iusto ipsum voluptatum?<br/>
+                        </div>
+                        <div class='.formated-content'>
+                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aliquam, expedita. Rerum ratione enim iure illo voluptatum! Repudiandae, beatae itaque suscipit optio aliquam ad, omnis, consequuntur nobis dolorem mollitia ullam et.
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
+            {{-- location --}}
             <div class="flex-1 relative bg-slate-900 location-display text-gray-400" :class="mode === 'location' ? '' : 'hidden'">
                 <div class='absolute right-2 top-2 text-8xl z-20 hover:bg-white/20 cursor-pointer transition-all group' @click="mode = 'default'">
                     <i class='fa-solid fa-xmark fa-fw group-hover:rotate-90 transition-all'></i>
