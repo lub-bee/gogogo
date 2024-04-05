@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MediaCreateRequest;
 use App\Models\Media;
+use App\Services\ImageService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -59,7 +60,9 @@ class MediaController extends Controller
     {
         $validated = $request->validated();
 
-        $path = $request->file('file')->store('pictures');
+        $imageName = time().'.'.$request->picture->extension();
+        $request->picture->move(public_path('pictures'), $imageName);
+        $path = $imageName;
 
         $media = new Media();
         $media->path = $path;
@@ -68,7 +71,6 @@ class MediaController extends Controller
         $media->user_id = auth()->user()->id;
 
         $media->save();
-
 
         return redirect(route("media.index"))
             ->with("success", "Media file saved successfully");

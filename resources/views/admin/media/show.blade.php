@@ -9,11 +9,15 @@
     <div class="section">
         <div class="block-container p-4">
 
+            <div class='flex justify-center'>
+                <x-media-card :media="$media"/>
+            </div>
+
             <div class='info'>
                 <div>Preview</div>
                 <div>
-                    <img src='{{asset($media->path)}}'/>
-                    {{--{{$media->}} {{--TODO--}}
+                    <img
+                        src="{{ asset("pictures/" . $media->path) }}"/>
                 </div>
             </div>
             <div class='info'>

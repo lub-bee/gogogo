@@ -10,11 +10,11 @@
                 @csrf
 
                 <div class="info">
-                    <div>File</div>
+                    <div>Picture</div>
                     {{--TODO--}}
                     <div class="">
-                        <input type="file" name="file"/>
-                        @error("file")
+                        <input type="file" name="picture"/>
+                        @error("picture")
                             <div>{{$message}}</div>
                         @enderror
                     </div>

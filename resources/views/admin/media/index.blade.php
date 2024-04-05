@@ -17,8 +17,9 @@
                 @foreach ($medias as $media)
                     <tr>
                         <td>
-                            <a href="{{ route('media.show', $media->id)}}" class="btn">
-                                Preview thumbnail {{--TODO--}}
+                            <a href="{{ route('media.show', $media->id)}}">
+                                {{-- Preview thumbnail TODO --}}
+                                <x-media-thumbnail :media="$media"/>
                             </a>
                         </td>
                         <td>
