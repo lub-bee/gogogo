@@ -23,9 +23,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 // public routes
+Route::get("/", [TopController::class, "index"])->name("top");
 Route::name('top.')->group(function () {
 
-    Route::get("/", [TopController::class, "index"])->name("top");
+    // Route::get("/", [TopController::class, "index"])->name("top");
     Route::get("/test", function () {
         return view("test");
     });
