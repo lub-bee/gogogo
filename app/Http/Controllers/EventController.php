@@ -53,7 +53,8 @@ class EventController extends Controller
      */
     public function create() : View
     {
-        return view("admin/event/create");
+        return view("admin/event/create")
+            ->with("topics", Topic::get());
     }
 
     /**
