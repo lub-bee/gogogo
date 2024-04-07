@@ -9,11 +9,14 @@
             <form method="POST" action="{{route('media.update', $media->id)}}">
                 @csrf
                 @method('PUT')
+                <input type="hidden" name="media_id" value="{{$media->id}}"/>
 
                 <div class="info">
                     <div>Preview</div>
-                    <img src='{{asset($media->path)}}' />
-                    {{--TO CHECK--}}
+                    <div>
+                        <img
+                            src="{{ asset("pictures/" . $media->path) }}"/>
+                    </div>
                 </div>
 
                 <div class="info">

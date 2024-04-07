@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MediaCreateRequest;
+use App\Http\Requests\MediaUpdateRequest;
 use App\Models\Media;
 use App\Services\ImageService;
 use Illuminate\Http\RedirectResponse;
@@ -96,11 +97,11 @@ class MediaController extends Controller
      * @param MediaCreateRequest $request
      * @return RedirectResponse
      */
-    public function update(int $media_id, MediaCreateRequest $request) : RedirectResponse
+    public function update(MediaUpdateRequest $request) : RedirectResponse
     {
         $validated = $request->validated();
 
-        $media = Media::find($media_id);
+        $media = Media::findOrFail($validated["media_id"]);
         $media->description_en = $validated["description_en"];
         $media->description_ja = $validated["description_ja"];
 
