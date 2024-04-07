@@ -25,7 +25,7 @@ class MediaCreateRequest extends FormRequest
             "picture" => [
                 "required",
                 "image",
-                "mimes:png,jpg,jpeg,svg",
+                "mimes:png,jpg,jpeg,svg,webp",
                 "max:5000",
             ],
             "description_en" => [
