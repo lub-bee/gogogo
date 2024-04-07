@@ -58,6 +58,10 @@ class EventCreateRequest extends FormRequest
                 }),
                 "date",
             ],
+            "topic_id" => [
+                "nullable",
+                "exists:topics,id"
+            ],
             "status" => [
                 "required",
                 "in:published,draft"

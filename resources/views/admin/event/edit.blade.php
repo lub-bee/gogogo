@@ -81,6 +81,21 @@
                 </div>
 
                 <div class="info">
+                    <div>Topic</div>
+                    <div>
+                        <select name="topic_id">
+                            <option value="" >-</option>
+                            @foreach ($topics as $topic)
+                                <option value="{{$topic->id}}" {{ (old("topic_id", $event->topic_id) == $topic->id ? "selected":"") }} >{{ $topic->name }}</option>
+                            @endforeach
+                        </select>
+                        @error("topic_id")
+                            <div>{{$message}}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="info">
                     <div>Status</div>
                     <div class="col-span-3">
                         <div>

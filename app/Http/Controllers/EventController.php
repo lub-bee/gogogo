@@ -79,8 +79,9 @@ class EventController extends Controller
         }
 
         $event->user_id = auth()->user()->id; //automatically design the author
-        $event->topic_id = Topic::topic()->id;
-        $event->location_id = Location::location()->id;
+        $event->topic_id = $validated["topic_id"];
+
+        // $event->location_id = Location::location()->id; //todo
 
         $event->save();
 
@@ -97,8 +98,10 @@ class EventController extends Controller
     public function edit(int $event_id): View
     {
         $event = Event::findOrFail($event_id);
+        $topics = Topic::get();
         return view("admin/event/edit")
-                ->with('event', $event);
+                ->with('event', $event)
+                ->with('topics', $topics);
     }
 
     /**

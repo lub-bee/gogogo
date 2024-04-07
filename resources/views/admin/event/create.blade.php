@@ -99,8 +99,17 @@
 
                 <div class="info">
                     <div>Topic</div>
-                    TODO - pluck - dropdown
-
+                    <div>
+                        <select name="topic_id">
+                            <option value="">-</option>
+                            @foreach ($topics as $topic)
+                                <option value="{{$topic->id}}">{{ $topic->name }}</option>
+                            @endforeach
+                        </select>
+                        @error("topic_id")
+                            <div>{{$message}}</div>
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="info">
@@ -118,6 +127,8 @@
                     </button>
                 </div>
             </form>
+
+            <div class="uppercase">SomeText in it WITH RANDoM CAp</div>
         </div>
     </div>
 </x-admin-layout>
