@@ -5,12 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MediaCreateRequest;
 use App\Http\Requests\MediaUpdateRequest;
 use App\Models\Media;
-use App\Services\ImageService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\Storage;
 
 class MediaController extends Controller
 {
