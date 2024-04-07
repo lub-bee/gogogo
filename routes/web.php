@@ -5,6 +5,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\TopController;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\UserController;
 use App\Models\Location;
@@ -21,15 +22,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// public routes
+Route::get("/", [TopController::class, "index"])->name("top");
+Route::name('top.')->group(function () {
+
+    // Route::get("/", [TopController::class, "index"])->name("top");
+    Route::get("/test", function () {
+        return view("test");
+    });
+
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
+Route::get('/management', function () {
+    return view('top.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::prefix("management")->middleware('auth')->group( function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

@@ -101,15 +101,103 @@ th{
 
 .formated-content h1{
     @apply
-        text-3xl
+        text-6xl
         font-bold
-        mb-2
-        border-b border-gray-200
+        mb-2 mt-4
 }
 .formated-content h2{
     @apply
-        text-2xl
+        text-4xl
         font-bold
-        mb-2
-        border-b border-gray-200
+        mb-2 mt-4
+}
+.formated-content h3{
+    @apply
+        text-3xl
+        mb-2 mt-2
+}
+
+.formated-content ul{
+    @apply
+        pl-4
+        list-disc
+}
+
+
+/* Top related design */
+:root {
+    scroll-behavior: smooth  !important;
+}
+
+.top header{
+    @apply
+        h-[4rem] sm:h-[7rem] md:h-[9rem]
+        text-[4rem] sm:text-[5rem] md:text-[10rem]
+        leading-[2.7rem] sm:leading-[6rem] md:leading-[9rem]
+        font-bold
+        overflow-hidden
+        uppercase
+        pl-4 md:pl-0 md:-mt-[1rem]
+}
+
+
+section{
+    @apply
+        snap-start
+        shrink-0
+        w-full
+        h-screen
+        overflow-y-hidden
+        overflow-x-auto
+        snap-mandatory
+}
+
+.low-contrast header{
+    @apply
+        text-white
+        bg-gray-400
+}
+.low-contrast.inverse header{
+    @apply
+        text-gray-400
+        bg-white
+}
+.high-contrast header{
+    @apply
+        text-white
+        bg-slate-900
+}
+.high-contrast.inverse header{
+    @apply
+        text-slate-900
+        bg-white
+}
+
+
+
+.menu a{
+    @apply
+        block
+        leading-[2.2rem]
+        hover:leading-[3rem]
+        text-slate-600
+        hover:border-y-2 border-slate-600
+        cursor-pointer
+        transition-all
+}
+
+.event-year{
+    @apply
+        w-60
+        font-bold text-[3rem]
+        leading-[3rem]
+        text-center
+}
+
+.media-tile{
+    @apply
+        flex-1
+        rounded
+        max-h-full
+        w-auto
 }
