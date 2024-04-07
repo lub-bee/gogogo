@@ -55,15 +55,15 @@ class Topic extends Model
     {
         if ($this->published_at == null)
         {
-            return "Draft";
+            return "draft"; // $status == "draft"
         }
         elseif( Carbon::now() < $this->published_at)
         {
-            return "Scheduled";
+            return "scheduled";
         }
         else
         {
-            return "Published";
+            return "published";
         }
     }
 
