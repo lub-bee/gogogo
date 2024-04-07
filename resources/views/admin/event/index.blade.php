@@ -29,15 +29,15 @@
                         </td>
                         <td>
                             @if( $event->topic )
-                            <a href="{{route('topic.show', $event->topic->id)}}" class="hover:text-blue-500 cursor-pointer">
-                                {{$event->topic->name}}
+                            <a href="{{route('topic.show', $event->topic->id)}}" class="hover:text-blue-500 cursor-pointer" title="{{ $event->topic->name }}">
+                                {{Str::limit($event->topic->name, 10)}}
                             </a>
                             @endif
                         </td>
                         <td>
                             @if ( $event->location )
-                            <a href="{{route('location.show', $event->location->id)}}" class="hover:text-blue-500 cursor-pointer">
-                                {{$event->location->name}}
+                            <a href="{{route('location.show', $event->location->id)}}" class="hover:text-blue-500 cursor-pointer" title="{{ $event->location->name }}">
+                                {{Str::limit($event->location->name,10)}}
                             </a>
                             @endif
                         </td>

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MediaCreateRequest;
+use App\Http\Requests\MediaUpdateRequest;
 use App\Models\Media;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class MediaController extends Controller
@@ -17,7 +18,7 @@ class MediaController extends Controller
      */
     public function index() : View
     {
-        $medias = Media::orderBy("timestamps", "desc")->get();
+        $medias = Media::orderBy("id", "asc")->get();
             //to check
             //->orderBy("","");
         return view("admin.media.index")
@@ -50,39 +51,24 @@ class MediaController extends Controller
     /**
      * Store a new Media file
      *
-     * @param Request $request
+     * @param MediaCreateRequest $request
      * @return RedirectResponse
      */
-    public function store(Request $request) : RedirectResponse
+    public function store(MediaCreateRequest $request) : RedirectResponse
     {
-        $validated = $request->validate([
-            //to check - Media migration table does not have a "name" for media
-            //do I need to add one?
-            "name" => [
-                "required",
-                "string",
-                "max:60",
-            ],
-            "description_en" => [
-                "nullable",
-                "string",
-                "max:2000"
-            ],
-            "description_ja" => [
-                "nullable",
-                "string",
-                "max:2000"
-            ],
-        ]);
+        $validated = $request->validated();
+
+        $imageName = time().'.'.$request->picture->extension();
+        $request->picture->move(public_path('pictures'), $imageName);
+        $path = $imageName;
 
         $media = new Media();
-        $media->name = $validated["name"];
+        $media->path = $path;
         $media->description_en = $validated["description_en"];
         $media->description_ja = $validated["description_ja"];
         $media->user_id = auth()->user()->id;
 
         $media->save();
-
 
         return redirect(route("media.index"))
             ->with("success", "Media file saved successfully");
@@ -105,33 +91,14 @@ class MediaController extends Controller
      * Update a specific event
      *
      * @param int $media_id
-     * @param Request $request
+     * @param MediaCreateRequest $request
      * @return RedirectResponse
      */
-    public function update(int $media_id, Request $request) : RedirectResponse
+    public function update(MediaUpdateRequest $request) : RedirectResponse
     {
-        $validated = $request->validate([
-            //to check - Media migration table does not have a "name" for media
-            //do I need to add one?
-            "name" => [
-                "required",
-                "string",
-                "max:60",
-            ],
-            "description_en" => [
-                "nullable",
-                "string",
-                "max:2000"
-            ],
-            "description_ja" => [
-                "nullable",
-                "string",
-                "max:2000"
-            ],
-        ]);
+        $validated = $request->validated();
 
-        $media = Media::find($media_id);
-        $media->name = $validated["name"];
+        $media = Media::findOrFail($validated["media_id"]);
         $media->description_en = $validated["description_en"];
         $media->description_ja = $validated["description_ja"];
 

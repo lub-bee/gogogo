@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MediaCreateRequest extends FormRequest
+class MediaUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,9 @@ class MediaCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "picture" => [
+            "media_id" => [
                 "required",
-                "image",
-                "mimes:png,jpg,jpeg,svg,webp",
-                "max:5000",
+                "exists:medias,id"
             ],
             "description_en" => [
                 "nullable",

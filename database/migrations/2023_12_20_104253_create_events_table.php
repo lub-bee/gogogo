@@ -23,8 +23,8 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreignId("user_id")->constrained("users");
-            $table->foreignId("topic_id")->constrained("topics")->nullable();
-            $table->foreignId("location_id")->constrained("locations")->nullable();
+            $table->foreignId("topic_id")->nullable()->default(null)->constrained("topics");
+            $table->foreignId("location_id")->nullable()->default(null)->constrained("locations");
         });
     }
 
