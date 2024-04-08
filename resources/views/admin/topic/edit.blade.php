@@ -92,6 +92,22 @@
                 </button>
             </div>
 
+            <form method="POST" action="{{ route('topic.destroy') }}" >
+                <div class='section'>
+                    <div class='block-container p-4 '>
+                        @csrf
+                        @method("delete")
+
+                        <input type="hidden" name="event_id" value="{{$topic->id}}" />
+
+                        <div class="text-xl">
+                            Delete the topic
+                        </div>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </form>
+
     <x-editor-loader/>
 
 </x-admin-layout>
