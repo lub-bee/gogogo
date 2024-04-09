@@ -22,9 +22,9 @@ return new class extends Migration
             $table->string("cost", 255)->nullable();
             $table->timestamps();
 
-            $table->foreignId("user_id")->constrained("users");
-            $table->foreignId("topic_id")->nullable()->default(null)->constrained("topics");
-            $table->foreignId("location_id")->nullable()->default(null)->constrained("locations");
+            $table->foreignId("user_id")->nullable()->constrained("users")->onDelete("set null");
+            $table->foreignId("topic_id")->nullable()->default(null)->constrained("topics")->onDelete("set null");
+            $table->foreignId("location_id")->nullable()->default(null)->constrained("locations")->onDelete("set null");
         });
     }
 

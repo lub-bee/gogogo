@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string("cost", 255)->default("TBD");
             $table->timestamps();
 
-            $table->foreignId("user_id")->constrained("users");
+            $table->foreignId("user_id")->constrained("users")->onDelete("set null");
         });
     }
 

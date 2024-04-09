@@ -137,7 +137,7 @@ class TopicController extends Controller
     {
         $validated = $request->validated();
 
-        $topic = Topic::findOrFail($validated['$topic_id']);
+        $topic = Topic::findOrFail($validated['topic_id']);
         $topic->delete();
 
         return redirect(route("topic.index"))
