@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MediaCreateRequest;
+use App\Http\Requests\MediaDeleteRequest;
 use App\Http\Requests\MediaUpdateRequest;
 use App\Models\Media;
 use Illuminate\Http\RedirectResponse;
@@ -111,16 +112,18 @@ class MediaController extends Controller
     /**
      * Delete a specific Media file
      *
-     * @param int $media_id
-     * @param Request $request
+     * @param MediaDeleteRequest $request
      * @return RedirectResponse
      */
-    public function delete(int $media_id, Request $request) : RedirectResponse
+    public function destroy(MediaDeleteRequest $request): RedirectResponse
     {
-        //todo - Need to check how to delete
-        return redirect(route("media.index"))
-            ->with("success", "Media file  deleted successfully");
+        $validated = $request->validated();
 
+        $media = Media::findOrFail($validated['media_id']);
+        $media->delete();
+
+        return redirect(route("media.index"))
+            ->with("success", "Media [$media->name] deleted successfully");
     }
 }
 
