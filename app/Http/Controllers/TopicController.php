@@ -101,7 +101,7 @@ class TopicController extends Controller
     {
         $validated = $request->validated();
 
-        $topic =  Topic::find($topic_id);
+        $topic =  Topic::findOrFail($topic_id);
         $topic->name = $validated["name"];
         $topic->memo = $validated["memo"];
         $topic->description_en = $validated["description_en"];
