@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date("published_at")->nullable();
             $table->timestamps();
 
-            $table->foreignId("user_id")->constrained("users");
+            $table->foreignId("user_id")->constrained("users")->onDelete("set null");
         });
     }
 
