@@ -144,10 +144,10 @@
     </form>
 
     <form method="POST" action="{{ route('event.destroy') }}" >
+        @csrf
+        @method("delete")
         <div class='section'>
             <div class='block-container p-4 '>
-                @csrf
-                @method("delete")
 
                 <input type="hidden" name="event_id" value="{{$event->id}}" />
 
