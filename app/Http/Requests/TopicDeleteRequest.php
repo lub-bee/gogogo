@@ -22,7 +22,7 @@ class TopicDeleteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "topic_id" => "exists:topics,id"
+            "topic_id" => "exists:topics,id",
         ];
     }
 }
