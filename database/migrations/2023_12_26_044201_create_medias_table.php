@@ -16,9 +16,11 @@ return new class extends Migration
             $table->string("path", 100);
             $table->text("description_en")->nullable();
             $table->text("description_ja")->nullable();
+            $table->date('validated_at') ->nullable();
             $table->timestamps();
 
             $table->foreignId("user_id")->nullable()->constrained("users")->onDelete("set null");
+            $table->foreignId("event_id")->nullable()->constrained("events")->onDelete("set null");
 
         });
     }

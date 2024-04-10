@@ -7,34 +7,30 @@
     </div>
 
     <div class='section'>
-        <div class='block-container'>
-            <table class="table my-5">
-                <tr>
-                    <th>PREVIEW</th>
-                    <th>Description (English)</th>
-                    <th>Description (Japanese)</th>
-                </tr>
-                @foreach ($medias as $media)
-                    <tr>
-                        <td>
-                            <a href="{{ route('media.show', $media->id)}}">
-                                {{-- Preview thumbnail TODO --}}
-                                <x-media-thumbnail :media="$media"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="{{route('media.show', $media->id)}}">
-                                {{$media->description_en}}
-                            </a>
-                        </td>
-                        <td>
-                            <a href="{{route('media.show', $media->id)}}">
-                                {{$media->description_ja}}
-                            </a>
-                        </td>
-                    </tr>
-                @endforeach
-            </table>
+        <div class='block-container p-4'>
+            @if($pending_medias->count() > 0)
+            <div class='title-1 mb-4'>
+                Media Pending Validation
+            </div>
+            @endif
+            <div class='grid grid-cols-4 gap-4'>
+                @forelse ($pending_medias as $media)
+                    <x-media.admin-media-card :media="$media"/>
+                @empty
+                @endforelse
+            </div>
+
+            @if($valid_medias->count() > 0)
+            <div class='title-1 mt-4'>
+                Media
+            </div>
+            @endif
+            <div class='grid grid-cols-4 gap-4'>
+                @forelse ($valid_medias as $media)
+                    <x-media.admin-media-card :media="$media"/>
+                @empty
+                @endforelse
+            </div>
         </div>
     </div>
 

@@ -38,6 +38,10 @@ class MediaCreateRequest extends FormRequest
                 "string",
                 "max:2000",
             ],
+            "event_id" => [
+                "required",
+                "exists:events,id",
+            ],
         ];
     }
 }

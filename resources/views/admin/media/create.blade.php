@@ -38,6 +38,19 @@
                         @enderror
                     </div>
                 </div>
+                <div class="info">
+                    <div>Event</div>
+                    <div class="col-span-3">
+                        <select name="event_id" class="w-full">
+                            @foreach ($events as $event)
+                                <option value="{{ $event->id }}">{{ $event->name }}</option>
+                            @endforeach
+                        </select>
+                        @error("event_id")
+                        <div>{{$message}}</div>
+                        @enderror
+                    </div>
+                </div>
 
                 <div class="flex justify-center gap-4 mt-5">
                     <a class="btn" href="{{ route('media.index') }}">

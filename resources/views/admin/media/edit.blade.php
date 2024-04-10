@@ -15,7 +15,7 @@
                     <div>Preview</div>
                     <div>
                         <img
-                            src="{{ asset("pictures/" . $media->path) }}"/>
+                            src="{{ $media->pathUrl }}"/>
                     </div>
                 </div>
 
