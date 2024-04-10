@@ -5,7 +5,7 @@
         <a href="{{ route('event.edit', $event->id)}}" class="btn">Edit</a>
     </div>
 
-    <!-- @if($event->status == 'draft')
+    @if($event->status == 'draft')
     <div class='section'>
         <div class='block-container p-4'>
             <form class="flex justify-between items-center gap-5">
@@ -16,7 +16,7 @@
             </form>
         </div>
     </div>
-    @endif -->
+    @endif
 
     <div class='section'>
         <div class='block-container p-4'>
@@ -27,6 +27,23 @@
             <x-event.event-detail :event="$event"/>
         </div>
     </div>
+
+    {{-- display related media --}}
+    @if($event->media()->count() > 0)
+        <div class='section'>
+            <div class='block-container p-4'>
+                <div class='title-1'>
+                    Media
+                </div>
+                <div class='flex gap-4 flex-wrap'>
+                    @foreach($event->media as $media)
+                        <x-media-thumbnail :media="$media"/>
+                    @endforeach
+                </div>
+
+            </div>
+        </div>
+    @endif
 
     {{-- display related topic --}}
     @if($event->topic != null)
@@ -39,5 +56,7 @@
             </div>
         </div>
     @endif
+
+
 
 </x-admin-layout>

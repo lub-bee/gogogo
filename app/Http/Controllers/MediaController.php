@@ -20,12 +20,19 @@ class MediaController extends Controller
      *
      * @return View
      */
-    public function index() : View
+    public function index(Request $request) : View
     {
-        $valid_medias = Media::isValidated()->orderBy("id", "desc")->get();
-        $pending_medias = Media::isNotValidated()->orderBy("id", "desc")->get();
+        $valid_medias = Media::isValidated()
+            ->when($request->query("event"), fn($query) => $query->where("event_id", $request->query("event")))
+            ->orderBy("id", "desc")
+            ->get();
+        $pending_medias = Media::isNotValidated()
+            ->when($request->query("event"), fn($query) => $query->where("event_id", $request->query("event")))
+            ->orderBy("id", "desc")
+            ->get();
 
         return view("admin.media.index")
+            ->with('paramsQuery', $request->query())
             ->with("valid_medias", $valid_medias)
             ->with("pending_medias", $pending_medias);
 
@@ -36,11 +43,11 @@ class MediaController extends Controller
      *
      * @return View
      */
-    public function show(int $media_id) : View
+    public function show(Request $request,int $media_id) : View
     {
         $media = Media::findOrFail($media_id);
         return view("admin/media/show")
-        ->with("media", $media);
+            ->with("media", $media);
     }
 
     /**
@@ -142,7 +149,7 @@ class MediaController extends Controller
         //remove DB entry
         $media->delete();
 
-        return redirect(route("media.index"))
+        return redirect(route("media.index",$request->query()))
             ->with("success", "Media deleted successfully");
     }
 
@@ -151,7 +158,8 @@ class MediaController extends Controller
         $media = Media::findOrFail($request->validated()["media_id"]);
         $media->validated_at = now();
         $media->save();
-        return redirect(route("media.index", $media->id));
+
+        return redirect(route("media.index", $request->query()));
     }
 }
 

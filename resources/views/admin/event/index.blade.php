@@ -42,9 +42,17 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{route('media.index', ['event' => $event->id ])}}" class="hover:text-blue-500 cursor-pointer">
-                                TODO-NEW
-                            </a>
+                            <div class='flex gap-2'>
+
+                                <div class=''>
+                                    {{ $event->media()->count() }}
+                                </div>
+                                @if($event->media()->isNotValidated()->count() > 0)
+                                <a href="{{route('media.index', ['event' => $event->id ])}}" class="text-xs text-white bg-amber-500 font-bold hover:bg-amber-400 rounded p-px px-1 transition-all self-start">
+                                    {{ $event->media()->isNotValidated()->count() }} New
+                                </a>
+                                @endif
+                            </div>
                         </td>
                         <td>
                             @if($event->start_at)

@@ -12,7 +12,7 @@
             </div>
             <div class='flex gap-2  p-2 pt-0'>
                 {{-- delete form --}}
-                <form class="flex-1 flex" action="{{ route('media.destroy') }}" method="POST">
+                <form class="flex-1 flex" action="{{ route('media.destroy', request()->query()) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <input type="hidden" name="media_id" value="{{$media->id}}" />
@@ -20,7 +20,7 @@
                 </form>
 
                 {{-- validate form --}}
-                <form class="flex-1 flex" action="{{ route('media.validate', $media->id) }}" method="POST">
+                <form class="flex-1 flex" action="{{ route('media.validate', request()->query()) }}" method="POST">
                     @csrf
                     @method('PATCH')
                     <input type="hidden" name="media_id" value="{{$media->id}}" />
