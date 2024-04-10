@@ -1,9 +1,6 @@
 @props(['media'])
 <div class='rounded relative overflow-hidden group/media'>
     <img
-        {{-- src="https://picsum.photos/200/300?random=1" --}}
-        {{-- src="{{ asset("pictures/" . $media->path) }}" --}}
-        {{-- src="{{ asset($media->path) }}" --}}
         src="{{ asset($media->pathUrl) }}"
         alt="{{ $media->pathUrl }}"
         class="w-full h-full object-cover"

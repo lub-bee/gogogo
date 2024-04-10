@@ -31,7 +31,6 @@
                     <img src="{{ $media->pathUrl }}"/>
                 </div>
             </div>
-
             <div class='info'>
                 <div>Description (English)</div>
                 <div>
