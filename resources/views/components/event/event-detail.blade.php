@@ -1,7 +1,4 @@
 @props(['event'])
-<div class='title-1'>
-    Event details
-</div>
 
 <div class='info'>
     <div>Name</div>
@@ -49,15 +46,15 @@
 
 <div class="info">
     <div>Topic</div>
-    <div><a href="{{route('topic.show',$event->topic->id)}}" class="hover:text-blue-500 cursor-pointer">{{ $event->topic->name}}</a></div>
+    <div><a href="{{route('topic.show',$event->topic->id)}}" class="link">{{ $event->topic->name}}</a></div>
 </div>
 <div class="info">
     <div>Location</div>
-    <div><a href="{{route('location.show',$event->location->id)}}" class="hover:text-blue-500 cursor-pointer">{{ $event->location->name}}</a></div>
+    <div><a href="{{route('location.show',$event->location->id)}}" class="link">{{ $event->location->name}}</a></div>
 </div>
 <div class="info">
     <div>Author</div>
-    <div><a href="{{route('user.show',$event->user->id)}}" class="hover:text-blue-500 cursor-pointer">{{ $event->user->name}}</a></div>
+    <div><a href="{{route('user.show',$event->user->id)}}" class="link">{{ $event->user->name}}</a></div>
     <div>Last Update</div>
     <div>{{ $event->updated_at }}</div>
 </div>

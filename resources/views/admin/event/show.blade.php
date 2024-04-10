@@ -20,6 +20,10 @@
 
     <div class='section'>
         <div class='block-container p-4'>
+            <div class='title-1'>
+                Event details
+            </div>
+
             <x-event.event-detail :event="$event"/>
         </div>
     </div>
