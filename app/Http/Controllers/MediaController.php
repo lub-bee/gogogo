@@ -123,7 +123,7 @@ class MediaController extends Controller
         $media->delete();
 
         return redirect(route("media.index"))
-            ->with("success", "Media [$media->name] deleted successfully");
+            ->with("success", "Media '$media->path' deleted successfully");
     }
 }
 
