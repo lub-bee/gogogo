@@ -96,6 +96,21 @@
                 </div>
 
                 <div class="info">
+                    <div>Location</div>
+                    <div>
+                        <select name="location_id">
+                            <option value="" >-</option>
+                            @foreach ($locations as $location)
+                                <option value="{{$location->id}}" {{ (old("location_id", $event->location_id) == $location->id ? "selected":"") }} >{{ $location->name }}</option>
+                            @endforeach
+                        </select>
+                        @error("location_id")
+                            <div>{{$message}}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="info">
                     <div>Status</div>
                     <div class="col-span-3">
                         <div>
