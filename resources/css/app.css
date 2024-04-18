@@ -26,7 +26,7 @@
 }
 .info > div{
     @apply p-4
-    odd:bg-gray-300
+    odd:bg-gray-100
     text-gray-700
 }
 
@@ -86,7 +86,7 @@ table{
 table th, table td{
     @apply
         p-3
-        border-b border-gray-200
+        border-b border-gray-100
 }
 th{
     @apply
@@ -200,4 +200,9 @@ section{
         rounded
         max-h-full
         w-auto
+}
+
+.title-1{
+    @apply
+    text-4xl border-l-4 border-blue-500 pl-4 mb-4
 }
