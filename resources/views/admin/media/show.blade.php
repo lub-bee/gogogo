@@ -3,7 +3,19 @@
     <div class='section flex justify-between'>
         <a href="{{ route('media.index')}}" class="btn">Back</a>
         <a href="{{ route('media.edit', $media->id)}}" class="btn">Edit</a>
-        <a href="{{ route('media.destroy', $media->id) }}" class="btn">Delete</a>
+        <form method="POST" action="{{ route('media.destroy') }}" >
+            @csrf
+            @method("delete")
+            <div class='section'>
+                <div class='block-container p-4 '>
+                    <input type="hidden" name="media_id" value="{{$media->id}}" />
+                    {{-- <div class="text-xl">
+                        Delete the Media File
+                    </div> --}}
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </form>
     </div>
 
     <div class="section">
