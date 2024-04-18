@@ -5,18 +5,20 @@
         <a href="{{ route('event.edit', $event->id)}}" class="btn">Edit</a>
     </div>
 
-    <!-- @if($event->status == 'draft')
-    <div class='section'>
-        <div class='block-container p-4'>
-            <form class="flex justify-between items-center gap-5">
-                <x-input-info level="warning" class="flex-1">
-                    This event is currently still saved as a DRAFT.
-                </x-input-info>
-                <button type="submit" class="btn btn-main">Publish Now</button>
-            </form>
+    @if($event->isDraft())
+        <div class='section'>
+            <div class='block-container p-4'>
+                <form class="flex justify-between items-center gap-5" action="{{route('event.publish', $event->id)}}" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <x-input-info level="warning" class="flex-1">
+                        This event is currently still saved as a DRAFT.
+                    </x-input-info>
+                    <button type="submit" class="btn btn-main">Publish Now</button>
+                </form>
+            </div>
         </div>
-    </div>
-    @endif -->
+    @endif
 
     <div class='section'>
         <div class='block-container p-4'>

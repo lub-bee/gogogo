@@ -12,7 +12,7 @@
                 @csrf
                 @method('PATCH')
                 <x-input-info level="warning" class="flex-1">
-                    This topic is currently still in the Draft state.
+                    This topic is currently still saved as a DRAFT.
                 </x-input-info>
                 <button type="submit" class="btn btn-main">Publish Now</button>
             </form>
