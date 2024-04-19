@@ -4,10 +4,10 @@ namespace App\Http\Requests;
 
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Password;
 
-class UserCreateRequest extends FormRequest
+class UserUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -34,23 +34,12 @@ class UserCreateRequest extends FormRequest
                 "required",
                 "string",
                 "email",
-                Rule::unique('users', 'email'),
+                Rule::unique('users', 'email')->ignore($this->user_id),
             ],
-            "password" => [
-                "required",
-                "string",
-                "min:8",
-                "max:30",
-                "confirmed",
-                Password::min(8)
-                    ->max(30)
-                    ->letters()
-                    ->numbers()
-                    ->mixedCase(),
-            ],
-            "password_confirmation" => [
-                "required",
-            ],
+            // "password" => [
+            //     "required",
+            //     "current_password",
+            // ],
             "rank" => [
                 "required",
                 "string",
@@ -59,23 +48,3 @@ class UserCreateRequest extends FormRequest
         ];
     }
 }
-
-// "name" => [
- //   "required",
-   // "string",
-   // "max:60"
-//],
-//"email" => [
-  //  "required",
-   // "string",
-   // "max:100"
-//],
-/**
- * "password" => [
- *      "required",
- *      "string",
- *      "max:30"
- *  ],
- */
-
-//]);

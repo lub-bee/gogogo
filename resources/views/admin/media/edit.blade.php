@@ -6,6 +6,10 @@
     <div class='section'>
         <div class='block-container p-4'>
 
+            <div class='title-1'>
+                Media edition
+            </div>
+
             <form method="POST" action="{{route('media.update', $media->id)}}">
                 @csrf
                 @method('PUT')
@@ -15,25 +19,16 @@
                     <div>Preview</div>
                     <div>
                         <img
-                            src="{{ asset("pictures/" . $media->path) }}"/>
+                            src="{{ $media->pathUrl }}"/>
                     </div>
                 </div>
 
                 <div class="info">
-                    <div>Description (English)</div>
+                    <div>Legend</div>
                     <div class="col-span-3">
-                        <textarea name="description_en" class="w-full">{{old("description_en")}}</textarea>
-                        @error("description_en")
+                        <textarea name="legend" class="w-full">{{old("legend")}}</textarea>
+                        @error("legend")
                             <div>{{$message}}</div>
-                        @enderror
-                    </div>
-                </div>
-                <div class="info">
-                    <div>Description (Japanese)</div>
-                    <div class="col-span-3">
-                        <textarea name="description_ja" class="w-full">{{old("description_ja")}}</textarea>
-                        @error("description_ja")
-                        <div>{{$message}}</div>
                         @enderror
                     </div>
                 </div>
@@ -50,5 +45,5 @@
         </div>
     </div>
 
-    <x-editor-loader/>
+    {{-- <x-editor-loader/> --}}
 </x-admin-layout>

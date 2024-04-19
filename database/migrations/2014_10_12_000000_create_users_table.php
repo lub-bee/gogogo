@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('rank', [100,10,0])->default(0)->comment("Admin : 100, Supoort : 10, Visitor : 0");
+            $table->enum('rank', User::RANKS)->default(User::RANK_VISITOR)->comment("Admin : 100, Support : 10, Visitor : 0");
             $table->rememberToken();
             $table->timestamps();
         });

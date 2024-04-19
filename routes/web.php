@@ -25,12 +25,10 @@ use Illuminate\Support\Facades\Route;
 // public routes
 Route::get("/", [TopController::class, "index"])->name("top");
 Route::name('top.')->group(function () {
-
-    // Route::get("/", [TopController::class, "index"])->name("top");
-    Route::get("/test", function () {
-        return view("test");
-    });
-
+    Route::get("/user/{user_id}", [TopController::class, "user"])->name("user");
+    Route::get("/event/{event_id}", [TopController::class, "event"])->name("event");
+    Route::get('/location/{location_id}', [TopController::class, "location"])->name('location');
+    Route::get('/topic/{topic_id}', [TopController::class, "topic"])->name('topic');
 });
 
 Route::get('/management', function () {
@@ -90,6 +88,7 @@ Route::prefix("management")->middleware('auth')->group( function () {
     Route::get('/media/{media_id}', [MediaController::class, "show"])->name('media.show');
     Route::put('/media/{media_id}',[MediaController::class,"update"])->name('media.update');
     Route::delete('/media',[MediaController::class,"destroy"])->name('media.destroy');
+    Route::patch('/media/validate', [MediaController::class, 'updateValidatedAt'])->name('media.validate');
 
     //Tag
     Route::get('/tag',[TagController::class, "index"])->name('tag.index');

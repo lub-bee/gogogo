@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserDeleteRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Models\User as ModelsUser;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\User;
@@ -69,7 +70,9 @@ class UserController extends Controller
 
         $user = new User();
         $user->name = $validated["name"];
-        // $user->email = $validated["email"];
+        $user->email = $validated["email"];
+        $user->rank = $validated["rank"];
+        $user->password = Hash::make($validated["password"]);
         /**
          *
          * to check
@@ -106,16 +109,19 @@ class UserController extends Controller
      * @param UserCreateRequest $request
      * @return RedirectResponse
      */
-    public function update(int $user_id, UserCreateRequest $request): RedirectResponse
+    public function update(int $user_id, UserUpdateRequest $request): RedirectResponse
     {
         $validated = $request->validated();
 
         $user = User::find($user_id);
         $user->name = $validated["name"];
         $user->email = $validated["email"];
-        // $user->password = $validated["password"];
+        $user->rank = $validated["rank"];
 
-        $user->save();
+        //only save when data have actually changed
+        if($user->isDirty()) {
+            $user->save();
+        }
 
         return redirect(route("user.show", $user->id))
             ->with("success","User updated successfully");
