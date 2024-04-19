@@ -22,7 +22,7 @@
                             </a>
                         </td>
                         <td>{{$user->email}}</td>
-                        <td>{{$user->rank}}</td>
+                        <td>{{ App\Models\User::rankLabel($user->rank) }}</td>
                     </tr>
                 @endforeach
             </table>
