@@ -114,7 +114,17 @@
 
                 <div class="info">
                     <div>Location</div>
-                    TODO - pluck - dropdown
+                    <div>
+                        <select name="location_id">
+                            <option value="">-</option>
+                            @foreach ($locations as $location)
+                            <option value="{{$location->id}}">{{ $location->name }}</option>
+                            @endforeach
+                        </select>
+                        @error("location_id")
+                            <div>{{$message}}</div>
+                        @enderror
+                    </div>
 
                 </div>
 
@@ -128,7 +138,7 @@
                 </div>
             </form>
 
-            <div class="uppercase">SomeText in it WITH RANDoM CAp</div>
+            <div class="uppercase">SomeText in it WITH RANDoM CAp - Keeping for checking!</div>
         </div>
     </div>
 </x-admin-layout>

@@ -54,7 +54,8 @@ class EventController extends Controller
     public function create() : View
     {
         return view("admin/event/create")
-            ->with("topics", Topic::get());
+            ->with("topics", Topic::get())
+            ->with("locations", Location::get());
     }
 
     /**
@@ -81,6 +82,7 @@ class EventController extends Controller
 
         $event->user_id = auth()->user()->id; //automatically design the author
         $event->topic_id = $validated["topic_id"];
+        $event->location_id = $validated["location_id"];
 
         // $event->location_id = Location::location()->id; //todo
 
@@ -100,9 +102,12 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($event_id);
         $topics = Topic::get();
+        $locations = Location::get();
+
         return view("admin/event/edit")
                 ->with('event', $event)
-                ->with('topics', $topics);
+                ->with('topics', $topics)
+                ->with('locations', $locations);
     }
 
     /**
@@ -123,6 +128,8 @@ class EventController extends Controller
         $event->description_en = $validated["description_en"];
         $event->description_ja = $validated["description_ja"];
         $event->cost = $validated["cost"];
+        $event->topic_id = $validated["topic_id"];
+        $event->location_id = $validated["location_id"];
 
         if($validated["status"] == "published"){
             $event->published_at = $validated["published_at"];

@@ -62,6 +62,10 @@ class EventCreateRequest extends FormRequest
                 "nullable",
                 "exists:topics,id"
             ],
+            "location_id" => [
+                "nullable",
+                "exists:locations,id"
+            ],
             "status" => [
                 "required",
                 "in:published,draft"
