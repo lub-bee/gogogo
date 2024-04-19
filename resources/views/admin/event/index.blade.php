@@ -43,10 +43,9 @@
                         </td>
                         <td>
                             <div class='flex gap-2'>
-
-                                <div class=''>
+                                <a href="{{route('media.index', ['event' => $event->id ])}}" class='link'>
                                     {{ $event->media()->count() }}
-                                </div>
+                                </a>
                                 @if($event->media()->isNotValidated()->count() > 0)
                                 <a href="{{route('media.index', ['event' => $event->id ])}}" class="text-xs text-white bg-amber-500 font-bold hover:bg-amber-400 rounded p-px px-1 transition-all self-start">
                                     {{ $event->media()->isNotValidated()->count() }} New

@@ -79,7 +79,7 @@ class MediaController extends Controller
         $media = new Media();
         $media->path = $path;
         $media->description_en = $validated["description_en"];
-        $media->description_ja = $validated["description_ja"];
+        // $media->description_ja = $validated["description_ja"];
         $media->event_id = $validated["event_id"];
         $media->user_id = auth()->user()->id;
 
@@ -121,9 +121,11 @@ class MediaController extends Controller
 
         $media = Media::findOrFail($validated["media_id"]);
         $media->description_en = $validated["description_en"];
-        $media->description_ja = $validated["description_ja"];
+        // $media->description_ja = $validated["description_ja"];
 
-        $media->save();
+        if($media->isDirty()) {
+            $media->save();
+        }
 
         return redirect(route("media.show", $media->id))
             ->with("success", "Media file updated successfully");

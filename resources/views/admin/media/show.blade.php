@@ -3,8 +3,35 @@
     <div class='section flex justify-between'>
         <a href="{{ route('media.index')}}" class="btn">Back</a>
         <a href="{{ route('media.edit', $media->id)}}" class="btn">Edit</a>
-        <a href="{{ route('media.destroy', $media->id) }}" class="btn">Delete</a>
+        {{-- <a href="{{ route('media.destroy', $media->id) }}" class="btn">Delete</a> --}}
     </div>
+
+    @if(!$media->validated)
+    <div class='section'>
+        <div class="block-container p-4 flex gap-4 items-center">
+            <div class='flex-1 text-4xl'>
+                <i class="fa-solid fa-circle-exclamation text-amber-500"></i> Pending validation
+            </div>
+
+            {{-- delete form --}}
+            <form class="" action="{{ route('media.destroy', request()->query()) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <input type="hidden" name="media_id" value="{{$media->id}}" />
+                <button type="submit" class="flex-1 btn btn-danger">Refuse</button>
+            </form>
+
+            {{-- validate form --}}
+            <form class="" action="{{ route('media.validate', request()->query()) }}" method="POST">
+                @csrf
+                @method('PATCH')
+                <input type="hidden" name="media_id" value="{{$media->id}}" />
+
+                <button type="submit" class="flex-1 btn btn-success">Authorize</button>
+            </form>
+        </div>
+    </div>
+    @endif
 
     <div class="section">
         <div class="block-container p-4">
@@ -32,18 +59,18 @@
                 </div>
             </div>
             <div class='info'>
-                <div>Description (English)</div>
+                <div>Legend</div>
                 <div>
                     {{$media->description_en}}
                 </div>
             </div>
 
-            <div class='info'>
+            {{-- <div class='info'>
                 <div>Description (Japanese)</div>
                 <div>
                     {{$media->description_ja}}
                 </div>
-            </div>
+            </div> --}}
 
             <div class="info">
                 <div>Author</div>

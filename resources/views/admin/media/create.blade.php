@@ -6,6 +6,10 @@
     <div class='section'>
         <div class='block-container p-4'>
 
+            <div class='title-1'>
+                Media upload
+            </div>
+
             <form method="POST" action="{{route('media.store')}}" enctype="multipart/form-data">
                 @csrf
 
@@ -21,15 +25,16 @@
                 </div>
 
                 <div class="info">
-                    <div>Description (English)</div>
+                    {{-- <div>Description (English)</div> --}}
+                    <div>Legend</div>
                     <div class="col-span-3">
-                        <textarea name="description_en" class="w-full">{{old("description_en")}}</textarea>
+                        <textarea name="description_en" class="form-input" class="w-full">{{old("description_en")}}</textarea>
                         @error("description_en")
                             <div>{{$message}}</div>
                         @enderror
                     </div>
                 </div>
-                <div class="info">
+                {{-- <div class="info">
                     <div>Description (Japanese)</div>
                     <div class="col-span-3">
                         <textarea name="description_ja" class="w-full">{{old("description_ja")}}</textarea>
@@ -37,11 +42,11 @@
                         <div>{{$message}}</div>
                         @enderror
                     </div>
-                </div>
+                </div>--}}
                 <div class="info">
                     <div>Event</div>
                     <div class="col-span-3">
-                        <select name="event_id" class="w-full">
+                        <select name="event_id" class="w-full form-input">
                             @foreach ($events as $event)
                                 <option value="{{ $event->id }}">{{ $event->name }}</option>
                             @endforeach
@@ -64,5 +69,5 @@
         </div>
     </div>
 
-    <x-editor-loader/>
+    {{-- <x-editor-loader/> --}}
 </x-admin-layout>
