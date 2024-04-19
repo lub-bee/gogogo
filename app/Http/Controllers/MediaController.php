@@ -78,8 +78,7 @@ class MediaController extends Controller
 
         $media = new Media();
         $media->path = $path;
-        $media->description_en = $validated["description_en"];
-        // $media->description_ja = $validated["description_ja"];
+        $media->legend = $validated["legend"];
         $media->event_id = $validated["event_id"];
         $media->user_id = auth()->user()->id;
 
@@ -120,8 +119,7 @@ class MediaController extends Controller
         $validated = $request->validated();
 
         $media = Media::findOrFail($validated["media_id"]);
-        $media->description_en = $validated["description_en"];
-        // $media->description_ja = $validated["description_ja"];
+        $media->legend = $validated["legend"];
 
         if($media->isDirty()) {
             $media->save();

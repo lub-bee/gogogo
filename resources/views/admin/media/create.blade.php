@@ -28,21 +28,13 @@
                     {{-- <div>Description (English)</div> --}}
                     <div>Legend</div>
                     <div class="col-span-3">
-                        <textarea name="description_en" class="form-input" class="w-full">{{old("description_en")}}</textarea>
-                        @error("description_en")
+                        <textarea name="legend" class="form-input" class="w-full">{{old("legend")}}</textarea>
+                        @error("legend")
                             <div>{{$message}}</div>
                         @enderror
                     </div>
                 </div>
-                {{-- <div class="info">
-                    <div>Description (Japanese)</div>
-                    <div class="col-span-3">
-                        <textarea name="description_ja" class="w-full">{{old("description_ja")}}</textarea>
-                        @error("description_ja")
-                        <div>{{$message}}</div>
-                        @enderror
-                    </div>
-                </div>--}}
+
                 <div class="info">
                     <div>Event</div>
                     <div class="col-span-3">

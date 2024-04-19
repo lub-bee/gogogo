@@ -16,19 +16,13 @@
         </a>
     </div>
 
-    @if ($media->description_en /*|| $media->description_ja*/)
+    @if ($media->legend)
         <div class='absolute bottom-0 left-0 right-0 flex flex-col p-2 px-4 gap-2 bg-white/80 opacity-0 group-hover/media-card:opacity-100 transition-all' :class="{ 'opacity-100': open }">
-            @if ($media->description_en)
+            @if ($media->legend)
                 <div>
-                    {{ $media->description_en }}
+                    {{ $media->legend }}
                 </div>
             @endif
-
-            {{-- @if ($media->description_ja)
-                <div>
-                    {{ $media->description_ja }}
-                </div>
-            @endif --}}
         </div>
     @endif
 </div>

@@ -28,16 +28,11 @@ class MediaCreateRequest extends FormRequest
                 "mimes:png,jpg,jpeg,svg,webp",
                 "max:5000",
             ],
-            "description_en" => [
+            "legend" => [
                 "nullable",
                 "string",
                 "max:2000",
             ],
-            // "description_ja" => [
-            //     "nullable",
-            //     "string",
-            //     "max:2000",
-            // ],
             "event_id" => [
                 "required",
                 "exists:events,id",

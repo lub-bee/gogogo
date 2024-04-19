@@ -61,7 +61,7 @@
             <div class='info'>
                 <div>Legend</div>
                 <div>
-                    {{$media->description_en}}
+                    {{$media->legend}}
                 </div>
             </div>
 
