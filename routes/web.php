@@ -5,6 +5,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\TempController;
 use App\Http\Controllers\TopController;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\UserController;
@@ -100,6 +101,16 @@ Route::prefix("management")->middleware('auth')->group( function () {
     Route::put('/tag/{tag_id}',[TagController::class,"update"])->name('tag.update');
     Route::delete('/tag',[TagController::class,"destroy"])->name('tag.destroy');
 
+
+
+});
+
+Route::name('temp.')->prefix('/temp')->group(function () {
+    Route::get('event', [TempController::class, "event"])->name('event');
+    Route::get('topic', [TempController::class, "topic"])->name('topic');
+    Route::get('location', [TempController::class, "location"])->name('location');
+    Route::get('media', [TempController::class, "media"])->name('media');
+    Route::get('agenda', [TempController::class, "agenda"])->name('agenda');
 });
 
 require __DIR__.'/auth.php';
