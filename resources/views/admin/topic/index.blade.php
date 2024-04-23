@@ -13,7 +13,6 @@
             <table class="table my-5">
                 <tr>
                     <th>Name</th>
-                    <th>Memo</th>
                     <th>Status</th>
                     <th>Last used</th>
                 </tr>
@@ -25,7 +24,6 @@
                                 {{$topic->name}}
                             </a>
                         </td>
-                        <td>{{$topic->memo}}</td>
                         <td class="uppercase text-center text-sm font-bold text-gray-500">
                             {{ $topic->publish_status }}
                         </td>
