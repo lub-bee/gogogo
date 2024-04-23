@@ -23,7 +23,7 @@
     <div class='section'>
         <div class='block-container p-4'>
             <div class='title-1'>
-                Event details
+                Event Details
             </div>
 
             <x-event.event-detail :event="$event"/>
@@ -52,13 +52,24 @@
         <div class='section'>
             <div class='block-container p-4'>
                 <div class='title-1'>
-                    Topic details
+                    Topic Details
                 </div>
                 <x-topic.topic-detail :topic="$event->topic"/>
             </div>
         </div>
     @endif
 
+    {{-- display related location --}}
+    @if($event->location != null)
+        <div class = 'section'>
+            <div class= 'block-container p-4'>
+                <div class='title-1'>
+                    Location Details
+                </div>
+                <x-location.location-detail :location="$event->location"/>
+            </div>
+        </div>
+    @endif
 
 
 </x-admin-layout>
