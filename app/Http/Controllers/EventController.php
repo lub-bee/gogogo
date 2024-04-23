@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\EventCreateRequest;
 use App\Http\Requests\EventDeleteRequest;
+use App\Http\Requests\EventPublishRequest;
 use App\Models\Event;
 use App\Models\Location;
 use App\Models\Topic;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View as ViewView;
 use Ramsey\Uuid\Type\Integer;
+
 
 class EventController extends Controller
 {
@@ -40,7 +42,6 @@ class EventController extends Controller
     public function show(int $event_id) : View
     {
         $event = Event::findOrFail($event_id);
-        // $event->user();
 
         return view("admin/event/show")
             ->with("event", $event);
@@ -140,6 +141,20 @@ class EventController extends Controller
 
         return redirect(route("event.show", $event->id))
             ->with("success", "Event updated successfully");
+    }
+
+    /**
+     * Publish a specific Event
+     * @param Event $event
+     * @param EventPublishRequest $request
+     * @return RedirectResponse
+     */
+    public function publish(Event $event, EventPublishRequest $request) : RedirectResponse
+    {
+        $event->published_at = now();
+        $event->save();
+        return redirect(route("event.show", $event->id))
+            ->with('success',"Event [$event->name] published successfully");
     }
 
     /**

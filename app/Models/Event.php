@@ -13,6 +13,16 @@ class Event extends Model
 {
     use HasFactory;
 
+    const STATUS_DRAFT = "draft";
+    const STATUS_SCHEDULED = "scheduled";
+    const STATUS_PUBLISHED = "published";
+
+    const STATUS = [
+        self::STATUS_DRAFT,
+        self::STATUS_SCHEDULED,
+        self::STATUS_PUBLISHED,
+    ];
+
     protected $casts = [
         "start_at" => "date",
     ];
@@ -59,31 +69,31 @@ class Event extends Model
     {
         if($this->published_at == null)
         {
-            return "Draft";
+            return self::STATUS_DRAFT;
         }
         elseif ( Carbon::now() < $this->published_at)
         {
-            return "Scheduled";
+            return self::STATUS_SCHEDULED;
         }
         else
         {
-            return "Published";
+            return self::STATUS_PUBLISHED;
         }
     }
 
     public function isPublished(): bool
     {
-        return $this->publish_status == "Published";
+        return $this->publish_status == self::STATUS_PUBLISHED;
     }
 
     public function isScheduled(): bool
     {
-        return $this->publish_status == "Scheduled";
+        return $this->publish_status == self::STATUS_SCHEDULED;
     }
 
     public function isDraft(): bool
     {
-        return $this->publish_status == "Draft";
+        return $this->publish_status == self::STATUS_DRAFT;
     }
 
 
