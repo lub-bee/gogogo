@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MediaCreateRequest;
 use App\Http\Requests\MediaDeleteRequest;
 use App\Http\Requests\MediaUpdateRequest;
+use App\Http\Requests\MediaValidateRequest;
+use App\Models\Event;
 use App\Models\Media;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class MediaController extends Controller
@@ -17,13 +20,21 @@ class MediaController extends Controller
      *
      * @return View
      */
-    public function index() : View
+    public function index(Request $request) : View
     {
-        $medias = Media::orderBy("id", "asc")->get();
-            //to check
-            //->orderBy("","");
+        $valid_medias = Media::isValidated()
+            ->when($request->query("event"), fn($query) => $query->where("event_id", $request->query("event")))
+            ->orderBy("id", "desc")
+            ->get();
+        $pending_medias = Media::isNotValidated()
+            ->when($request->query("event"), fn($query) => $query->where("event_id", $request->query("event")))
+            ->orderBy("id", "desc")
+            ->get();
+
         return view("admin.media.index")
-            ->with("medias", $medias);
+            ->with('paramsQuery', $request->query())
+            ->with("valid_medias", $valid_medias)
+            ->with("pending_medias", $pending_medias);
 
     }
 
@@ -32,11 +43,11 @@ class MediaController extends Controller
      *
      * @return View
      */
-    public function show(int $media_id) : View
+    public function show(Request $request,int $media_id) : View
     {
         $media = Media::findOrFail($media_id);
         return view("admin/media/show")
-           ->with("media", $media);
+            ->with("media", $media);
     }
 
     /**
@@ -46,7 +57,10 @@ class MediaController extends Controller
      */
     public function create() : View
     {
-        return view("admin.media.create");
+        $events = Event::orderBy("start_at","desc")->get();
+
+        return view("admin.media.create")
+            ->with("events", $events);
     }
 
     /**
@@ -60,14 +74,17 @@ class MediaController extends Controller
         $validated = $request->validated();
 
         $imageName = time().'.'.$request->picture->extension();
-        $request->picture->move(public_path('pictures'), $imageName);
-        $path = $imageName;
+        $path = Storage::putFileAs('public/pictures', $request->picture, $imageName);
 
         $media = new Media();
         $media->path = $path;
-        $media->description_en = $validated["description_en"];
-        $media->description_ja = $validated["description_ja"];
+        $media->legend = $validated["legend"];
+        $media->event_id = $validated["event_id"];
         $media->user_id = auth()->user()->id;
+
+        if(auth()->user()->isAdmin()) {
+            $media->validated_at = now();
+        }
 
         $media->save();
 
@@ -84,8 +101,10 @@ class MediaController extends Controller
     public function edit(int $media_id): View
     {
         $media = Media::findOrFail($media_id);
+        $events = Event::orderBy("start_at","desc")->get();
         return view("admin.media.edit")
-            ->with('media', $media);
+            ->with('media', $media)
+            ->with('events', $events);
     }
 
     /**
@@ -100,10 +119,11 @@ class MediaController extends Controller
         $validated = $request->validated();
 
         $media = Media::findOrFail($validated["media_id"]);
-        $media->description_en = $validated["description_en"];
-        $media->description_ja = $validated["description_ja"];
+        $media->legend = $validated["legend"];
 
-        $media->save();
+        if($media->isDirty()) {
+            $media->save();
+        }
 
         return redirect(route("media.show", $media->id))
             ->with("success", "Media file updated successfully");
@@ -120,10 +140,26 @@ class MediaController extends Controller
         $validated = $request->validated();
 
         $media = Media::findOrFail($validated['media_id']);
+
+        // remove related file
+        if (Storage::exists($media->path)) {
+            Storage::delete($media->path);
+        }
+
+        //remove DB entry
         $media->delete();
 
-        return redirect(route("media.index"))
-            ->with("success", "Media '$media->path' deleted successfully");
+        return redirect(route("media.index",$request->query()))
+            ->with("success", "Media deleted successfully");
+    }
+
+    public function updateValidatedAt(MediaValidateRequest $request) : RedirectResponse
+    {
+        $media = Media::findOrFail($request->validated()["media_id"]);
+        $media->validated_at = now();
+        $media->save();
+
+        return redirect(route("media.index", $request->query()));
     }
 }
 

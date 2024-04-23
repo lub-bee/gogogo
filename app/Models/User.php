@@ -13,6 +13,15 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const RANK_VISITOR = "0";
+    const RANK_SUPPORT = "10";
+    const RANK_ADMIN = "100";
+    const RANKS = [
+        self::RANK_VISITOR,
+        self::RANK_SUPPORT,
+        self::RANK_ADMIN,
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -42,10 +51,29 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'rank' => 'string',
     ];
 
     public function events(): HasMany
     {
         return $this->hasMany(Event::class);
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->rank === self::RANK_ADMIN;
+    }
+
+    public static function rankLabel($rank): string
+    {
+        switch ($rank) {
+            case self::RANK_ADMIN:
+                return "admin";
+            case self::RANK_SUPPORT:
+                return "support";
+            case self::RANK_VISITOR:
+                return "visitor";
+        }
+    }
+
 }

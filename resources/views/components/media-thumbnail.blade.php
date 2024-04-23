@@ -1,7 +1,6 @@
 @props(['media'])
-<div class='rounded-lg relative inline-block overflow-hidden max-w-[100px] hover:max-w-[200px] transition-all'>
-    <img
-        src="{{ asset("pictures/" . $media->path) }}"
-        alt="{{ $media->path }}"
-    />
-</div>
+<a
+    class='rounded-lg relative inline-block overflow-hidden w-[100px] h-[100px] hover:scale-105 transition-all bg-cover'
+    style="background-image: url('{{ asset($media->pathUrl)}}')"
+    href="{{ route('media.show', $media->id) }}"
+></a>

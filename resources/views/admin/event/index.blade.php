@@ -20,7 +20,7 @@
                 @foreach ($events as $event)
                     <tr>
                         <td>
-                            <a href="{{route('event.show', $event->id)}}" class="hover:text-blue-500 cursor-pointer">
+                            <a href="{{route('event.show', $event->id)}}" class="link">
                                 {{$event->name}}
                             </a>
                         </td>
@@ -29,22 +29,29 @@
                         </td>
                         <td>
                             @if( $event->topic )
-                            <a href="{{route('topic.show', $event->topic->id)}}" class="hover:text-blue-500 cursor-pointer" title="{{ $event->topic->name }}">
+                            <a href="{{route('topic.show', $event->topic->id)}}" class="link" title="{{ $event->topic->name }}">
                                 {{Str::limit($event->topic->name, 10)}}
                             </a>
                             @endif
                         </td>
                         <td>
                             @if ( $event->location )
-                            <a href="{{route('location.show', $event->location->id)}}" class="hover:text-blue-500 cursor-pointer" title="{{ $event->location->name }}">
+                            <a href="{{route('location.show', $event->location->id)}}" class="link" title="{{ $event->location->name }}">
                                 {{Str::limit($event->location->name,10)}}
                             </a>
                             @endif
                         </td>
                         <td>
-                            {{-- <a href="{{route('media.show', $event->media->id)}}" class="hover:text-blue-500 cursor-pointer">
-                                {{$event->media->name}}
-                            </a> --}}
+                            <div class='flex gap-2'>
+                                <a href="{{route('media.index', ['event' => $event->id ])}}" class='link'>
+                                    {{ $event->media()->count() }}
+                                </a>
+                                @if($event->media()->isNotValidated()->count() > 0)
+                                <a href="{{route('media.index', ['event' => $event->id ])}}" class="text-xs text-white bg-amber-500 font-bold hover:bg-amber-400 rounded p-px px-1 transition-all self-start">
+                                    {{ $event->media()->isNotValidated()->count() }} New
+                                </a>
+                                @endif
+                            </div>
                         </td>
                         <td>
                             @if($event->start_at)

@@ -26,12 +26,7 @@ class MediaUpdateRequest extends FormRequest
                 "required",
                 "exists:medias,id"
             ],
-            "description_en" => [
-                "nullable",
-                "string",
-                "max:2000",
-            ],
-            "description_ja" => [
+            "legend" => [
                 "nullable",
                 "string",
                 "max:2000",

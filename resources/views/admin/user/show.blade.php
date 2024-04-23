@@ -8,6 +8,10 @@
     <div class='section'>
         <div class='block-container p-4'>
 
+            <div class='title-1'>
+                User Details
+            </div>
+
             <div class='info'>
                 <div>Name</div>
                 <div>
@@ -25,13 +29,13 @@
             <div class='info'>
                 <div>Rank</div>
                 <div>
-                    {{$user->rank}}
+                    {{ App\Models\User::rankLabel($user->rank) }}
                 </div>
             </div>
 
             <div class="info">
-                <div>Author</div>
-                <div><a href="{{route('user.show',$user->id)}}">{{ $user->name}}</a></div>
+                <div>Created</div>
+                <div>{{ $user->created_at }}</div>
                 <div>Last Updated</div>
                 <div>{{ $user->updated_at }}</div>
             </div>
