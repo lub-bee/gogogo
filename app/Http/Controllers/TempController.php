@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 
 
@@ -12,10 +14,11 @@ class TempController extends Controller
      * @param
      *
      */
-    function event()
+    function event(int $event_id)
     {
-
-        return view('temp.event');
+        $event = Event::findOrFail($event_id);
+        return view('temp.event')
+            ->with('event', $event);
     }
     //Agenda
     function agenda()
@@ -25,9 +28,10 @@ class TempController extends Controller
 
     }
     //Topic
-    function topic()
+    function topic(Topic $topic)
     {
-        return view('temp.topic');
+        return view('temp.topic')
+            ->with("topic", $topic);
 
 
     }

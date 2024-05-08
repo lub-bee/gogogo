@@ -106,8 +106,8 @@ Route::prefix("management")->middleware('auth')->group( function () {
 });
 
 Route::name('temp.')->prefix('/temp')->group(function () {
-    Route::get('event', [TempController::class, "event"])->name('event');
-    Route::get('topic', [TempController::class, "topic"])->name('topic');
+    Route::get('/event/{event_id}', [TempController::class, "event"])->name('event');
+    Route::get('/topic/{topic}', [TempController::class, "topic"])->name('topic');
     Route::get('location', [TempController::class, "location"])->name('location');
     Route::get('media', [TempController::class, "media"])->name('media');
     Route::get('agenda', [TempController::class, "agenda"])->name('agenda');
