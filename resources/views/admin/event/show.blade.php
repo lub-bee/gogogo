@@ -31,7 +31,7 @@
     </div>
 
     {{-- display related media --}}
-    @if($event->media()->count() > 0)
+    @if($event->medias()->count() > 0)
         <div class='section'>
             <div class='block-container p-4'>
                 <div class='title-1'>
