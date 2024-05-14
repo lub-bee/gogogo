@@ -54,7 +54,7 @@ class Event extends Model
         return $this->hasOne(Location::class, "id", "location_id");
     }
 
-    public function media(): HasMany
+    public function medias(): HasMany
     {
         return $this->hasMany(Media::class);
     }
