@@ -14,7 +14,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Status</th>
-                    <th>Last used</th>
+                    <th>Used Count</th>
                 </tr>
 
                 @foreach ($topics as $topic)
@@ -27,7 +27,7 @@
                         <td class="uppercase text-center text-sm font-bold text-gray-500">
                             {{ $topic->publish_status }}
                         </td>
-                        <td>todo</td>
+                        <td>{{ $topic->Event()->count() }}</td>
                     </tr>
                 @endforeach
             </table>
