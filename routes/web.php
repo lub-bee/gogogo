@@ -1,14 +1,20 @@
 <?php
 
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\EventFrontController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\LocationFrontController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\MediaFrontController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TempController;
-use App\Http\Controllers\TopController;
+use App\Http\Controllers\TopFrontController;
 use App\Http\Controllers\TopicController;
+use App\Http\Controllers\TopicFrontController;
+use App\Http\Controllers\TopicOutputController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserFrontController;
 use App\Models\Location;
 use Illuminate\Support\Facades\Route;
 
@@ -24,12 +30,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 // public routes
-Route::get("/", [TopController::class, "index"])->name("top");
-Route::name('top.')->group(function () {
-    Route::get("/user/{user_id}", [TopController::class, "user"])->name("user");
-    Route::get("/event/{event_id}", [TopController::class, "event"])->name("event");
-    Route::get('/location/{location_id}', [TopController::class, "location"])->name('location');
-    Route::get('/topic/{topic_id}', [TopController::class, "topic"])->name('topic');
+Route::get("/", [TopFrontController::class, "index"])->name("top");
+Route::get("/temp", [TopFrontController::class, "temp"])->name("top");
+Route::name('front.')->group(function () {
+    //todo
+    Route::get("/event/{event_slug}",[EventFrontController::class, "show"]);
+    Route::get("/events",[EventFrontController::class, "index"]);
+    Route::get("/media/{id}",[MediaFrontController::class, "show"]);
+    Route::get("/topic/{topic_slug}",[TopicFrontController::class, "show"]);
+    Route::get("/topic/{topic_slug}/download",[TopicOutputController::class, "download"]);
+    Route::get("/location/{location_slug}",[LocationFrontController::class, "show"]);
+    Route::get("/user/{id}",[UserFrontController::class, "show"]);
 });
 
 Route::get('/management', function () {
