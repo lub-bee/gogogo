@@ -1,10 +1,12 @@
 <x-admin-layout>
 
+    {{-- nav --}}
     <div class='section flex justify-between'>
         <a href="{{ route('event.index')}}" class="btn">Back</a>
         <a href="{{ route('event.edit', $event->id)}}" class="btn">Edit</a>
     </div>
 
+    {{-- publish shortcut --}}
     @if($event->isDraft())
         <div class='section'>
             <div class='block-container p-4'>
@@ -20,6 +22,7 @@
         </div>
     @endif
 
+    {{-- event detail --}}
     <div class='section'>
         <div class='block-container p-4'>
             <div class='title-1'>
@@ -30,7 +33,7 @@
         </div>
     </div>
 
-    {{-- display related media --}}
+    {{-- related media --}}
     @if($event->medias()->count() > 0)
         <div class='section'>
             <div class='block-container p-4'>
@@ -47,7 +50,7 @@
         </div>
     @endif
 
-    {{-- display related topic --}}
+    {{-- related topic --}}
     @if($event->topic != null)
         <div class='section'>
             <div class='block-container p-4'>
@@ -59,7 +62,7 @@
         </div>
     @endif
 
-    {{-- display related location --}}
+    {{-- related location --}}
     @if($event->location != null)
         <div class = 'section'>
             <div class= 'block-container p-4'>

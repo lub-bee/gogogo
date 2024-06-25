@@ -10,108 +10,98 @@
         <div class='section'>
             <div class='block-container p-4 '>
 
+                {{-- event name --}}
                 <div class="info">
                     <div>Name (Required) </div>
                     <div>
+                        <x-input-error :messages="$errors->get('name')" class="mb-2" />
                         <input type="text" name="name" value="{{old('name', $event->name)}}">
-
-                        @error("name")
-                            <div>{{$message}}</div>
-                        @enderror
                     </div>
                 </div>
 
                 <div class="info">
+                    {{-- event start --}}
                     <div>Start (Required) </div>
                     <div>
+                        <x-input-error :messages="$errors->get('start_at')" class="mb-2" />
                         <input
                             type="datetime-local"
                             name="start_at"
                             value="{{old('start_at',$event->start_at)}}"
                         />
-                        <!--
-                        @php
-                            echo old('test', "something"); //=> if the value $test is not set, then use "something" as default value
-                            echo old("name", $event->name);
-                        @endphp
-                        -->
-
-
-                        @error("start_at")
-                            <div>{{$message}}</div>
-                        @enderror
                     </div>
+
+                    {{-- event end --}}
                     <div>End</div>
                     <div>
+                        <x-input-error :messages="$errors->get('end_at')" class="mb-2" />
                         <input type="datetime-local" name="end_at" value="{{old('end_at', $event->end_at)}}"/>
-                        @error("end_at")
-                            <div>{{$message}}</div>
-                        @enderror
                     </div>
                 </div>
 
+                {{-- event cost --}}
                 <div class="info">
                     <div>Cost</div>
                     <div>
+                        <x-input-error :messages="$errors->get('cost')" class="mb-2" />
                         <input type="text" name="cost" value="{{old('cost', $event->cost)}}"/>
-                        @error("cost")
-                            <div>{{$message}}</div>
-                        @enderror
                     </div>
                 </div>
 
+                {{-- event description EN (editor) --}}
                 <div class="info">
                     <div>Content (EN)</div>
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('description_en')" class="mb-2" />
                         <textarea id="description_en" name="description_en" class="hidden"></textarea>
-                        <div id="editor_en" class="">{!! old('description_en', $topic->description_en) !!}</div>
+                        <div id="editor_en" class="">{!! old('description_en', $event->description_en) !!}</div>
                     </div>
                 </div>
 
+                {{-- event description JA (editor) --}}
                 <div class="info">
                     <div>Content (JA)</div>
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('description_ja')" class="mb-2" />
                         <textarea id="description_ja" name="description_ja" class="hidden"></textarea>
-                        <div id="editor_ja" class="">{!! old('description_ja', $topic->description_ja) !!}</div>
+                        <div id="editor_ja" class="">{!! old('description_ja', $event->description_ja) !!}</div>
                     </div>
                 </div>
 
+                {{-- event topic --}}
                 <div class="info">
                     <div>Topic</div>
                     <div>
+                        <x-input-error :messages="$errors->get('topic_id')" class="mb-2" />
                         <select name="topic_id">
                             <option value="" >-</option>
                             @foreach ($topics as $topic)
                                 <option value="{{$topic->id}}" {{ (old("topic_id", $event->topic_id) == $topic->id ? "selected":"") }} >{{ $topic->name }}</option>
                             @endforeach
                         </select>
-                        @error("topic_id")
-                            <div>{{$message}}</div>
-                        @enderror
                     </div>
                 </div>
 
+                {{-- event location --}}
                 <div class="info">
                     <div>Location</div>
                     <div>
+                        <x-input-error :messages="$errors->get('location_id')" class="mb-2" />
                         <select name="location_id">
                             <option value="" >-</option>
                             @foreach ($locations as $location)
                                 <option value="{{$location->id}}" {{ (old("location_id", $event->location_id) == $location->id ? "selected":"") }} >{{ $location->name }}</option>
                             @endforeach
                         </select>
-                        @error("location_id")
-                            <div>{{$message}}</div>
-                        @enderror
                     </div>
                 </div>
 
+                {{-- event status --}}
                 <div class="info">
                     <div>Status</div>
                     <div class="col-span-3">
                         <div>
+                            <x-input-error :messages="$errors->get('status')" class="mb-2" />
                             <label>
                                 <input
                                     type="radio"
@@ -121,12 +111,10 @@
                                 />
                                 Draft
                             </label>
-                            @error("status")
-                                <div>{{$message}}</div>
-                            @enderror
                         </div>
                         <div>
                             <label>
+                                <x-input-error :messages="$errors->get('published_at')" class="mb-2" />
                                 <input
                                     type="radio"
                                     name="status"
@@ -136,9 +124,6 @@
                                 Published
                             </label>
                             <input type="date" name="published_at"/>
-                            @error("published_at")
-                                <div>{{$message}}</div>
-                            @enderror
                         </div>
                     </div>
                 </div>
@@ -156,20 +141,6 @@
         </div>
     </form>
 
-    <form method="POST" action="{{ route('event.destroy') }}" >
-        @csrf
-        @method("delete")
-        <div class='section'>
-            <div class='block-container p-4 '>
-
-                <input type="hidden" name="event_id" value="{{$event->id}}" />
-
-                <div class="text-xl">
-                    Delete the event
-                </div>
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </div>
-        </div>
-    </form>
+    <x-event.event-delete-form :event="$event"/>
 
 </x-admin-layout>

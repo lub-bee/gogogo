@@ -9,43 +9,41 @@
 
                 @csrf
 
+                {{-- event name --}}
                 <div class="info">
-                    <div>Event Name (Required) </div>
+                    <div>Event Name <x-required/></div>
                     <div>
+                        <x-input-error :messages="$errors->get('name')" class="mb-2" />
                         <input type="text" name="name" value='{{old("name")}}'>
-                        @error("name")
-                            <div>{{$message}}</div>
-                        @enderror
                     </div>
                 </div>
 
                 <div class="info">
-                    <div>Start (Required) </div>
+                    {{-- event start --}}
+                    <div>Start <x-required/></div>
                     <div>
+                        <x-input-error :messages="$errors->get('start_at')" class="mb-2" />
                         <input type="datetime-local" name="start_at" value='{{old("start_at")}}' class="w-full">
-                        @error("start_at")
-                            <div>{{$message}}</div>
-                        @enderror
                     </div>
+
+                    {{-- event end --}}
                     <div>End</div>
                     <div>
+                        <x-input-error :messages="$errors->get('end_at')" class="mb-2" />
                         <input type="datetime-local" name="end_at" value='{{old("end_at")}}' class="w-full">
-                        @error("end_at")
-                            <div>{{$message}}</div>
-                        @enderror
                     </div>
                 </div>
 
+                {{-- event cost --}}
                 <div class="info">
                     <div>Cost</div>
                     <div>
+                        <x-input-error :messages="$errors->get('cost')" class="mb-2" />
                         <input type="text" name="cost" value='{{old("cost")}}'>
-                        @error("cost")
-                            <div>{{$message}}</div>
-                        @enderror
                     </div>
                 </div>
 
+                {{-- event description EN (editor) --}}
                 <div class="info h-fit">
                     <div>Content (EN)</div>
                     <div class="col-span-3">
@@ -55,6 +53,7 @@
                     </div>
                 </div>
 
+                {{-- event description JA (editor) --}}
                 <div class="info h-fit">
                     <div>Description (Japanese)</div>
                     <div class="col-span-3">
@@ -64,65 +63,64 @@
                     </div>
                 </div>
 
+                {{-- event status --}}
                 <div class="info">
                     <div>Status</div>
                     <div class="col-span-3">
                         <div>
                             <label>
                                 <input
-                                type="radio"
-                                name="status"
-                                value="draft" {{old('published_at', null) == null ? 'checked' : '' }}
+                                    type="radio"
+                                    name="status"
+                                    value="draft" {{old('status', null) == null ? 'checked' : '' }}
                                 >
                                 Draft (Only visible from the administator)
                             </label>
                         </div>
                         <div>
                             <label>
+                                <x-input-error :messages="$errors->get('published_at')" class="mb-2" />
                                 <input
-                                type="radio"
-                                name="status"
-                                value="published" {{old('published_at', null) !== null ? 'checked' : '' }}
+                                    type="radio"
+                                    name="status"
+                                    value="published" {{old('published_at', null) !== null ? 'checked' : '' }}
                                 >
                                 Published
                                 <input
-                                type="date"
-                                name="published_at"
-                                value='{{old("published_at", Carbon\Carbon::now()->format("Y-m-d"))}}'
+                                    type="date"
+                                    name="published_at"
+                                    value='{{old("published_at", Carbon\Carbon::now()->format("Y-m-d"))}}'
                                 >
-                                <x-input-error :messages="$errors->get('published_at')" class="mb-2" />
                             </label>
                         </div>
                     </div>
                 </div>
 
+                {{-- event topic --}}
                 <div class="info">
                     <div>Topic</div>
                     <div>
+                        <x-input-error :messages="$errors->get('topic_id')" class="mb-2" />
                         <select name="topic_id">
                             <option value="">-</option>
                             @foreach ($topics as $topic)
                                 <option value="{{$topic->id}}">{{ $topic->name }}</option>
                             @endforeach
                         </select>
-                        @error("topic_id")
-                            <div>{{$message}}</div>
-                        @enderror
                     </div>
                 </div>
 
+                {{-- event location --}}
                 <div class="info">
                     <div>Location</div>
                     <div>
+                        <x-input-error :messages="$errors->get('location_id')" class="mb-2" />
                         <select name="location_id">
                             <option value="">-</option>
                             @foreach ($locations as $location)
                             <option value="{{$location->id}}">{{ $location->name }}</option>
                             @endforeach
                         </select>
-                        @error("location_id")
-                            <div>{{$message}}</div>
-                        @enderror
                     </div>
 
                 </div>

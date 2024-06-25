@@ -19,14 +19,20 @@
                 </tr>
                 @foreach ($events as $event)
                     <tr>
+
+                        {{-- event name --}}
                         <td>
                             <a href="{{route('event.show', $event->id)}}" class="link">
                                 {{$event->name}}
                             </a>
                         </td>
+
+                        {{-- event status --}}
                         <td class="uppercase text-center text-sm font-bold text-gray-500">
                             {{$event->publish_status}}
                         </td>
+
+                        {{-- event topic --}}
                         <td>
                             @if( $event->topic )
                             <a href="{{route('topic.show', $event->topic->id)}}" class="link" title="{{ $event->topic->name }}">
@@ -34,6 +40,8 @@
                             </a>
                             @endif
                         </td>
+
+                        {{-- event location --}}
                         <td>
                             @if ( $event->location )
                             <a href="{{route('location.show', $event->location->id)}}" class="link" title="{{ $event->location->name }}">
@@ -41,6 +49,8 @@
                             </a>
                             @endif
                         </td>
+
+                        {{-- event media --}}
                         <td>
                             <div class='flex gap-2'>
                                 <a href="{{route('media.index', ['event' => $event->id ])}}" class='link'>
@@ -53,6 +63,8 @@
                                 @endif
                             </div>
                         </td>
+
+                        {{-- event start at --}}
                         <td>
                             @if($event->start_at)
                                 {{$event->start_at->format('y-m-d')}}
