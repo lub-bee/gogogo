@@ -16,24 +16,26 @@
     <div >{{ $event->end_at }}</div>
 </div>
 
+@if($event->cost)
 <div class="info">
     <div>Cost</div>
     <div class=''>
         {{$event->cost}}
     </div>
 </div>
+@endif
 
 <div class="info">
     <div class=''>Description (English)</div>
     <div class='col-span-3'>
-        {{$event->description_en}}
+        {!!$event->description_en!!}
     </div>
 </div>
 
 <div class="info">
     <div>Description (Japanese)</div>
     <div class="cols-span-3">
-        {{$event->description_ja}}
+        {!! $event->description_ja!!}
     </div>
 </div>
 
