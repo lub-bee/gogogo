@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string("gps_long")->nullable();
             $table->string("gps_lat")->nullable();
             $table->string("website_url")->nullable();
-            $table->string("cost", 255)->default("TBD");
+            $table->string("cost", 255)->nullable();
             $table->timestamps();
 
             $table->foreignId("user_id")->nullable()->constrained("users")->onDelete("set null");
