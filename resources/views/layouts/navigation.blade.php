@@ -27,9 +27,9 @@
                     <x-nav-link :href="route('media.index')" :active="request()->routeIs('media.*')">
                         {{ __('Media') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('tag.index')" :active="request()->routeIs('tag.*')">
+                    {{-- <x-nav-link :href="route('tag.index')" :active="request()->routeIs('tag.*')">
                         {{ __('Tags') }}
-                    </x-nav-link>
+                    </x-nav-link> --}}
                 </div>
             </div>
 
@@ -99,9 +99,9 @@
             <x-responsive-nav-link :href="route('media.index')" :active="request()->routeIs('media.*')">
                 {{ __('Media') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('tag.index')" :active="request()->routeIs('tag.*')">
+            {{-- <x-responsive-nav-link :href="route('tag.index')" :active="request()->routeIs('tag.*')">
                 {{ __('Tag') }}
-            </x-responsive-nav-link>
+            </x-responsive-nav-link> --}}
         </div>
 
         <!-- Responsive Settings Options -->

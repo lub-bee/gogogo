@@ -19,7 +19,7 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Status</th>
+                        <th class="text-center">Status</th>
                         <th>Topic</th>
                         <th>Location</th>
                         <th>Media</th>
@@ -49,6 +49,10 @@
                                 <a href="{{route('topic.show', $event->topic->id)}}" class="link" title="{{ $event->topic->name }}">
                                     {{Str::limit($event->topic->name, 10)}}
                                 </a>
+                                @else
+                                    <div class='text-amber-500'>
+                                        <i class='fas fa-triangle-exclamation'></i> Not set
+                                    </div>
                                 @endif
                             </td>
 
@@ -58,6 +62,10 @@
                                 <a href="{{route('location.show', $event->location->id)}}" class="link" title="{{ $event->location->name }}">
                                     {{Str::limit($event->location->name,10)}}
                                 </a>
+                                @else
+                                    <div class='text-amber-500'>
+                                        <i class='fas fa-triangle-exclamation'></i> Not set
+                                    </div>
                                 @endif
                             </td>
 
@@ -78,7 +86,7 @@
                             {{-- event start at --}}
                             <td>
                                 @if($event->start_at)
-                                    {{$event->start_at->format('y-m-d')}}
+                                    {{$event->start_at->format('Y-m-d')}}
                                 @endif
                             </td>
                         </tr>
