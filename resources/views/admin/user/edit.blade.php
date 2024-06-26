@@ -1,15 +1,15 @@
 <x-admin-layout>
 
     <div class='section'>
+        <h1>User edition</h1>
+    </div>
+
+    <div class='section'>
         <a href="{{ route('user.show', $user->id)}}" class="btn">Back</a>
     </div>
 
     <div class='section'>
         <div class='block-container p-4 '>
-
-            <div class='title-1'>
-                User Edition
-            </div>
 
             <form method="POST" action="{{route('user.update',  $user->id)}}">
                 @csrf
@@ -17,21 +17,17 @@
 
                 <div class="info">
                     <div>User Name <x-required/></div>
-                    <div>
+                    <div class='col-span-3'>
+                        <x-input-error :messages="$errors->get('name')" class="mb-2" />
                         <input type="text" name="name" class="form-input" value="{{old('name',$user->name)}}">
-                        @error("name")
-                            <div>{{$message}}</div>
-                        @enderror
                     </div>
                 </div>
 
                 <div class="info">
                     <div>Email <x-required/></div>
-                    <div>
+                    <div class='col-span-3'>
+                        <x-input-error :messages="$errors->get('email')" class="mb-2" />
                         <input type="text" name="email" class="form-input" value="{{old('email',$user->email)}}">
-                        @error("email")
-                        <div>{{$message}}</div>
-                        @enderror
                     </div>
                 </div>
 
@@ -56,6 +52,7 @@
                 <div class="info">
                     <div>Rank <x-required/></div>
                     <div class='col-span-3'>
+                        <x-input-error :messages="$errors->get('rank')" class="mb-2" />
                         <select class="form-input" name="rank">
                             @foreach(App\Models\User::RANKS as $rank)
                                 <option value="{{$rank}}" {{old("rank") == $rank ? 'selected' : ''}}>
@@ -63,9 +60,6 @@
                                 </option>
                             @endforeach
                         </select>
-                        @error("rank")
-                            <div>{{$message}}</div>
-                        @enderror
                     </div>
                 </div>
 
@@ -95,8 +89,11 @@
     </div>
 
     <div class="section">
-        <div class="block-container">
-            <a href="{{ route('user.destroy', $user->id)}}" class="btn">
+        <div class="block-container p-4">
+            <div class=''>
+                Delete the user
+            </div>
+            <a href="{{ route('user.destroy', $user->id)}}" class="btn btn-danger">
                 Delete
             </a>
         </div>

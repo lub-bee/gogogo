@@ -1,5 +1,9 @@
 <x-admin-layout>
 
+    <div class='section'>
+        <h1>Users</h1>
+    </div>
+
     <div class="section">
         <div class="text-right">
             <a href='{{route("user.create")}}' class="btn">Create</a>
@@ -10,19 +14,19 @@
         <div class='block-container'>
             <table class="table my-5">
                 <tr>
-                    <th>User Name</th>
+                    <th>Name</th>
                     <th>Email</th>
-                    <th>Rank</th>
+                    <th class="text-center">Rank</th>
                 </tr>
                 @foreach ($users as $user)
                     <tr>
                         <td>
-                            <a href="{{route('user.show',$user->id)}}" class="block hover:text-blue-500 transition">
+                            <a href="{{route('user.show',$user->id)}}" class="link">
                                 {{$user->name}}
                             </a>
                         </td>
                         <td>{{$user->email}}</td>
-                        <td>{{ App\Models\User::rankLabel($user->rank) }}</td>
+                        <td class="uppercase text-center text-sm font-bold text-gray-500">{{ App\Models\User::rankLabel($user->rank) }}</td>
                     </tr>
                 @endforeach
             </table>

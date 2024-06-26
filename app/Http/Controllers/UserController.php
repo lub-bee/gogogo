@@ -22,8 +22,8 @@ class UserController extends Controller
      */
     public function index() : View
     {
-        $users = User::orderBy("name", "desc")
-            ->orderBy('email_verified_at', 'asc')->get();
+        $users = User::orderBy("rank", "desc")
+            ->orderBy('name', 'asc')->get();
 
         return view("admin.user.index")
         ->with("users", $users);
@@ -60,13 +60,6 @@ class UserController extends Controller
     public function store(UserCreateRequest $request) : RedirectResponse
     {
         $validated = $request->validated();
-
-            // "email" => [
-            //     "required",
-            //     "string",
-            //     "max:100"
-            // ],
-        //]);
 
         $user = new User();
         $user->name = $validated["name"];
@@ -118,13 +111,16 @@ class UserController extends Controller
         $user->email = $validated["email"];
         $user->rank = $validated["rank"];
 
+        $message = "Nothing to update";
+
         //only save when data have actually changed
         if($user->isDirty()) {
             $user->save();
+            $message = "User updated successfully";
         }
 
         return redirect(route("user.show", $user->id))
-            ->with("success","User updated successfully");
+            ->with("success", $message);
 
     }
     /**
