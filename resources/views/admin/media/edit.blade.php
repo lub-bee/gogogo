@@ -1,32 +1,36 @@
 <x-admin-layout>
+
+    <div class='section'>
+        <h1>Media edition</h1>
+    </div>
+
+    {{-- nav --}}
     <div class='section'>
         <a href="{{route('media.index')}}" class="btn">Back</a>
     </div>
 
+    {{-- form --}}
     <div class='section'>
         <div class='block-container p-4'>
-
-            <div class='title-1'>
-                Media edition
-            </div>
 
             <form method="POST" action="{{route('media.update', $media->id)}}">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="media_id" value="{{$media->id}}"/>
 
+                {{-- file --}}
                 <div class="info">
                     <div>Preview</div>
                     <div>
-                        <img
-                            src="{{ $media->pathUrl }}"/>
+                        <img src="{{ $media->pathUrl }}"/>
                     </div>
                 </div>
 
+                {{-- legend --}}
                 <div class="info">
                     <div>Legend</div>
                     <div class="col-span-3">
-                        <textarea name="legend" class="w-full">{{old("legend")}}</textarea>
+                        <textarea name="legend" class="form-input">{{old("legend")}}</textarea>
                         @error("legend")
                             <div>{{$message}}</div>
                         @enderror
@@ -45,5 +49,4 @@
         </div>
     </div>
 
-    {{-- <x-editor-loader/> --}}
 </x-admin-layout>

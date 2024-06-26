@@ -1,6 +1,10 @@
 <x-admin-layout>
 
     <div class='section'>
+        <h1>Media</h1>
+    </div>
+
+    <div class='section'>
         <div class="text-right">
             <a href="{{ route('media.create')}}" class="btn">Upload</a>
         </div>

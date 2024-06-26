@@ -1,5 +1,9 @@
 <x-admin-layout>
 
+    <div class='section'>
+        <h1>Media details</h1>
+    </div>
+
     <div class='section flex justify-between'>
         <a href="{{ route('media.index')}}" class="btn">Back</a>
         <a href="{{ route('media.edit', $media->id)}}" class="btn">Edit</a>
@@ -33,11 +37,12 @@
     </div>
     @endif
 
+    {{-- media preview --}}
     <div class="section">
         <div class="block-container p-4">
             <div class=''>
                 <div class='title-1'>
-                    Media Preview
+                    Preview
                 </div>
             </div>
             <div class='flex justify-center'>
@@ -46,6 +51,7 @@
         </div>
     </div>
 
+    {{-- media details --}}
     <div class="section">
         <div class="block-container p-4">
             <div class='title-1'>
@@ -65,13 +71,6 @@
                 </div>
             </div>
 
-            {{-- <div class='info'>
-                <div>Description (Japanese)</div>
-                <div>
-                    {{$media->description_ja}}
-                </div>
-            </div> --}}
-
             <div class="info">
                 <div>Author</div>
                 <div><a href='{{route("user.show", $media->user->id)}}' class="hover:text-blue-500 cursor-pointer">{{ $media->user->name}}</a></div>
@@ -81,15 +80,16 @@
         </div>
     </div>
 
+    {{-- related event --}}
     @if($media->event)
-    <div class="section">
-        <div class="block-container p-4">
-            <div class='title-1'>
-                Related Event
+        <div class="section">
+            <div class="block-container p-4">
+                <div class='title-1'>
+                    Related Event
+                </div>
+                <x-event.event-detail :event="$media->event"/>
             </div>
-            <x-event.event-detail :event="$media->event"/>
         </div>
-    </div>
     @endif
 
 </x-admin-layout>

@@ -34,13 +34,13 @@ Route::get("/", [TopFrontController::class, "index"])->name("top");
 Route::get("/temp", [TopFrontController::class, "temp"])->name("top");
 Route::name('front.')->group(function () {
     //todo
-    Route::get("/event/{event_slug}",[EventFrontController::class, "show"]);
-    Route::get("/events",[EventFrontController::class, "index"]);
-    Route::get("/media/{id}",[MediaFrontController::class, "show"]);
-    Route::get("/topic/{topic_slug}",[TopicFrontController::class, "show"]);
-    Route::get("/topic/{topic_slug}/download",[TopicOutputController::class, "download"]);
-    Route::get("/location/{location_slug}",[LocationFrontController::class, "show"]);
-    Route::get("/user/{id}",[UserFrontController::class, "show"]);
+    Route::get("/event/{event_slug}",[EventFrontController::class, "show"])->name("event.show");
+    Route::get("/events",[EventFrontController::class, "index"])->name("event.index");
+    Route::get("/media/{id}",[MediaFrontController::class, "show"])->name("media.show");
+    Route::get("/topic/{topic_slug}",[TopicFrontController::class, "show"])->name("topic.show");
+    Route::get("/topic/{topic_slug}/download",[TopicOutputController::class, "download"])->name("topic.download");
+    Route::get("/location/{location_slug}",[LocationFrontController::class, "show"])->name("location.show");
+    Route::get("/user/{id}",[UserFrontController::class, "show"])->name("user.show");
 });
 
 Route::get('/management', function () {
