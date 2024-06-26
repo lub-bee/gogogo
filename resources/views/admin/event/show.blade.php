@@ -30,7 +30,7 @@
     <div class='section'>
         <div class='block-container p-4'>
             <div class='title-1'>
-                Event Details
+                Details
             </div>
 
             <x-event.event-detail :event="$event"/>

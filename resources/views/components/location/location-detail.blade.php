@@ -3,13 +3,13 @@
 {{-- location name --}}
 <div class='info'>
     <div>Name</div>
-    <div>{{$location->name}}</div>
+    <div class="col-span-3">{{$location->name}}</div>
 </div>
 
 {{-- location description --}}
 <div class='info'>
     <div>Description</div>
-    <div>{{ $location->description_en }}</div>
+    <div class="col-span-3">{{ $location->description_en }}</div>
 </div>
 
 {{-- gps --}}
@@ -33,21 +33,21 @@
 @if ($location->website_url)
     <div class='info'>
         <div>Website URL</div>
-        <div>{{$location->website_url}}</div>
+        <div class="col-span-3">{{$location->website_url}}</div>
     </div>
 @endif
 
 {{-- cost --}}
 <div class='info'>
     <div>Cost</div>
-    <div>{{$location->cost}}</div>
+    <div class="col-span-3">{{$location->cost}}</div>
 </div>
 
 {{-- author and last update --}}
 <div class="info">
     {{-- author --}}
     <div>Author</div>
-    <div><a href='{{route("user.show", $location->user->id)}}' class="hover:text-blue-500 cursor-pointer">{{ $location->user->name}}</a></div>
+    <div><a href='{{route("user.show", $location->user->id)}}' class="link">{{ $location->user->name}}</a></div>
 
     {{-- last update --}}
     <div>Last Update</div>

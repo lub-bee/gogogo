@@ -3,7 +3,7 @@
 {{-- event name --}}
 <div class='info'>
     <div>Name</div>
-    <div>{{$event->name}}</div>
+    <div class="col-span-3">{{$event->name}}</div>
 </div>
 
 {{-- event time --}}
@@ -21,7 +21,7 @@
 @if($event->cost)
     <div class="info">
         <div>Cost</div>
-        <div>{{$event->cost}}</div>
+        <div class="col-span-3">{{$event->cost}}</div>
     </div>
 @endif
 
@@ -40,19 +40,35 @@
 {{-- event status --}}
 <div class="info">
     <div>Status</div>
-    <div class=''>{{$event->publish_status}}</div>
+    <div class='uppercase font-bold col-span-3'>{{$event->publish_status}}</div>
 </div>
 
 {{-- event topic --}}
 <div class="info">
     <div>Topic</div>
-    <div><a href="{{route('topic.show',$event->topic->id)}}" class="link">{{ $event->topic->name}}</a></div>
+    <div class="col-span-3">
+        @if($event->topic)
+            <a href="{{route('topic.show',$event->topic->id)}}" class="link">{{ $event->topic->name}}</a>
+        @else
+            <div class='italic text-gray-500'>
+                No Topic Set
+            </div>
+        @endif
+    </div>
 </div>
 
 {{-- event location --}}
 <div class="info">
     <div>Location</div>
-    <div><a href="{{route('location.show',$event->location->id)}}" class="link">{{ $event->location->name}}</a></div>
+    <div class="col-span-3">
+        @if($event->location)
+            <a href="{{route('location.show',$event->location->id)}}" class="link">{{ $event->location->name}}</a>
+        @else
+            <div class='italic text-gray-500'>
+                No Location Set
+            </div>
+        @endif
+    </div>
 </div>
 
 {{-- event author and last update --}}

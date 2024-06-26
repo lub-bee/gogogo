@@ -3,7 +3,7 @@
 {{-- name --}}
 <div class='info'>
     <div>Name</div>
-    <div>{{$topic->name}}</div>
+    <div class="col-span-3">{{$topic->name}}</div>
 </div>
 
 {{-- memo --}}
@@ -29,13 +29,13 @@
 {{-- author --}}
 <div class="info">
     <div>Author</div>
-    <div><a href="{{route('user.show',$topic->user->id)}}" class="hover:text-blue-500 cursor-pointer" class="link">{{ $topic->user->name}}</a></div>
+    <div><a href="{{route('user.show',$topic->user->id)}}" class="link">{{ $topic->user->name}}</a></div>
 </div>
 
 {{-- status --}}
 <div class="info">
     <div>Status</div>
-    <div>{{ $topic->publish_status }}</div>
+    <div class="uppercase font-bold">{{ $topic->publish_status }}</div>
 
     @if ($topic->isPublished())
         <div>Published at</div>
