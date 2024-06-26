@@ -1,5 +1,9 @@
 <x-admin-layout>
 
+    <div class='section'>
+        <h1>Event details</h1>
+    </div>
+
     {{-- nav --}}
     <div class='section flex justify-between'>
         <a href="{{ route('event.index')}}" class="btn">Back</a>

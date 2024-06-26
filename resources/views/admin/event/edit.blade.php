@@ -1,27 +1,34 @@
 <x-admin-layout>
+
+    <div class='section'>
+        <h1>Event Edit</h1>
+    </div>
+
+    {{-- nav --}}
+    <div class='section'>
+        <a href="{{ route('event.show', $event->id)}}" class="btn">Back</a>
+    </div>
+
+    {{-- event edit form --}}
     <form method="POST" action="{{route('event.update',  $event->id)}}">
         @csrf
         @method('PUT')
-
-        <div class='section'>
-            <a href="{{ route('event.show', $event->id)}}" class="btn">Back</a>
-        </div>
 
         <div class='section'>
             <div class='block-container p-4 '>
 
                 {{-- event name --}}
                 <div class="info">
-                    <div>Name (Required) </div>
-                    <div>
+                    <div>Name <x-required/></div>
+                    <div class="col-span-3">
                         <x-input-error :messages="$errors->get('name')" class="mb-2" />
-                        <input type="text" name="name" value="{{old('name', $event->name)}}">
+                        <input type="text" name="name" class="w-full" value="{{old('name', $event->name)}}">
                     </div>
                 </div>
 
                 <div class="info">
                     {{-- event start --}}
-                    <div>Start (Required) </div>
+                    <div>Start <x-required/></div>
                     <div>
                         <x-input-error :messages="$errors->get('start_at')" class="mb-2" />
                         <input
@@ -142,5 +149,7 @@
     </form>
 
     <x-event.event-delete-form :event="$event"/>
+
+    <x-editor-loader/>
 
 </x-admin-layout>

@@ -1,7 +1,15 @@
 <x-admin-layout>
+
+    <div class='section'>
+        <h1>Event Create</h1>
+    </div>
+
+    {{-- nav --}}
     <div class='section'>
         <a href="{{ route('event.index')}}" class="btn">Back</a>
     </div>
+
+    {{-- form --}}
     <div class='section'>
         <div class='block-container p-4'>
 
