@@ -78,7 +78,7 @@ class UserController extends Controller
         //TODO add email job to the queue with the password in it;
 
         return redirect()->route("user.index")
-            ->with("success", "User saved successfully");
+            ->with("success", "User saved ");
     }
 
     /**
@@ -116,7 +116,7 @@ class UserController extends Controller
         //only save when data have actually changed
         if($user->isDirty()) {
             $user->save();
-            $message = "User updated successfully";
+            $message = "User updated ";
         }
 
         return redirect(route("user.show", $user->id))
@@ -137,7 +137,7 @@ class UserController extends Controller
         $user->delete();
 
         return redirect(route("user.index"))
-            ->with("success", "User [$user->name] deleted successfully");
+            ->with("success", "User [$user->name] deleted ");
 
     }
 }

@@ -76,7 +76,7 @@ class TagController extends Controller
         $tag->save();
 
         return redirect(route("tag.index"))
-            ->with("success","Tag created successfully");
+            ->with("success","Tag created ");
     }
 
     /**
@@ -122,7 +122,7 @@ class TagController extends Controller
         $tag->save();
 
         return redirect(route("tag.show", $tag->id))
-            ->with("success","Tag updated successfully");
+            ->with("success","Tag updated ");
     }
 
     /**
@@ -137,7 +137,7 @@ class TagController extends Controller
     {
         //todo
         return redirect(route("tag.index"))
-            ->with("success","Tag deleted successfully");
+            ->with("success","Tag deleted ");
 
     }
 }

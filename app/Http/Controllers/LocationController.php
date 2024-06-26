@@ -73,7 +73,7 @@ class LocationController extends Controller
         $location->save();
 
         return redirect(route("location.index"))
-            ->with("success", "Location saved successfully");
+            ->with("success", "Location saved ");
     }
 
     /**
@@ -113,7 +113,7 @@ class LocationController extends Controller
         // check if anything changed, to avoid unnecessary saving
         if($location->isDirty()){
             $location->save();
-            $message = "Location updated successfully";
+            $message = "Location updated ";
         }
 
         //  TO CHECK - $location->user_id = auth()->user()->id;
@@ -136,6 +136,6 @@ class LocationController extends Controller
         $location->delete();
 
         return redirect(route("location.index"))
-            ->with('success', "Location [$location->name} deleted successfully");
+            ->with('success', "Location [$location->name} deleted ");
     }
 }

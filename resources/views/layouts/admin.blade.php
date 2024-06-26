@@ -26,9 +26,9 @@
             @include('layouts.navigation')
 
             @if(session()->has("success"))
-                <div class='mt-8 section'>
-                    <div class="block-container border border-blue-500 bg-blue-50 text-blue-500 p-4">
-                        {{ session('success')}}
+                <div class='mt-8 max-w-7xl mx-auto sm:px-6 lg:px-8 text-right mb-0'>
+                    <div class=" border-blue-500 text-blue-500 text-4xl uppercase font-bold px-4">
+                        <i class='far fa-lightbulb'></i> {{ session('success')}}
                     </div>
                 </div>
             @endif

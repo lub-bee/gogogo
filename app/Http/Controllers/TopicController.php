@@ -74,7 +74,7 @@ class TopicController extends Controller
         $topic->save();
 
         return redirect()->route("topic.index")
-            ->with("success", "Topic saved successfully");
+            ->with("success", "Topic saved ");
     }
 
     /**
@@ -118,7 +118,7 @@ class TopicController extends Controller
 
         if($topic->isDirty()) {
             $topic->save();
-            $message = "Topic updated successfully";
+            $message = "Topic updated ";
         }
 
         return redirect(route("topic.show", $topic->id))
@@ -146,6 +146,6 @@ class TopicController extends Controller
         $topic->delete();
 
         return redirect(route("topic.index"))
-            ->with('success',"Topic [$topic->name] deleted successfully");
+            ->with('success',"Topic [$topic->name] deleted ");
     }
 }

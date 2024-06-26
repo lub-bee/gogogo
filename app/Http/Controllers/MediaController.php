@@ -89,7 +89,7 @@ class MediaController extends Controller
         $media->save();
 
         return redirect(route("media.index"))
-            ->with("success", "Media file saved successfully");
+            ->with("success", "Media file saved ");
     }
 
     /**
@@ -126,7 +126,7 @@ class MediaController extends Controller
         }
 
         return redirect(route("media.show", $media->id))
-            ->with("success", "Media file updated successfully");
+            ->with("success", "Media file updated ");
     }
 
     /**
@@ -150,7 +150,7 @@ class MediaController extends Controller
         $media->delete();
 
         return redirect(route("media.index",$request->query()))
-            ->with("success", "Media deleted successfully");
+            ->with("success", "Media deleted ");
     }
 
     public function updateValidatedAt(MediaValidateRequest $request) : RedirectResponse

@@ -90,7 +90,7 @@ class EventController extends Controller
         $event->save();
 
         return redirect(route('event.index'))
-            ->with("success", "Event saved successfully");
+            ->with("success", "Event saved ");
     }
 
     /**
@@ -140,7 +140,7 @@ class EventController extends Controller
         $event->save();
 
         return redirect(route("event.show", $event->id))
-            ->with("success", "Event updated successfully");
+            ->with("success", "Event updated ");
     }
 
     /**
@@ -154,7 +154,7 @@ class EventController extends Controller
         $event->published_at = now();
         $event->save();
         return redirect(route("event.show", $event->id))
-            ->with('success',"Event [$event->name] published successfully");
+            ->with('success',"Event [$event->name] published ");
     }
 
     /**
@@ -171,7 +171,7 @@ class EventController extends Controller
         $event->delete();
 
         return redirect(route("event.index"))
-            ->with('success',"Event [$event->name] deleted successfully");
+            ->with('success',"Event [$event->name] deleted ");
     }
 
 }
