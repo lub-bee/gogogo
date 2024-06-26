@@ -1,10 +1,16 @@
 <x-admin-layout>
 
+    <div class='section'>
+        <h1>Topic Details</h1>
+    </div>
+
+    {{-- nav --}}
     <div class='section flex justify-between'>
         <a href="{{ route('topic.index')}}" class="btn">Back</a>
         <a href="{{ route('topic.edit', $topic->id)}}" class="btn">Edit</a>
     </div>
 
+    {{-- publish shortcut --}}
     @if($topic->isDraft())
     <div class='section'>
         <div class='block-container p-4'>
@@ -20,6 +26,7 @@
     </div>
     @endif
 
+    {{-- topic detail --}}
     <div class='section'>
         <div class='block-container p-4'>
 

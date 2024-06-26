@@ -114,10 +114,15 @@ class TopicController extends Controller
             $topic->published_at = null;
         }
 
-        $topic->save();
+        $message = "Nothing to update";
+
+        if($topic->isDirty()) {
+            $topic->save();
+            $message = "Topic updated successfully";
+        }
 
         return redirect(route("topic.show", $topic->id))
-            ->with("success", "Topic saved successfully");
+            ->with("success", $message);
     }
 
     public function publish(Topic $topic, TopicPublishRequest $request) : RedirectResponse
