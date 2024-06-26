@@ -21,7 +21,7 @@
                     <div>Name <x-required/></div>
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('name')" class="mb-2" />
-                        <input type="text" name="name" class="w-full" value='{{old("name", $topic->name)}}'>
+                        <input type="text" name="name" class="form-input" value='{{old("name", $topic->name)}}'>
                     </div>
                 </div>
 
@@ -30,7 +30,7 @@
                     <div>Memo</div>
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('memo')" class="mb-2" />
-                        <input type="text" name="memo" class="w-full" value='{{old("memo", $topic->memo)}}'>
+                        <input type="text" name="memo" class="form-input" value='{{old("memo", $topic->memo)}}'>
                         <x-input-info level="warning" class="mt-2">Only visible by admin</x-input-info>
                     </div>
                 </div>
@@ -67,10 +67,12 @@
                         </div>
                         <div>
                             <label>
+                                <x-input-error :messages="$errors->get('published_at')" class="mb-2" />
                                 <input type="radio" name="status" value="published" {{ old("published_at", $topic->published_at) !== null ? 'checked' : '' }}>
                                 Published
-                                <input type="date" name="published_at" value='{{old("published_at", Carbon\Carbon::now()->format("Y-m-d"))}}' />
-                                <x-input-error :messages="$errors->get('published_at')" class="mb-2" />
+                                <div class='inline-block'>
+                                    <input type="date" name="published_at" class="form-input" value='{{old("published_at", Carbon\Carbon::now()->format("Y-m-d"))}}' />
+                                </div>
                             </label>
                         </div>
                     </div>

@@ -21,7 +21,7 @@
                     <div>Title <x-required/></div>
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('name')" class="mb-2" />
-                        <input type="text" name="name" class="w-full" value='{{old("name")}}'>
+                        <input type="text" name="name" class="form-input" value='{{old("name")}}'>
                     </div>
                 </div>
 
@@ -30,7 +30,7 @@
                     <div>Memo</div>
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('memo')" class="mb-2" />
-                        <input type="text" name="memo" class="w-full" value='{{old("memo")}}'>
+                        <input type="text" name="memo" class="form-input" value='{{old("memo")}}'>
                         <x-input-info level="warning" class="mt-2">Only visible by admin</x-input-info>
                     </div>
                 </div>
@@ -70,7 +70,9 @@
                                 <x-input-error :messages="$errors->get('published_at')" class="mb-2" />
                                 <input type="radio" name="status" value="published" {{ old("published_at", null) !== null ? 'checked' : '' }}>
                                 Published
-                                <input type="date" name="published_at" value='{{old("published_at", Carbon\Carbon::now()->format("Y-m-d"))}}'>
+                                <div class='inline-block'>
+                                    <input type="date" class="form-input" name="published_at" value='{{old("published_at", Carbon\Carbon::now()->format("Y-m-d"))}}'>
+                                </div>
                             </label>
                         </div>
                     </div>

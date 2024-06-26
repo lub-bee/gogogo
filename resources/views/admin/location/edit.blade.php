@@ -18,9 +18,9 @@
                 {{-- title --}}
                 <div class="info">
                     <div>Location Name <x-required/></div>
-                    <div>
+                    <div class="col-span-3">
                         <x-input-error :messages="$errors->get('name')" class="mb-2" />
-                        <input type="text" name="name" value="{{old('name',$location->name)}}">
+                        <input type="text" name="name" class="form-input" value="{{old('name',$location->name)}}">
                     </div>
                 </div>
 
@@ -29,43 +29,41 @@
                     <div>Location Description</div>
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('description_en')" class="mb-2" />
-                        <textarea name="description_en" class="w-full">{{old('description_en', $location->description_en)}}</textarea>
+                        <textarea name="description_en" class="form-input">{{old('description_en', $location->description_en)}}</textarea>
                     </div>
                 </div>
 
-                {{-- gps long --}}
                 <div class="info">
+                    {{-- gps long --}}
                     <div>GPS-Long</div>
                     <div>
                         <x-input-error :messages="$errors->get('gps_long')" class="mb-2" />
-                        <input type="text" name="gps_long" value="{{old('gps_long', $location->gps_long)}}" class="w-full"/>
+                        <input type="text" name="gps_long" class="form-input" value="{{old('gps_long', $location->gps_long)}}"/>
                     </div>
-                </div>
 
-                {{-- gps lat --}}
-                <div class="info">
+                    {{-- gps lat --}}
                     <div>GPS-Lat</div>
                     <div>
                         <x-input-error :messages="$errors->get('gps_lat')" class="mb-2" />
-                        <input type="text" name="gps_lat" value="{{old('gps_lat', $location->gps_lat)}}" class="w-full"/>
+                        <input type="text" name="gps_lat" value="{{old('gps_lat', $location->gps_lat)}}" class="form-input"/>
                     </div>
                 </div>
 
                 {{-- website url --}}
                 <div class="info">
                     <div>Website URL</div>
-                    <div>
+                    <div class="col-span-3">
                         <x-input-error :messages="$errors->get('website_url')" class="mb-2" />
-                        <input type="url" name="website_url" value="{{old('website_url',$location->website_url)}}" class="w-full"/>
+                        <input type="url" name="website_url" value="{{old('website_url',$location->website_url)}}" class="form-input"/>
                     </div>
                 </div>
 
                 {{-- cost --}}
                 <div class="info">
                     <div>Cost</div>
-                    <div>
+                    <div class="col-span-3">
                         <x-input-error :messages="$errors->get('cost')" class="mb-2" />
-                        <input type="text" name="cost" value="{{old('cost', $location->cost)}}" class="w-full"/>
+                        <input type="text" name="cost" value="{{old('cost', $location->cost)}}" class="form-input"/>
                     </div>
                 </div>
 

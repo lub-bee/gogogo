@@ -20,9 +20,9 @@
                 {{-- event name --}}
                 <div class="info">
                     <div>Event Name <x-required/></div>
-                    <div>
+                    <div class="col-span-3">
                         <x-input-error :messages="$errors->get('name')" class="mb-2" />
-                        <input type="text" name="name" value='{{old("name")}}'>
+                        <input type="text" name="name" class="form-input" value='{{old("name")}}'>
                     </div>
                 </div>
 
@@ -31,14 +31,14 @@
                     <div>Start <x-required/></div>
                     <div>
                         <x-input-error :messages="$errors->get('start_at')" class="mb-2" />
-                        <input type="datetime-local" name="start_at" value='{{old("start_at")}}' class="w-full">
+                        <input type="datetime-local" name="start_at" value='{{old("start_at")}}' class="form-input">
                     </div>
 
                     {{-- event end --}}
                     <div>End</div>
                     <div>
                         <x-input-error :messages="$errors->get('end_at')" class="mb-2" />
-                        <input type="datetime-local" name="end_at" value='{{old("end_at")}}' class="w-full">
+                        <input type="datetime-local" name="end_at" value='{{old("end_at")}}' class="form-input">
                     </div>
                 </div>
 
@@ -47,7 +47,7 @@
                     <div>Cost</div>
                     <div>
                         <x-input-error :messages="$errors->get('cost')" class="mb-2" />
-                        <input type="text" name="cost" value='{{old("cost")}}'>
+                        <input type="text" name="cost" class="form-input" value='{{old("cost")}}'>
                     </div>
                 </div>
 
@@ -94,11 +94,14 @@
                                     value="published" {{old('published_at', null) !== null ? 'checked' : '' }}
                                 >
                                 Published
-                                <input
-                                    type="date"
-                                    name="published_at"
-                                    value='{{old("published_at", Carbon\Carbon::now()->format("Y-m-d"))}}'
-                                >
+                                <div class='inline-block'>
+                                    <input
+                                        type="date"
+                                        name="published_at"
+                                        class="form-input"
+                                        value='{{old("published_at", Carbon\Carbon::now()->format("Y-m-d"))}}'
+                                    >
+                                </div>
                             </label>
                         </div>
                     </div>
@@ -107,9 +110,9 @@
                 {{-- event topic --}}
                 <div class="info">
                     <div>Topic</div>
-                    <div>
+                    <div class="col-span-2">
                         <x-input-error :messages="$errors->get('topic_id')" class="mb-2" />
-                        <select name="topic_id">
+                        <select name="topic_id" class="form-input">
                             <option value="">-</option>
                             @foreach ($topics as $topic)
                                 <option value="{{$topic->id}}">{{ $topic->name }}</option>
@@ -118,12 +121,12 @@
                     </div>
                 </div>
 
-                {{-- event location --}}
                 <div class="info">
+                    {{-- event location --}}
                     <div>Location</div>
-                    <div>
+                    <div class="col-span-2">
                         <x-input-error :messages="$errors->get('location_id')" class="mb-2" />
-                        <select name="location_id">
+                        <select name="location_id" class="form-input">
                             <option value="">-</option>
                             @foreach ($locations as $location)
                             <option value="{{$location->id}}">{{ $location->name }}</option>

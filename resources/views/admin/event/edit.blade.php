@@ -22,7 +22,7 @@
                     <div>Name <x-required/></div>
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('name')" class="mb-2" />
-                        <input type="text" name="name" class="w-full" value="{{old('name', $event->name)}}">
+                        <input type="text" name="name" class="form-input" value="{{old('name', $event->name)}}">
                     </div>
                 </div>
 
@@ -33,6 +33,7 @@
                         <x-input-error :messages="$errors->get('start_at')" class="mb-2" />
                         <input
                             type="datetime-local"
+                            class="form-input"
                             name="start_at"
                             value="{{old('start_at',$event->start_at)}}"
                         />
@@ -42,16 +43,16 @@
                     <div>End</div>
                     <div>
                         <x-input-error :messages="$errors->get('end_at')" class="mb-2" />
-                        <input type="datetime-local" name="end_at" value="{{old('end_at', $event->end_at)}}"/>
+                        <input type="datetime-local" class="form-input" name="end_at" value="{{old('end_at', $event->end_at)}}"/>
                     </div>
                 </div>
 
                 {{-- event cost --}}
                 <div class="info">
                     <div>Cost</div>
-                    <div>
+                    <div class="col-span-3">
                         <x-input-error :messages="$errors->get('cost')" class="mb-2" />
-                        <input type="text" name="cost" value="{{old('cost', $event->cost)}}"/>
+                        <input type="text" class="form-input" name="cost" value="{{old('cost', $event->cost)}}"/>
                     </div>
                 </div>
 
@@ -78,9 +79,9 @@
                 {{-- event topic --}}
                 <div class="info">
                     <div>Topic</div>
-                    <div>
+                    <div class="col-span-2">
                         <x-input-error :messages="$errors->get('topic_id')" class="mb-2" />
-                        <select name="topic_id">
+                        <select name="topic_id" class="form-input">
                             <option value="" >-</option>
                             @foreach ($topics as $topic)
                                 <option value="{{$topic->id}}" {{ (old("topic_id", $event->topic_id) == $topic->id ? "selected":"") }} >{{ $topic->name }}</option>
@@ -92,9 +93,9 @@
                 {{-- event location --}}
                 <div class="info">
                     <div>Location</div>
-                    <div>
+                    <div class="col-span-2">
                         <x-input-error :messages="$errors->get('location_id')" class="mb-2" />
-                        <select name="location_id">
+                        <select name="location_id" class="form-input">
                             <option value="" >-</option>
                             @foreach ($locations as $location)
                                 <option value="{{$location->id}}" {{ (old("location_id", $event->location_id) == $location->id ? "selected":"") }} >{{ $location->name }}</option>
@@ -130,7 +131,9 @@
                                 />
                                 Published
                             </label>
-                            <input type="date" name="published_at"/>
+                            <div class='inline-block'>
+                                <input type="date" name="published_at" class="form-input"/>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -45,9 +45,10 @@
                     Media
                 </div>
                 <div class='flex gap-4 flex-wrap'>
-                    @foreach($event->media as $media)
+                    @forelse($event->medias as $media)
                         <x-media-thumbnail :media="$media"/>
-                    @endforeach
+                    @empty
+                    @endforelse
                 </div>
 
             </div>
