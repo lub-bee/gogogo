@@ -62,11 +62,9 @@ class LocationController extends Controller
     {
         $validated = $request->validated();
 
-
         $location = new Location();
         $location->name = $validated["name"];
         $location->description_en = $validated["description_en"];
-        $location->description_ja = $validated["description_ja"];
         $location->gps_long = $validated["gps_long"];
         $location->gps_lat = $validated["gps_lat"];
         $location->website_url = $validated["website_url"];
@@ -105,18 +103,23 @@ class LocationController extends Controller
         $location = Location::find($location_id);
         $location->name = $validated["name"];
         $location->description_en = $validated["description_en"];
-        $location->description_ja = $validated["description_ja"];
         $location->gps_long = $validated["gps_long"];
         $location->gps_lat = $validated["gps_lat"];
         $location->website_url = $validated["website_url"];
         $location->cost = $validated["cost"];
 
-        $location->save();
+        $message = "Nothing to update";
+
+        // check if anything changed, to avoid unnecessary saving
+        if($location->isDirty()){
+            $location->save();
+            $message = "Location updated successfully";
+        }
 
         //  TO CHECK - $location->user_id = auth()->user()->id;
 
         return redirect(route("location.show", $location->id))
-            ->with("success", "Location updated successfully");
+            ->with("success", $message);
     }
 
     /**

@@ -1,59 +1,55 @@
 @props(['location'])
 
+{{-- location name --}}
 <div class='info'>
     <div>Name</div>
-    <div>
-        {{$location->name}}
-    </div>
+    <div>{{$location->name}}</div>
 </div>
 
+{{-- location description --}}
 <div class='info'>
-    <div>Description (English)</div>
-    <div>
-        {{$location->description_en}}
-    </div>
+    <div>Description</div>
+    <div>{{ $location->description_en }}</div>
 </div>
 
-<div class='info'>
-    <div>Description (Japanese)</div>
-    <div>
-        {{$location->description_ja}}
-    </div>
-</div>
+{{-- gps --}}
+@if($location->gps_long || $location->gps_lat)
+    <div class='info'>
+        {{-- gps long --}}
+        @if($location->gps_long)
+            <div>GPS-Long</div>
+            <div>{{$location->gps_lat}}</div>
+        @endif
 
-<div class='info'>
-    <div>GPS-Long</div>
-    <div>
-        {{$location->gps_long}}
+        {{-- gps lat --}}
+        @if($location->gps_lat)
+            <div>GPS-Lat</div>
+            <div>{{$location->gps_long}}</div>
+        @endif
     </div>
-</div>
+@endif
 
-<div class='info'>
-    <div>GPS-Lat</div>
-    <div>
-        {{$location->gps_lat}}
+{{-- website --}}
+@if ($location->website_url)
+    <div class='info'>
+        <div>Website URL</div>
+        <div>{{$location->website_url}}</div>
     </div>
-</div>
+@endif
 
-<div class='info'>
-    <div>Website URL</div>
-    <div>
-        {{$location->website_url}}
-    </div>
-</div>
-
+{{-- cost --}}
 <div class='info'>
     <div>Cost</div>
-    <div>
-        {{$location->cost}}
-    </div>
+    <div>{{$location->cost}}</div>
 </div>
 
-
+{{-- author and last update --}}
 <div class="info">
-<div>Author</div>
-<div><a href='{{route("user.show", $location->user->id)}}' class="hover:text-blue-500 cursor-pointer">{{ $location->user->name}}</a></div>
-<div>Last Update</div>
-<div>{{$location->updated_at}}</div>
-</div>
+    {{-- author --}}
+    <div>Author</div>
+    <div><a href='{{route("user.show", $location->user->id)}}' class="hover:text-blue-500 cursor-pointer">{{ $location->user->name}}</a></div>
+
+    {{-- last update --}}
+    <div>Last Update</div>
+    <div>{{$location->updated_at}}</div>
 </div>

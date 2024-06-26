@@ -251,3 +251,25 @@ section{
         px-4 py-2
         w-full
 }
+
+h1, .h1{
+    @apply
+        text-8xl
+        leading-[4.4rem]
+        font-bold
+        uppercase
+        overflow-hidden
+        relative
+
+}
+/*
+h1::before{
+    @apply
+        h-[.5rem]
+        w-full
+        bg-gray-100
+        content-['']
+        block
+        absolute
+        top-0
+} */
