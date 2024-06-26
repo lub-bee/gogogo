@@ -13,7 +13,7 @@
     <div class='section p-4'>
         @if($pending_medias->count() > 0)
         <div class='block-container pb-4'>
-            <div class='title-1 mb-4'>
+            <div class='title-1 mt-4'>
                 Media Pending Validation
             </div>
 
@@ -25,7 +25,9 @@
             </div>
         </div>
         @endif
+    </div>
 
+    <div class='section p-4'>
         @if($valid_medias->count() > 0)
         <div class='block-container pb-4'>
             <div class='title-1 mt-4'>

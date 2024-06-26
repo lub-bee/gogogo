@@ -13,8 +13,8 @@
     @if(!$media->validated)
     <div class='section'>
         <div class="block-container p-4 flex gap-4 items-center">
-            <div class='flex-1 text-4xl'>
-                <i class="fa-solid fa-circle-exclamation text-amber-500"></i> Pending validation
+            <div class='flex-1 text-4xl uppercase font-bold'>
+                <i class="fa-solid fa-triangle-exclamation text-amber-500"></i> Pending validation
             </div>
 
             {{-- delete form --}}
