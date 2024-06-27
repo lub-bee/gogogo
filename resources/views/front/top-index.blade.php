@@ -1,10 +1,34 @@
 <x-public-layout>
 
-    <x-front.section id="top" class="bg-white">
-        Top
+    <x-front.section id="top" class="bg-white flex flex-col">
+        <div class='flex-1 flex flex-col lg:flex-row'>
+            <div class='flex-1 text-[5rem] sm:text-[9rem] font-bold flex justify-center items-center text-slate-700'>
+                五語Go!
+            </div>
+            <div class='lg:w-1/3 flex-none bg-gray-300'>
+                <form method="POST" action="{{ route('login') }}" class="h-full flex flex-col gap-4 p-4 xl:p-14 justify-center sm:max-w-sm lg:max-w-full mx-auto">
+                    <div class='flex justify-between items-center border-b border-gray-400 mb-4 md:mt-8 uppercase'>
+                        Not a member yet? <a href="{{ route('register') }}" class='btn btn-success'>Join us!</a>
+                    </div>
+                    <div class=''>
+                        <input type="text" placeholder="email" class="form-input"/>
+                    </div>
+                    <div class=''>
+                        <input type="password" placeholder="password" class="form-input"/>
+                    </div>
+                    <div class='text-right'>
+                        <a href="{{ route('password.request') }}" class="text-slate-700 hover:underline">You have forgot your password?</a>
+                    </div>
+                    <div class='text-center'>
+                        <button type="submit" class="btn btn-main">{{ __('sign in') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class='flex-none h-4 bg-slate-700'></div>
     </x-front.section>
 
-    <x-front.section id="event" class="flex flex-col relative bg-white">
+    <x-front.section id="event" class="flex flex-col bg-white relative">
         <header class='bg-slate-700 text-white'>
             event
         </header>
@@ -26,31 +50,30 @@
             Agenda
         </header>
 
-        <div class='flex-1 max-w-5xl mx-auto flex flex-col justify-evenly'>
-            <div class='flex gap-14'>
-                <div class='text-right flex-none w-1/4 font-bold text-[3rem] sm:text-[4.5rem] lg:text-[7rem] leading-[2rem] sm:leading-[3rem] lg:leading-[6rem] -tracking-[0.12em]'>
+        <div class='flex-1 max-w-6xl mx-auto flex flex-col justify-evenly'>
+            <div class='flex flex-col lg:flex-row gap-4 lg:gap-14'>
+                <div class='lg:text-right flex-none lg:w-1/4 font-bold text-[3rem] sm:text-[4.5rem] lg:text-[7rem] leading-[2rem] md:leading-[3rem] lg:leading-[6rem] -tracking-[0.12em]'>
                     SEPT
                 </div>
-                <div class='font-bold text-[2rem] sm:text-[2.5rem] leading-[2rem] sm:leading-[4.5rem] divide-y-4'>
-                    <x-front.event.event-agenda-tile date="22" title="Gogogo at The Mall"/>
-                    <x-front.event.event-agenda-tile date="25" title="Badminton night!"/>
-                    <x-front.event.event-agenda-tile date="29" title="Oktoberfes at Nichikichou Koen"/>
+                <div class='flex-1 font-bold text-[2rem] sm:text-[2.5rem] leading-[3rem] sm:leading-[4.5rem] divide-y lg:divide-y-4'>
+                    <x-front.event.event-agenda-tile date="22" title="Gogogo at The Mall" slug="2024-9-22"/>
+                    <x-front.event.event-agenda-tile date="25" title="Badminton night!" slug="2024-9-25"/>
+                    <x-front.event.event-agenda-tile date="29" title="Oktoberfes at Nichikichou Koen" slug="2024-9-29"/>
                 </div>
             </div>
 
-            <div class='flex gap-14'>
-                <div class='text-right flex-none w-1/4 font-bold text-[3rem] sm:text-[4.5rem] lg:text-[7rem] leading-[2rem] sm:leading-[3rem] lg:leading-[6rem] -tracking-[0.12em]'>
+            <div class='flex flex-col lg:flex-row gap-4 lg:gap-14'>
+                <div class='lg:text-right flex-none lg:w-1/4 font-bold text-[3rem] sm:text-[4.5rem] lg:text-[7rem] leading-[2rem] sm:leading-[3rem] lg:leading-[6rem] -tracking-[0.12em]'>
                     OCT
                 </div>
-                <div class=' font-bold text-[2rem] sm:text-[2.5rem] leading-[2rem] sm:leading-[4.5rem] divide-y-4'>
-                    <x-front.event.event-agenda-tile date="07" title="Trip to Matsushima"/>
-                    <x-front.event.event-agenda-tile date="12" title="Gogogo Friday"/>
-                    <x-front.event.event-agenda-tile date="17" title="Beer garden"/>
+                <div class='flex-1 font-bold text-[2rem] sm:text-[2.5rem] leading-[3rem] sm:leading-[4.5rem] divide-y lg:divide-y-4'>
+                    <x-front.event.event-agenda-tile date="07" title="Trip to Matsushima" slug="2024-10-07"/>
+                    <x-front.event.event-agenda-tile date="12" title="Gogogo Friday" slug="2024-10-12"/>
                 </div>
 
             </div>
 
-            <div class='text-center my-10'>
+            <div class='text-center lg:my-4'>
                 <a href="{{ route('front.agenda.index') }}" class='btn btn-main' >
                     See all
                 </a>
