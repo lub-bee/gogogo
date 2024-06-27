@@ -169,6 +169,7 @@ th{
         h-[4rem] sm:h-[7rem] md:h-[9rem]
         text-[4rem] sm:text-[5rem] md:text-[10rem]
         leading-[2.7rem] sm:leading-[6rem] md:leading-[9rem]
+        -tracking-[0.12em]
         font-bold
         overflow-hidden
         uppercase
@@ -190,7 +191,7 @@ section{
 .low-contrast header{
     @apply
         text-white
-        bg-gray-400
+        /* bg-gray-400 */
 }
 .low-contrast.inverse header{
     @apply

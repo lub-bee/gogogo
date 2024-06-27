@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgendaFrontController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventFrontController;
 use App\Http\Controllers\LocationController;
@@ -41,6 +42,8 @@ Route::name('front.')->group(function () {
     Route::get("/topic/{topic_slug}/download",[TopicOutputController::class, "download"])->name("topic.download");
     Route::get("/location/{location_slug}",[LocationFrontController::class, "show"])->name("location.show");
     Route::get("/user/{id}",[UserFrontController::class, "show"])->name("user.show");
+    Route::get("/agenda",[AgendaFrontController::class, "index"])->name("agenda.index");
+
 });
 
 Route::get('/management', function () {
