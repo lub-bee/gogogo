@@ -55,7 +55,7 @@
                 <div class='lg:text-right flex-none lg:w-1/4 font-bold text-[3rem] sm:text-[4.5rem] lg:text-[7rem] leading-[2rem] md:leading-[3rem] lg:leading-[6rem] -tracking-[0.12em]'>
                     SEPT
                 </div>
-                <div class='flex-1 font-bold text-[2rem] sm:text-[2.5rem] leading-[3rem] sm:leading-[4.5rem] divide-y lg:divide-y-4'>
+                <div class='flex-1 text-[2rem] sm:text-[2.5rem] leading-[3rem] sm:leading-[4.5rem] divide-y lg:divide-y-4'>
                     <x-front.event.event-agenda-tile date="22" title="Gogogo at The Mall" slug="2024-9-22"/>
                     <x-front.event.event-agenda-tile date="25" title="Badminton night!" slug="2024-9-25"/>
                     <x-front.event.event-agenda-tile date="29" title="Oktoberfes at Nichikichou Koen" slug="2024-9-29"/>
@@ -84,21 +84,64 @@
 
     </x-front.section>
 
-    <x-front.section id="about" class="bg-yellow-200">
-        <header class='bg-slate-700 text-yellow-200'>
-            About
+    <x-front.section id="about" class="bg-slate-200 flex flex-col">
+        <header class='bg-slate-700 text-white'>
+            About US
         </header>
+
+        <div class='flex-1 flex flex-col divide-y-4 divide-slate-700 w-2/3 mx-auto justify-center' x-data="{mode: 'default'}">
+
+            <div class='' x-data="{open: false}">
+                <div class='text-4xl py-2 font-bold uppercase' @click="open = !open">
+                    <i class='fa-solid fa-caret-right transition-all mr-4' :class="open ? 'fa-rotate-90' : ''"></i>
+                    五語Go, what is it?
+                </div>
+
+                <div class='text-2xl uppercase text-right py-4' x-show="open">
+                    It's a study group for people<br/>to learn English or Japanese
+                </div>
+            </div>
+
+            <div class='' x-data="{open: false}">
+                <div class='text-4xl py-2 font-bold uppercase' @click="open = !open">
+                    <i class='fa-solid fa-caret-right transition-all mr-4' :class="open ? 'fa-rotate-90' : ''"></i>
+                    How it works?
+                </div>
+
+                <div class='text-2xl mx-auto flex justify-center items-center divide-x-4 divide-slate-700 py-4' x-show="open">
+                    <div class='text-[9rem] uppercase font-bold -tracking-[0.12em] px-4'>we</div>
+                    <div class='flex flex-col uppercase px-4'>
+                        <div class=''>meet <b>every week</b></div>
+                        <div class=''>talk <b>5 min</b> in <b>english</b></div>
+                        <div class=''>talk <b>5 min</b> in <b>japanese</b></div>
+                        <div class=''>repeat that for <b>30min</b></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class='' x-data="{open: false}">
+                <div class='text-4xl py-2 font-bold uppercase' @click="open = !open">
+                    <i class='fa-solid fa-caret-right transition-all mr-4' :class="open ? 'fa-rotate-90' : ''"></i>
+                    That's all?
+                </div>
+                <div class='text-2xl text-right uppercase' x-show="open">
+                    No!<br/>
+                    We also do BBQs,<br/> festivals,<br/> sports activities,<br/> and much much more!
+                </div>
+            </div>
+
+        </div>
     </x-front.section>
 
-    <x-front.section id="topic" class="bg-slate-700">
-        <header class='bg-yellow-200 text-slate-700'>
-            Topic
-        </header>
-    </x-front.section>
-
-    <x-front.section id="media" class="bg-blue-200">
-        <header class='bg-slate-700 text-blue-200'>
+    <x-front.section id="media" class="bg-slate-700">
+        <header class='bg-gray-200 text-slate-700'>
             Media
+        </header>
+    </x-front.section>
+
+    <x-front.section id="topic" class="bg-blue-200">
+        <header class='bg-slate-700 text-blue-200'>
+            topic
         </header>
     </x-front.section>
 
