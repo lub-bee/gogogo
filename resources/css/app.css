@@ -227,8 +227,12 @@ th{
     @apply
         px-4
         cursor-pointer
-        hover:bg-yellow-200
+        hover:bg-yellow-100
         transition-all
+}
+.menu a.active{
+    @apply
+        font-bold
 }
 .menu a.active::before{
     content: "# ";
