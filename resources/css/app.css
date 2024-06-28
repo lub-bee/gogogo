@@ -177,7 +177,7 @@ th{
 }
 
 
-section{
+.top-section{
     @apply
         snap-start
         shrink-0
@@ -210,16 +210,40 @@ section{
 }
 
 
+.menu {
+    @apply
+    text-slate-600
+    uppercase
+    leading-[2.2rem]
+    transition-all
+}
+.menu.reversed{
+    @apply
+        text-white
+        transition-all
+}
 
 .menu a{
     @apply
-        block
-        leading-[2.2rem]
-        hover:leading-[3rem]
-        text-slate-600
-        hover:border-y-2 border-slate-600
+        px-4
         cursor-pointer
+        hover:bg-yellow-200
         transition-all
+}
+.menu a.active::before{
+    content: "# ";
+    @apply
+        font-bold
+}
+.menu.reversed a{
+    @apply
+        hover:bg-yellow-500/30
+        transition-all
+}
+.menu.reversed a:hover{
+    @apply
+        divide-slate-600
+        /* leading-[3rem] */
 }
 
 .event-year{

@@ -92,24 +92,40 @@
         <div class='flex-1 flex flex-col divide-y-4 divide-slate-700 w-2/3 mx-auto justify-center' x-data="{mode: 'default'}">
 
             <div class='' x-data="{open: false}">
-                <div class='text-4xl py-2 font-bold uppercase' @click="open = !open">
-                    <i class='fa-solid fa-caret-right transition-all mr-4' :class="open ? 'fa-rotate-90' : ''"></i>
-                    五語Go, what is it?
+                <div class='text-4xl py-2 font-bold uppercase flex gap-4 items-center' @click="open = !open">
+                    <i class='fa-solid fa-caret-right transition-all' :class="open ? 'fa-rotate-90' : ''"></i>
+                    <div class='flex-1'>
+                        五語Go, what is it?
+                    </div>
+                    <div class='text-slate-500 text-2xl'>
+                        五語Goって何ですか?
+                    </div>
                 </div>
 
-                <div class='text-2xl uppercase text-right py-4' x-show="open">
-                    It's a study group for people<br/>to learn English or Japanese
+                <div class='text-2xl uppercase py-4' x-show="open">
+                    <div class=''>
+                        It's a study group for people<br/>to learn English or Japanese
+                    </div>
+
+                    <div class='mt-4 text-right text-slate-500'>
+                        英語や日本語を学ぶための勉強会です。
+                    </div>
                 </div>
             </div>
 
-            <div class='' x-data="{open: false}">
-                <div class='text-4xl py-2 font-bold uppercase' @click="open = !open">
-                    <i class='fa-solid fa-caret-right transition-all mr-4' :class="open ? 'fa-rotate-90' : ''"></i>
-                    How it works?
+            <div class='' x-data="{open: true}">
+                <div class='text-4xl py-2 font-bold uppercase flex gap-4' @click="open = !open">
+                    <i class='fa-solid fa-caret-right transition-all' :class="open ? 'fa-rotate-90' : ''"></i>
+                    <div class='flex-1 -tracking-[0.08em]'>
+                        How does it works?
+                    </div>
+                    <div class='text-slate-500 text-2xl'>
+                        どうやって機能しますか？
+                    </div>
                 </div>
 
-                <div class='text-2xl mx-auto flex justify-center items-center divide-x-4 divide-slate-700 py-4' x-show="open">
-                    <div class='text-[9rem] uppercase font-bold -tracking-[0.12em] px-4'>we</div>
+                <div class='text-2xl mx-auto grid grid-cols-2 items-center divide-x-4 divide-slate-700 py-4' x-show="open">
+                    <div class='text-[9rem] uppercase font-bold -tracking-[0.12em] px-4 text-right'>we</div>
                     <div class='flex flex-col uppercase px-4'>
                         <div class=''>meet <b>every week</b></div>
                         <div class=''>talk <b>5 min</b> in <b>english</b></div>
@@ -117,12 +133,27 @@
                         <div class=''>repeat that for <b>30min</b></div>
                     </div>
                 </div>
+                <div class='text-2xl mx-auto grid grid-cols-2 items-center divide-x-4 divide-slate-700 py-4' x-show="open">
+                    <div class='text-[7rem] uppercase font-bold -tracking-[0.12em] px-4 text-right'>私たち</div>
+                    <div class='flex flex-col uppercase px-4'>
+                        <div class=''>は<b>毎週</b>会います</div>
+                        <div class=''>は<b>英語</b>で<b>5分</b>話します</div>
+                        <div class=''>は<b>日本語</b>で<b>5分</b>話します</b></div>
+                        <div class=''>は<b>30分</b>間繰り返します</div>
+
+                    </div>
+                </div>
             </div>
 
             <div class='' x-data="{open: false}">
-                <div class='text-4xl py-2 font-bold uppercase' @click="open = !open">
-                    <i class='fa-solid fa-caret-right transition-all mr-4' :class="open ? 'fa-rotate-90' : ''"></i>
-                    That's all?
+                <div class='text-4xl py-2 font-bold uppercase flex gap-4' @click="open = !open">
+                    <i class='fa-solid fa-caret-right transition-all' :class="open ? 'fa-rotate-90' : ''"></i>
+                    <div class='flex-1'>
+                        That's all?
+                    </div>
+                    <div class='text-slate-500 text-2xl'>
+                        それだけですか？
+                    </div>
                 </div>
                 <div class='text-2xl text-right uppercase' x-show="open">
                     No!<br/>
@@ -134,7 +165,7 @@
     </x-front.section>
 
     <x-front.section id="media" class="bg-slate-700">
-        <header class='bg-gray-200 text-slate-700'>
+        <header class='bg-slate-200 text-slate-700'>
             Media
         </header>
     </x-front.section>
