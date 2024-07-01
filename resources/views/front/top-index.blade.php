@@ -57,8 +57,8 @@
                 </div>
                 <div class='flex-1 text-[2rem] sm:text-[2.5rem] leading-[3rem] sm:leading-[4.5rem] divide-y lg:divide-y-4'>
                     <x-front.event.event-agenda-tile date="22" title="Gogogo at The Mall" slug="2024-9-22"/>
-                    <x-front.event.event-agenda-tile date="25" title="Badminton night!" slug="2024-9-25"/>
-                    <x-front.event.event-agenda-tile date="29" title="Oktoberfes at Nichikichou Koen" slug="2024-9-29"/>
+                    <x-front.event.event-agenda-tile date="25" title="Badminton night!" slug="2024-9-25" icon="fas fa-mug-hot"/>
+                    <x-front.event.event-agenda-tile date="29" title="Oktoberfes at Nichikichou Koen" slug="2024-9-29" icon="fas fa-mug-hot"/>
                 </div>
             </div>
 
@@ -67,7 +67,7 @@
                     OCT
                 </div>
                 <div class='flex-1 font-bold text-[2rem] sm:text-[2.5rem] leading-[3rem] sm:leading-[4.5rem] divide-y lg:divide-y-4'>
-                    <x-front.event.event-agenda-tile date="07" title="Trip to Matsushima" slug="2024-10-07"/>
+                    <x-front.event.event-agenda-tile date="07" title="Trip to Matsushima" slug="2024-10-07" icon="fas fa-mug-hot"/>
                     <x-front.event.event-agenda-tile date="12" title="Gogogo Friday" slug="2024-10-12"/>
                 </div>
 
@@ -177,14 +177,14 @@
         </div>
     </x-front.section>
 
-    <x-front.section id="media" class="bg-slate-700">
-        <header class='bg-slate-200 text-slate-700'>
+    <x-front.section id="media" class="bg-slate-600">
+        <header class='bg-slate-200 text-slate-600'>
             Media
         </header>
     </x-front.section>
 
     <x-front.section id="topic" class="bg-blue-200">
-        <header class='bg-slate-700 text-blue-200'>
+        <header class='bg-slate-600 text-blue-200'>
             topic
         </header>
     </x-front.section>
