@@ -16,7 +16,6 @@ use Illuminate\Validation\Rule;
 use Illuminate\View\View as ViewView;
 use Ramsey\Uuid\Type\Integer;
 
-
 class EventController extends Controller
 {
 
@@ -71,6 +70,7 @@ class EventController extends Controller
 
         $event = new Event();
         $event->name = $validated["name"];
+        $event->slug = $validated["slug"];
         $event->start_at = $validated['start_at'];
         $event->end_at = $validated['end_at'];
         $event->description_en = $validated["description_en"];

@@ -28,6 +28,13 @@ class EventCreateRequest extends FormRequest
                 "string",
                 "max:255"
             ],
+            "slug" => [
+                "required",
+                "string",
+                "unique:events,slug",
+                "alpha_dash",
+                "max:128"
+            ],
             "start_at" => [
                 "required",
                 "date"
