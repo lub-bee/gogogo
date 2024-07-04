@@ -19,6 +19,7 @@ class TopicFactory extends Factory
     {
         return [
             "name" => fake()->sentence(3),
+            "slug" => fake()->slug(),
             "user_id" => User::all()->random()->id,
         ];
     }

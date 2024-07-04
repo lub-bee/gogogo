@@ -19,6 +19,7 @@ class LocationFactory extends Factory
     {
         return [
             "name" => fake()->sentence(4, true),
+            "slug" => fake()->slug(),
             "user_id" => User::all()->random()->id,
         ];
     }

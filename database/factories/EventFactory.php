@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Event;
 use App\Models\Location;
 use App\Models\Topic;
 use App\Models\User;
@@ -29,6 +30,7 @@ class EventFactory extends Factory
          */
         return [
             "name" => fake()->sentence(6, true),
+            "slug" => fake()->slug(),
             "start_at" => fake()->dateTime(),
             "user_id" => User::all()->random()->id,
             "topic_id" => Topic::all()->random()->id,
