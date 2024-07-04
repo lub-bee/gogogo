@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LocationCreateRequest extends FormRequest
+class LocationUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,7 +30,7 @@ class LocationCreateRequest extends FormRequest
             "slug" => [
                 "required",
                 "string",
-                "unique:locations,slug",
+                "unique:event,slug",
                 "alpha_dash",
                 "max:128"
             ],
@@ -65,6 +65,7 @@ class LocationCreateRequest extends FormRequest
                 "string",
                 "max:100000"
             ]
+            //
         ];
     }
 }

@@ -64,6 +64,7 @@ class LocationController extends Controller
 
         $location = new Location();
         $location->name = $validated["name"];
+        $location->slug = $validated["slug"];
         $location->description_en = $validated["description_en"];
         $location->gps_long = $validated["gps_long"];
         $location->gps_lat = $validated["gps_lat"];
@@ -102,6 +103,7 @@ class LocationController extends Controller
 
         $location = Location::find($location_id);
         $location->name = $validated["name"];
+        $location->slug = $validated["slug"];
         $location->description_en = $validated["description_en"];
         $location->gps_long = $validated["gps_long"];
         $location->gps_lat = $validated["gps_lat"];
