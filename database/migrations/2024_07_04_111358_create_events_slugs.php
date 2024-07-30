@@ -15,14 +15,6 @@ return new class extends Migration
         Schema::table('events', function (Blueprint $table) {
             $table->string('slug',128)->nullable(false)->unique();
         });
-
-        Schema::table('topics', function (Blueprint $table) {
-            $table->string('slug',128)->nullable(false)->unique();
-        });
-
-        Schema::table('locations', function (Blueprint $table) {
-            $table->string('slug',128)->nullable(false)->unique();
-        });
     }
 
     /**
@@ -31,14 +23,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->dropColumn("slug");
-        });
-
-        Schema::table('topics', function (Blueprint $table) {
-            $table->dropColumn("slug");
-        });
-
-        Schema::table('locations', function (Blueprint $table) {
             $table->dropColumn("slug");
         });
     }

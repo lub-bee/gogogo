@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('locations_slugs', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('locations', function (Blueprint $table) {
+            $table->string('slug',128)->nullable(false)->unique();
         });
     }
 
@@ -22,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('locations_slugs');
+        Schema::table('locations', function (Blueprint $table) {
+            $table->dropColumn("slug");
+        });
     }
 };
