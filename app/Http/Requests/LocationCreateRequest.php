@@ -63,7 +63,7 @@ class LocationCreateRequest extends FormRequest
             "cost" => [
                 "nullable",
                 "string",
-                "max:100000"
+                "max:128"
             ]
         ];
     }
