@@ -6,6 +6,14 @@
     <div class="col-span-3">{{$event->name}}</div>
 </div>
 
+{{--event slug--}}
+<div class='info'>
+    <div>Slug</div>
+    <div class="col-span-3 ">
+        <a href="{{route("front.event.show", $event->slug)}}" class="link">{{$event->slug}}</a>
+    </div>
+</div>
+
 {{-- event time --}}
 <div class="info">
     <div>Start</div>
