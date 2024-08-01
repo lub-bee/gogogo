@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('rank', User::RANKS)->default(User::RANK_VISITOR)->comment("Admin : 100, Support : 10, Visitor : 0");
+            $table->enum('rank', [User::RANK_ADMIN, User::RANK_SUPPORT, User::RANK_VISITOR])->default(User::RANK_VISITOR)->comment("Admin : 100, Support : 10, Visitor : 0");
             $table->rememberToken();
             $table->timestamps();
         });
