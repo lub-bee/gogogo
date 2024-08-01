@@ -51,6 +51,14 @@
                     </x-slot>
 
                     <x-slot name="content">
+                        <div class='flex w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 justify-between border-b'>
+                            <div class=''>
+                                Rank
+                            </div>
+                            <div class='uppercase'>
+                                {{ Auth::user()->rank }}
+                            </div>
+                        </div>
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
@@ -109,6 +117,10 @@
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+            </div>
+            <div class="px-4">
+                <div class="font-medium text-base text-gray-800">Role</div>
+                <div class="font-medium text-sm text-gray-500 uppercase">{{ Auth::user()->rank }}</div>
             </div>
 
             <div class="mt-3 space-y-1">

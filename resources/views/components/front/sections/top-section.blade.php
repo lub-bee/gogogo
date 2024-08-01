@@ -53,14 +53,15 @@
                 </div>
 
 
-                <div class='self-stretch flex flex-col' x-show="mode === 'default'" x-cloak>
-                    Something here, maybe?
+                <div class='self-stretch flex flex-col mt-10 gap-4' x-show="mode === 'default'" x-cloak>
+                    <a href="{{ route('dashboard') }}" class='btn btn-main'>Go to Dashboard</a>
+                    <a href="{{ route('profile.edit') }}" class='btn btn-main'>Go to Profile</a>
                 </div>
             </div>
         @else
             <form method="POST" action="{{ route('login') }}" class="h-full flex flex-col gap-4 p-4 justify-center sm:max-w-sm lg:max-w-full mx-auto">
                 @csrf
-                <div class='flex justify-between items-center border-b border-gray-400 mb-4 md:mt-8 uppercase'>
+                <div class='flex justify-between items-center border-b border-gray-400 mb-4 md:mt-8 uppercase text-slate-700'>
                     Not a member yet? <a href="{{ route('register') }}" class='btn btn-success'>Join us!</a>
                 </div>
                 <div class=''>
