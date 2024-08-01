@@ -7,14 +7,17 @@
             </div>
             <div class='lg:w-1/3 flex-none bg-gray-300'>
                 <form method="POST" action="{{ route('login') }}" class="h-full flex flex-col gap-4 p-4 xl:p-14 justify-center sm:max-w-sm lg:max-w-full mx-auto">
+                    @csrf
                     <div class='flex justify-between items-center border-b border-gray-400 mb-4 md:mt-8 uppercase'>
                         Not a member yet? <a href="{{ route('register') }}" class='btn btn-success'>Join us!</a>
                     </div>
                     <div class=''>
-                        <input type="text" placeholder="email" class="form-input"/>
+                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                        <input type="email" name="email" placeholder="email" class="form-input" autocomplete="username"/>
                     </div>
                     <div class=''>
-                        <input type="password" placeholder="password" class="form-input"/>
+                        <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                        <input type="password" name="password" placeholder="password" class="form-input" required autocomplete="current-password"/>
                     </div>
                     <div class='text-right'>
                         <a href="{{ route('password.request') }}" class="text-slate-700 hover:underline">You have forgot your password?</a>
