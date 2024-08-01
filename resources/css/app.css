@@ -88,6 +88,33 @@
         transition-all
 }
 
+.btn-sns{
+    @apply
+        rounded-full
+        p-2
+        bg-white
+        text-slate-700 hover:text-blue-500
+        hover:rotate-12
+        active:rotate-[360deg]
+        transition-all
+}
+.btn-sns.selected{
+    @apply
+        bg-blue-500
+        text-white
+        transition-all
+}
+.btn-sns-red{
+    @apply
+        rounded-full
+        p-2
+        bg-white hover:text-white
+        text-slate-700 hover:bg-red-500
+        hover:rotate-12
+        active:rotate-[360deg]
+        transition-all
+}
+
 .link{
     @apply
         text-blue-500
