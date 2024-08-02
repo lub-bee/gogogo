@@ -79,28 +79,20 @@
                 {{-- event topic --}}
                 <div class="info">
                     <div>Topic</div>
-                    <div class="col-span-2">
+                    <div class="col-span-3">
                         <x-input-error :messages="$errors->get('topic_id')" class="mb-2" />
-                        <select name="topic_id" class="form-input">
-                            <option value="" >-</option>
-                            @foreach ($topics as $topic)
-                                <option value="{{$topic->id}}" {{ (old("topic_id", $event->topic_id) == $topic->id ? "selected":"") }} >{{ $topic->name }}</option>
-                            @endforeach
-                        </select>
+
+                        <livewire:topic-search :event="$event" />
                     </div>
                 </div>
 
                 {{-- event location --}}
                 <div class="info">
                     <div>Location</div>
-                    <div class="col-span-2">
+                    <div class="col-span-3">
                         <x-input-error :messages="$errors->get('location_id')" class="mb-2" />
-                        <select name="location_id" class="form-input">
-                            <option value="" >-</option>
-                            @foreach ($locations as $location)
-                                <option value="{{$location->id}}" {{ (old("location_id", $event->location_id) == $location->id ? "selected":"") }} >{{ $location->name }}</option>
-                            @endforeach
-                        </select>
+
+                        <livewire:location-search :event="$event" />
                     </div>
                 </div>
 
