@@ -321,14 +321,48 @@ h1, .h1{
         relative
 
 }
-/*
-h1::before{
+
+.top-menu-link{
     @apply
-        h-[.5rem]
-        w-full
-        bg-gray-100
-        content-['']
-        block
-        absolute
-        top-0
-} */
+    text-6xl lg:text-8xl
+    text-slate-700
+    -ml-10
+    transition-all
+    cursor-pointer
+    block
+    uppercase font-bold -tracking-[0.5rem]
+}
+.top-menu-link:hover, .top-menu-link.active{
+    @apply
+    -ml-28
+    tracking-tight
+}
+.top-menu-link.active{
+    @apply
+        invisible lg:visible
+}
+.top-menu-link.long{
+    @apply
+        hover:-ml-40
+}
+
+.top-menu-link.discord:hover, .top-menu-link.discord.active{
+    @apply
+        text-blue-500
+}
+
+.top-menu-link.line:hover, .top-menu-link.line.active{
+    @apply
+        text-green-500
+}
+
+.top-menu-title{
+    @apply
+    text-6xl lg:text-8xl
+    text-slate-700
+    uppercase
+    font-bold
+    -tracking-[0.5rem]
+    transition-all
+    cursor-pointer
+}
