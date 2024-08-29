@@ -27,6 +27,13 @@ class LocationCreateRequest extends FormRequest
                 "string",
                 "max:255"
             ],
+            "slug" => [
+                "required",
+                "string",
+                "unique:locations,slug",
+                "alpha_dash",
+                "max:128"
+            ],
             "description_en" => [
                 "nullable",
                 "string",
@@ -56,7 +63,7 @@ class LocationCreateRequest extends FormRequest
             "cost" => [
                 "nullable",
                 "string",
-                "max:100000"
+                "max:128"
             ]
         ];
     }

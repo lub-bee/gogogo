@@ -61,6 +61,7 @@ class TopicController extends Controller
 
         $topic = new Topic();
         $topic->name = $validated["name"];
+        $topic->slug = $validated["slug"];
         $topic->memo = $validated["memo"];
         $topic->description_en = $validated["description_en"];
         $topic->description_ja = $validated["description_ja"];
@@ -103,6 +104,7 @@ class TopicController extends Controller
 
         $topic =  Topic::findOrFail($topic_id);
         $topic->name = $validated["name"];
+        $topic->slug = $validated["slug"];
         $topic->memo = $validated["memo"];
         $topic->description_en = $validated["description_en"];
         $topic->description_ja = $validated["description_ja"];

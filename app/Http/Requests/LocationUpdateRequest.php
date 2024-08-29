@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Topic;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class TopicCreateRequest extends FormRequest
+class LocationUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,19 +25,14 @@ class TopicCreateRequest extends FormRequest
             "name" => [
                 "required",
                 "string",
-                "max:60"
+                "max:255"
             ],
             "slug" => [
                 "required",
                 "string",
-                "unique:topics,slug",
+                "unique:event,slug",
                 "alpha_dash",
                 "max:128"
-            ],
-            "memo" => [
-                "nullable",
-                "string",
-                "max:255"
             ],
             "description_en" => [
                 "nullable",
@@ -51,17 +44,28 @@ class TopicCreateRequest extends FormRequest
                 "string",
                 "max:2000"
             ],
-            "published_at" => [
+            "gps_long" => [
                 "nullable",
-                Rule::requiredIf(function () {
-                    return $this->status === 'published'; // Only required if status is "published"
-                }),
-                "date",
+                "string",
+                "max:15"
             ],
-            "status" => [
-                "required",
-                "in:published,draft"
+            "gps_lat" => [
+                "nullable",
+                "string",
+                "max:15"
             ],
+            "website_url" => [
+                "nullable",
+                "string",
+                "max:200"
+            ],
+            //TO CHECK - Default value vs Nullable.
+            "cost" => [
+                "nullable",
+                "string",
+                "max:128"
+            ]
+            //
         ];
     }
 }

@@ -2,11 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Topic;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class TopicCreateRequest extends FormRequest
+class TopicUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +22,12 @@ class TopicCreateRequest extends FormRequest
      */
     public function rules(): array
     {
+        // dd($this->id);
         return [
+            "id" => [
+                "required",
+                "exists:topics,id"
+            ],
             "name" => [
                 "required",
                 "string",
@@ -32,7 +36,7 @@ class TopicCreateRequest extends FormRequest
             "slug" => [
                 "required",
                 "string",
-                "unique:topics,slug",
+                Rule::unique('topics', "slug")->ignore($this->id, "id"),
                 "alpha_dash",
                 "max:128"
             ],
@@ -54,7 +58,8 @@ class TopicCreateRequest extends FormRequest
             "published_at" => [
                 "nullable",
                 Rule::requiredIf(function () {
-                    return $this->status === 'published'; // Only required if status is "published"
+                    return $this->status === 'published';
+                    // Only required if status is "published"
                 }),
                 "date",
             ],
@@ -62,6 +67,7 @@ class TopicCreateRequest extends FormRequest
                 "required",
                 "in:published,draft"
             ],
+            //
         ];
     }
 }

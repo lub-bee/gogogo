@@ -24,7 +24,8 @@ class Event extends Model
     ];
 
     protected $casts = [
-        "start_at" => "date",
+        "start_at" => "datetime",
+        "end_at" => "datetime",
     ];
 
     public function user(): BelongsTo

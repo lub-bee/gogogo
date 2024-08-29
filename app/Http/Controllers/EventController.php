@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EventCreateRequest;
 use App\Http\Requests\EventDeleteRequest;
 use App\Http\Requests\EventPublishRequest;
+use App\Http\Requests\EventUpdateRequest;
 use App\Models\Event;
 use App\Models\Location;
 use App\Models\Topic;
@@ -15,7 +16,6 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View as ViewView;
 use Ramsey\Uuid\Type\Integer;
-
 
 class EventController extends Controller
 {
@@ -71,6 +71,7 @@ class EventController extends Controller
 
         $event = new Event();
         $event->name = $validated["name"];
+        $event->slug = $validated["slug"];
         $event->start_at = $validated['start_at'];
         $event->end_at = $validated['end_at'];
         $event->description_en = $validated["description_en"];
@@ -118,12 +119,13 @@ class EventController extends Controller
      * @param EventCreateRequest $request
      * @return RedirectResponse
      */
-    public function update(int $event_id, EventCreateRequest $request): RedirectResponse
+    public function update( EventUpdateRequest $request): RedirectResponse
     {
         $validated = $request->validated();
 
-        $event = Event::find($event_id);
+        $event = Event::find($validated["id"]);
         $event->name = $validated["name"];
+        $event->slug = $validated['slug'];
         $event->start_at = $validated['start_at'];
         $event->end_at = $validated['end_at'];
         $event->description_en = $validated["description_en"];

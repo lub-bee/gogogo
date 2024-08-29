@@ -24,6 +24,15 @@
                     </div>
                 </div>
 
+                {{-- slug --}}
+                <div class="info">
+                    <div>Slug <x-required/></div>
+                    <div class="col-span-3">
+                        <x-input-error :messages="$errors->get('slug')" class="mb-2" />
+                        <input type="text" name="slug" class="form-input" value="{{old('slug',$location->slug)}}">
+                    </div>
+                </div>
+
                 {{-- description --}}
                 <div class="info">
                     <div>Location Description</div>

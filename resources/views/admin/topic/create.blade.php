@@ -1,7 +1,7 @@
 <x-admin-layout>
 
     <div class='section'>
-        <h1>Event Create</h1>
+        <h1>Topic Create</h1>
     </div>
 
     {{-- nav --}}
@@ -22,6 +22,15 @@
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('name')" class="mb-2" />
                         <input type="text" name="name" class="form-input" value='{{old("name")}}'>
+                    </div>
+                </div>
+
+                {{-- topic slug --}}
+                <div class="info">
+                    <div>Slug <x-required/></div>
+                    <div class="col-span-3">
+                        <x-input-error :messages="$errors->get('slug')" class="mb-2" />
+                        <input type="text" name="slug" class="form-input" value='{{old("slug")}}'>
                     </div>
                 </div>
 

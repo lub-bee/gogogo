@@ -67,7 +67,7 @@ Route::prefix("management")->middleware('auth', "rank:admin,support")->group( fu
     Route::post('/event', [EventController::class, "store"])->name('event.store');
     Route::get('/event/{event_id}/edit', [EventController::class, "edit"])->name("event.edit");
     Route::get('/event/{event_id}', [EventController::class, "show"])->name('event.show');
-    Route::put('/event/{event_id}',[EventController::class,"update"])->name('event.update');
+    Route::put('/event',[EventController::class,"update"])->name('event.update');
     Route::delete('/event',[EventController::class,"destroy"])->name('event.destroy');
     Route::patch('/event/{event}', [EventController::class,"publish"])->name('event.publish');
 

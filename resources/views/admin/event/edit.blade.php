@@ -10,9 +10,11 @@
     </div>
 
     {{-- event edit form --}}
-    <form method="POST" action="{{route('event.update',  $event->id)}}">
+    <form method="POST" action="{{route('event.update')}}">
         @csrf
         @method('PUT')
+
+        <input type="hidden" name="id" value="{{$event->id}}"/>
 
         <div class='section'>
             <div class='block-container p-4 '>
@@ -23,6 +25,15 @@
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('name')" class="mb-2" />
                         <input type="text" name="name" class="form-input" value="{{old('name', $event->name)}}">
+                    </div>
+                </div>
+
+                {{-- event slug --}}
+                <div class="info">
+                    <div>Slug <x-required/></div>
+                    <div class="col-span-3">
+                        <x-input-error :messages="$errors->get('slug')" class="mb-2" />
+                        <input type="text" name="slug" class="form-input" value="{{old('slug', $event->slug)}}">
                     </div>
                 </div>
 

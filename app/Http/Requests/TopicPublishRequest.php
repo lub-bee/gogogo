@@ -14,4 +14,16 @@ class TopicPublishRequest extends FormRequest
         // todo : add the permission here later
         return true;
     }
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            // -Only used for PUBLISH
+            // -Except for id, no param needed
+        ];
+    }
 }
