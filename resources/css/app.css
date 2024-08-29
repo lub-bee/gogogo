@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+[x-cloak] {
+    display: none;
+}
+
 .section{
     @apply
         max-w-7xl
@@ -85,6 +89,33 @@
         border border-red-500
         text-red-500 hover:text-white
         rounded
+        transition-all
+}
+
+.btn-sns{
+    @apply
+        rounded-full
+        p-2
+        bg-white
+        text-slate-700 hover:text-blue-500
+        hover:rotate-12
+        active:rotate-[360deg]
+        transition-all
+}
+.btn-sns.selected{
+    @apply
+        bg-blue-500
+        text-white
+        transition-all
+}
+.btn-sns-red{
+    @apply
+        rounded-full
+        p-2
+        bg-white hover:text-white
+        text-slate-700 hover:bg-red-500
+        hover:rotate-12
+        active:rotate-[360deg]
         transition-all
 }
 
@@ -227,8 +258,12 @@ th{
     @apply
         px-4
         cursor-pointer
-        hover:bg-yellow-200
+        hover:bg-yellow-100
         transition-all
+}
+.menu a.active{
+    @apply
+        font-bold
 }
 .menu a.active::before{
     content: "# ";

@@ -8,7 +8,10 @@ class TopFrontController extends Controller
 {
     public function index()
     {
-        return view('front.top-index');
+        $greetingsService = new \App\Services\GreetingsService();
+
+        return view('front.top-index')
+            ->with('greetings', $greetingsService->hello());
     }
 
     public function temp(){

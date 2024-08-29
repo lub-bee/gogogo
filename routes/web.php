@@ -32,7 +32,10 @@ use Illuminate\Support\Facades\Route;
 
 // public routes
 Route::get("/", [TopFrontController::class, "index"])->name("top");
-Route::get("/temp", [TopFrontController::class, "temp"])->name("top");
+
+
+
+// Route::get("/temp", [TopFrontController::class, "temp"])->name("top");
 Route::name('front.')->group(function () {
     //todo
     Route::get("/event/{event_slug}",[EventFrontController::class, "show"])->name("event.show");
@@ -45,15 +48,18 @@ Route::name('front.')->group(function () {
     Route::get("/agenda",[AgendaFrontController::class, "index"])->name("agenda.index");
 
 });
-// admin and management routes
+
+Route::prefix("profile")->name('profile.')->middleware('auth')->group( function () {
+    Route::get('/', [ProfileController::class, 'edit'])->name('edit');
+    Route::patch('/', [ProfileController::class, 'update'])->name('update');
+    Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
+});
+
 Route::get('/management', function () {
     return view('top.dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'rank:admin,support'])->name('dashboard');
 
-Route::prefix("management")->middleware('auth')->group( function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::prefix("management")->middleware('auth', "rank:admin,support")->group( function () {
 
     //Event
     Route::get('/event', [EventController::class, "index"])->name('event.index');

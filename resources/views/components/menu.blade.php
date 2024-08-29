@@ -1,10 +1,21 @@
 <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'>
-    <a href="#top">Top</a>
-    <a href="#event">Event</a>
-    <a href="#agenda">Agenda</a>
-    <a href="#about">About</a>
-    <a href="#media">Media</a>
-    <a href="#topic">Topic</a>
+    @if(request()->routeIs('top'))
+        <a href="#top">Top</a>
+        <a href="#event">Event</a>
+        <a href="#agenda">Agenda</a>
+        <a href="#about">About</a>
+        <a href="#media">Media</a>
+        <a href="#topic">Topic</a>
+    @endif
+
+    @if(request()->routeIs('profile.*'))
+        <a href="{{ route('top') }}"><i class='fa-solid fa-chevron-left'></i> Back</a>
+        <a href="#top">Profile</a>
+        <a href="#profile-media">My Media</a>
+        <a href="#profile-info">My Info</a>
+        <a href="#profile-password">My Pwd</a>
+        <a href="#profile-delete">My Account</a>
+    @endif
 </aside>
 
 <script>
@@ -30,11 +41,15 @@
                         case "event":
                         case "about":
                         case "topic":
+                        case "profile-media":
+                        case "profile-password":
                             menu.classList.remove("reversed");
                             break;
 
                         case "agenda":
                         case "media":
+                        case "profile-info":
+                        case "profile-delete":
                             menu.classList.add("reversed");
                             break;
 
