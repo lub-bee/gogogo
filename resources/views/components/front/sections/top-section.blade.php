@@ -1,11 +1,41 @@
 @props ([
     "greetings" => "Hello there,",
 ])
+
 <div class='flex-1 h-screen flex flex-col lg:flex-row overflow-hidden'>
 
     {{-- animated logo - Todo --}}
-    <div class='flex-1 text-[5rem] sm:text-[9rem] font-bold flex justify-center items-center text-slate-700'>
-        五語Go!
+    <div class='flex-1 font-bold flex justify-center items-center text-slate-700'>
+        {{-- 五語Go! --}}
+        <div class="flex">
+            <div id="slot1" class="slot h-[10rem] text-[5rem] md:text-[9rem] leading-[9rem] w-28 md:w-48 flex items-center justify-center overflow-hidden relative">
+                <div class="letters absolute inset-0 transition-transform duration-500 text-center">
+                    <div>五</div>
+                    <div>5</div>
+                    <div>ご</div>
+                    <div>ゴ</div>
+                    <div>Go</div>
+                </div>
+            </div>
+            <div id="slot2" class="slot h-[10rem] text-[5rem] md:text-[9rem] leading-[9rem] w-28 md:w-48 flex items-center justify-center overflow-hidden relative">
+                <div class="letters absolute inset-0 transition-transform duration-500 text-center">
+                    <div>語</div>
+                    <div>ご</div>
+                    <div>ゴ</div>
+                    <div>Go</div>
+                </div>
+            </div>
+            <div id="slot3" class="slot h-[10rem] text-[5rem] md:text-[9rem] leading-[9rem] w-28 md:w-52 flex items-center justify-center overflow-hidden relative">
+                <div class="letters absolute inset-0 transition-transform duration-500 text-center">
+                    <div>Go</div>
+                    <div>ゴ</div>
+                    <div>ご</div>
+                </div>
+            </div>
+        </div>
+
+
+
     </div>
 
     {{-- side menu --}}

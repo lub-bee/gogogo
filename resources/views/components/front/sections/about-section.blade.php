@@ -2,7 +2,7 @@
     About US
 </header>
 
-<div class='flex-1 flex flex-col divide-y-4 divide-slate-700 w-screen lg:w-2/3 mx-auto justify-center px-4' x-data="{mode: '2'}">
+<div class='flex-1 flex flex-col divide-y-4 divide-slate-700 w-screen lg:w-2/3 mx-auto justify-center px-4' x-data="{mode: '1'}">
 
     <div class='' x-data="{open: false}">
         <div class='text-3xl md:text-4xl py-2 font-bold uppercase flex flex-col items-start lg:items-center lg:flex-row gap-4 ' @click="mode = (mode == 1)?'false':'1'">

@@ -325,7 +325,7 @@ h1, .h1{
 .top-menu-link{
     @apply
     text-6xl lg:text-8xl
-    text-slate-700
+    text-gray-400 lg:text-slate-700
     -ml-10
     transition-all
     cursor-pointer
