@@ -2,8 +2,8 @@
     Agenda
 </header>
 
-<div class='flex-1 max-w-6xl mx-auto flex flex-col justify-evenly'>
-    <div class='flex flex-col lg:flex-row gap-4 lg:gap-14'>
+<div class='flex-1 max-w-6xl mx-auto flex flex-col justify-evenly w-screen'>
+    <div class='flex flex-col lg:flex-row gap-4 lg:gap-14 mx-4 overflow-hidden'>
         <div class='lg:text-right flex-none lg:w-1/4 font-bold text-[3rem] sm:text-[4.5rem] lg:text-[7rem] leading-[2rem] md:leading-[3rem] lg:leading-[6rem] -tracking-[0.12em]'>
             SEPT
         </div>
@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <div class='flex flex-col lg:flex-row gap-4 lg:gap-14'>
+    <div class='flex flex-col lg:flex-row gap-4 lg:gap-14 mx-4'>
         <div class='lg:text-right flex-none lg:w-1/4 font-bold text-[3rem] sm:text-[4.5rem] lg:text-[7rem] leading-[2rem] sm:leading-[3rem] lg:leading-[6rem] -tracking-[0.12em]'>
             OCT
         </div>
