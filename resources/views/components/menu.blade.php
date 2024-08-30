@@ -10,7 +10,7 @@
 
     @if(request()->routeIs('profile.*'))
         <a href="{{ route('top') }}"><i class='fa-solid fa-chevron-left'></i> Back</a>
-        <a href="#top">Profile</a>
+        <a href="#profile-top">Profile</a>
         <a href="#profile-media">My Media</a>
         <a href="#profile-info">My Info</a>
         <a href="#profile-password">My Pwd</a>
@@ -45,7 +45,7 @@
                         case "profile-password":
                             menu.classList.remove("reversed");
                             break;
-
+                        case "profile-top":
                         case "agenda":
                         case "media":
                         case "profile-info":

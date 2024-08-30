@@ -5,61 +5,76 @@
         </h2>
     </x-slot> --}}
 
-    <x-front.section id="top" class="bg-white flex flex-col text-slate-700">
-        <div class='flex-1 flex justify-center gap-20'>
-            <div class='w-1/3 self-center flex flex-col justify-center border-8'>
-                <div class='text-6xl font-bold -tracking-[0.12em] bg-slate-200'>
-                    PUBLIC
-                </div>
-                <div class='uppercase px-4'>
-                    Pseudo
-                </div>
-                <div class='text-right text-3xl px-4'>
-                    {{ Auth::user()->name }}
-                </div>
-                <div class='border-t-8 uppercase px-4'>
-                    Registered since
-                </div>
-                <div class='text-right text-3xl px-4'>
-                    {{ Auth::user()->created_at->format('Y-m-d') }}
-                </div>
-
-                <div class='border-t-8 uppercase px-4'>
-                    Media published
-                </div>
-                <div class='text-right text-3xl px-4'>
-                    {{ Auth::user()->medias()->count() }}
-                </div>
-
-                <div class='border-t-8 uppercase px-4'>
-                    Participations
-                </div>
-                <div class='text-right text-3xl px-4'>
-                    n
-                </div>
+    <x-front.section id="profile-top" class="bg-white lg:grid lg:grid-cols-2 flex flex-col text-slate-700 h-screen">
+        <div class='flex-1'>
+            <div class='text-slate-700 title'>
+                Public
             </div>
+            <div class='m-4 lg:m-10 space-y-4 lg:space-y-8 text-2xl lg:text-3xl'>
 
-            <div class='w-1/3 self-center flex flex-col justify-center border-8 border-slate-200'>
-                <div class='text-6xl font-bold -tracking-[0.12em] bg-slate-200'>
-                    PRIVATE
+                <div class=''>
+                    <div class='uppercase'>
+                        Pseudo
+                    </div>
+                    <div class='text-4xl lg:text-6xl mx-10'>
+                        {{ Auth::user()->name }}
+                    </div>
                 </div>
-                <div class='uppercase px-4'>
-                    Email
+
+                <div class=''>
+                    <div class='uppercase'>
+                        Registered since
+                    </div>
+                    <div class='text-4xl lg:text-6xl mx-10'>
+                        {{ Auth::user()->created_at->format('Y-m-d') }}
+                    </div>
                 </div>
-                <div class='text-right text-2xl px-4 -tracking-[0.06em]'>
-                    {{-- {{ Auth::user()->email }} --}}ludovic.blervaque@lubbee.net
-                </div>
-                <div class='flex flex-col border-t-8 p-4 text-right'>
-                    <a href="#profile-media" class="btn btn-success"><i class='fa-solid fa-image text-white'></i>&nbsp; Media</a>
-                    <a href="#profile-info" class="btn btn-main"><i class='fa-solid fa-address-card text-white'></i>&nbsp; Edit info</a>
-                    <a href="#profile-password" class="btn btn-main"><i class='fa-solid fa-asterisk text-white'></i>&nbsp; Edit PWD</a>
-                    <a href="#profile-delete" class="btn btn-danger"><i class='fa-solid fa-trash text-white'></i>&nbsp; Deletion</a>
+
+                <div class=''>
+                    <div class='uppercase'>
+                        Media published
+                    </div>
+                    <div class='text-4xl lg:text-6xl mx-10'>
+                        {{ Auth::user()->medias()->count() }}
+                    </div>
                 </div>
 
             </div>
-
         </div>
-        <div class='flex-none h-4 bg-slate-700'></div>
+        <div class='bg-slate-700 text-slate-300 flex-1'>
+            <div class='text-white title'>
+                Private
+            </div>
+            <div class='m-4 lg:m-10 space-y-4 lg:space-y-8 text-2xl lg:text-3xl'>
+                <div class=''>
+                    <div class='uppercase'>
+                        Email
+                    </div>
+                    <div class='text-4xl lg:text-6xl mx-10'>
+                        {{ Auth::user()->email }}
+                    </div>
+                </div>
+
+                <div class='flex flex-col'>
+                    <a href="#profile-media" class="btn btn-success px-4 py-2 lg:p-4 pl-0 hover:pl-4">
+                        {{-- <i class='fa-solid fa-image fa-fw opacity-0 group-hover:opacity-100 scale-x-0 group-hover:scale-x-100 transition-all'></i> --}}
+                        My Media
+                    </a>
+                    <a href="#profile-info" class="btn btn-main px-4 py-2 lg:p-4 pl-0 hover:pl-4">
+                        {{-- <i class='fa-solid fa-address-card text-white fa-fw'></i> --}}
+                        Edit info
+                    </a>
+                    <a href="#profile-password" class="btn btn-main px-4 py-2 lg:p-4 pl-0 hover:pl-4">
+                        {{-- <i class='fa-solid fa-asterisk text-white fa-fw'></i> --}}
+                        Edit PASSWORD
+                    </a>
+                    <a href="#profile-delete" class="btn btn-danger px-4 py-2 lg:p-4 pl-0 hover:pl-4">
+                        {{-- <i class='fa-solid fa-trash text-white fa-fw'></i> --}}
+                        Deletion
+                    </a>
+                </div>
+            </div>
+        </div>
     </x-front.section>
 
     <x-front.section id="profile-media" class="bg-white">
