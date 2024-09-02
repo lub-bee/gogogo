@@ -6,6 +6,13 @@
     <div class="col-span-3">{{$topic->name}}</div>
 </div>
 
+{{--topic slug--}}
+<div class='info'>
+    <div>Slug</div>
+    <div class="col-span-3 ">
+        <a href="{{route("front.topic.show", $topic->slug)}}" class="link">{{$topic->slug}}</a>
+    </div>
+</div>
 {{-- memo --}}
 @if ($topic->memo)
     <div class='info'>

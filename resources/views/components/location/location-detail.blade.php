@@ -6,6 +6,14 @@
     <div class="col-span-3">{{$location->name}}</div>
 </div>
 
+{{--location slug--}}
+<div class='info'>
+    <div>Slug</div>
+    <div class="col-span-3 ">
+        <a href="{{route("front.location.show", $location->slug)}}" class="link">{{$location->slug}}</a>
+    </div>
+</div>
+
 {{-- location description --}}
 <div class='info'>
     <div>Description</div>
