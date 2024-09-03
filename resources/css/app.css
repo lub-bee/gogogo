@@ -167,19 +167,19 @@ th{
 
 .formated-content h1{
     @apply
-        text-6xl
+        text-3xl
         font-bold
         mb-2 mt-4
 }
 .formated-content h2{
     @apply
-        text-4xl
+        text-2xl
         font-bold
         mb-2 mt-4
 }
 .formated-content h3{
     @apply
-        text-3xl
+        text-xl
         mb-2 mt-2
 }
 
