@@ -10,7 +10,7 @@
 <div class='info'>
     <div>Slug</div>
     <div class="col-span-3 ">
-        <a href="{{route("front.event.show", $event->slug)}}" class="link">{{$event->slug}}</a>
+        <a target="_BLANK" href="{{route("front.event.show", $event->slug)}}" class="link">{{$event->slug}}</a>
     </div>
 </div>
 
