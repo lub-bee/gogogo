@@ -135,7 +135,7 @@
                                 Published
                             </label>
                             <div class='inline-block'>
-                                <input type="date" name="published_at" class="form-input"/>
+                                <input type="date" name="published_at" class="form-input" value="{{old("published_at",$event->published_at)}}"/>
                             </div>
                         </div>
                     </div>
