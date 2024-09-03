@@ -64,6 +64,29 @@ class DatabaseSeeder extends Seeder
         User::factory(5)->create();
 
         // Tag::factory(5)->create();
+        Topic::factory()->create([
+            "name" => "What is your recipe?",
+            "slug" => "hirosegawa-imonikai",
+            "description_en" => "What is your recipe?",
+            "description_ja" => "これのレシピは何ですか？",
+        ]);
+        Location::factory()->create([
+            "name" => "Hirosegawa BBQ Square",
+            "slug" => "hirosegawa-bbq-square",
+            "description_en" => "Hirosegawa BBQ Square",
+        ]);
+        Event::factory()->create([
+            "name" => "2024 Hirosegawa Imonikai",
+            "slug" => "2024-hirosegawa-imonikai",
+            "description_en" => "<h1>the first GoGoGo Imonikai!</h1><p><br></p><p>Our first, certainly, but not the least!</p><p>Let's cook some <strong>meet</strong>, <strong>veggies</strong>, <strong>fish</strong>, <strong>mocchi</strong> and some more!</p><p><br></p><p><em>Reach us in case of allergy, or bring something you are safe to eat</em></p><p>And let's have a tons of fun.</p>",
+            "description_ja" => "<h1>初めての GoGoGo 芋煮会！</h1><p><br></p><p>初めての開催ですが、絶対に特別なイベントです！</p><p>お肉、野菜、魚、餅など、いろいろなものを料理しましょう！</p><p><br></p><p><em>アレルギーがある場合はご連絡いただくか、安全に食べられるものをお持ちください。</em></p><p>たくさん楽しみましょう！</p>",
+            "start_at" => "2024-02-01 12:00:00",
+            "end_at" => "2024-02-01 14:00:00",
+            "location_id" => 1,
+            "topic_id" => 1,
+            "user_id" => 1,
+            "published_at" => "2024-09-03",
+        ]);
         Topic::factory(5)->create();
         Location::factory(5)->create();
         Media::factory(5)->create();
