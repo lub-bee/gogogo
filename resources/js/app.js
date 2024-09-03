@@ -40,7 +40,12 @@ document.addEventListener('DOMContentLoaded', function () {
     ];
 
     function updateSlot(slot) {
+
         const slotElement = document.getElementById(slot.id);
+
+        //avoid an error when no slot on the page
+        if(!slotElement) return;
+
         const lettersElement = slotElement.querySelector('.letters');
         const totalLetters = lettersElement.children.length;
 
@@ -65,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function animateSlots() {
+
         slots.forEach(updateSlot);
     }
 
