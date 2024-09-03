@@ -36,13 +36,13 @@
 {{-- event description EN --}}
 <div class="info">
     <div class=''>Description (English)</div>
-    <div class='col-span-3'>{!!$event->description_en!!}</div>
+    <div class='col-span-3 formated-content'>{!!$event->description_en!!}</div>
 </div>
 
 {{-- event description JA --}}
 <div class="info">
     <div>Description (Japanese)</div>
-    <div class="cols-span-3">{!! $event->description_ja!!}</div>
+    <div class="col-span-3 formated-content">{!! $event->description_ja!!}</div>
 </div>
 
 {{-- event status --}}
