@@ -1,4 +1,4 @@
-@props(["title","description_en","description_ja"])
+@props(["title"=> "dummy title","description_en"=>"dummy description en","description_ja"=>"dummy description ja"])
 <div class='w-full md:w-2/4'>
     <div class='xs:mt-4 px-4 lg:px-0 text-[2.5rem] xl:text-[5rem] leading-[2.5rem] xl:leading-[5rem] lg:tracking-tight font-bold uppercase'>
         {{ $title }}
