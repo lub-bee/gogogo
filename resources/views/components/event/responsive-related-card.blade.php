@@ -1,3 +1,4 @@
+@props(['media_id', 'topic_id', 'location_id'])
 <div class='text-[1.3rem] sm:text-[2rem] flex flex-col h-full md:h-[25vh]'>
 
     <div class='flex-1 flex items-center gap-4 group cursor-pointer' @click="mode = 'media'">
