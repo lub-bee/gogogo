@@ -72,7 +72,7 @@
                     <div>Content (EN)</div>
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('description_en')" class="mb-2" />
-                        <textarea id="description_en" name="description_en" class="hidden"></textarea>
+                        <textarea id="description_en" name="description_en" class="hidden">{!! old('description_en', $event->description_en) !!}</textarea>
                         <div id="editor_en" class="">{!! old('description_en', $event->description_en) !!}</div>
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                     <div>Content (JA)</div>
                     <div class="col-span-3">
                         <x-input-error :messages="$errors->get('description_ja')" class="mb-2" />
-                        <textarea id="description_ja" name="description_ja" class="hidden"></textarea>
+                        <textarea id="description_ja" name="description_ja" class="hidden">{!! old('description_ja', $event->description_ja) !!}</textarea>
                         <div id="editor_ja" class="">{!! old('description_ja', $event->description_ja) !!}</div>
                     </div>
                 </div>
