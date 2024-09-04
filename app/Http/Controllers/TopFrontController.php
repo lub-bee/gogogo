@@ -16,7 +16,7 @@ class TopFrontController extends Controller
 
         //if there is no upcoming event, get the first published event
         if (!$event) {
-            $event = Event::where("start_at", "<", now())->isPublished()->first();
+            $event = Event::where("start_at", "<=", now())->isPublished()->first();
         }
 
         return view('front.top-index')
