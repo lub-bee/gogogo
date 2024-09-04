@@ -5,7 +5,7 @@
     </x-front.section>
 
     <x-front.section id="event" class="flex flex-col bg-white relative">
-        <x-front.sections.event-section />
+        <x-front.sections.event-section :event="$event"/>
     </x-front.section>
 
     <x-front.section id="agenda" class="bg-slate-700 text-white flex flex-col">

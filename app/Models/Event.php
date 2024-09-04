@@ -60,6 +60,32 @@ class Event extends Model
         return $this->hasMany(Media::class);
     }
 
+    /**
+     * Get the previous event that has been published.
+     * The previous event is defined as the one with the most recent start date
+     * that is before the current event's start date.
+     * If there is no previous event, it returns null.
+     *
+     * @return Event|null
+     */
+    public function previous(): Event|null
+    {
+        return $this->where("start_at", "<", $this->start_at)
+            ->where('published_at', '<=', Carbon::now())
+            ->orderBy("start_at", "desc")
+            ->first();
+    }
+
+    /**
+     * Check if the event has a previous one.
+     *
+     * @return bool
+     */
+    public function hasPrevious(): bool
+    {
+        return $this->previous() != null;
+    }
+
     public function scopeIsPublished($builder): void
     {
         $builder->whereNotNull("published_at")
