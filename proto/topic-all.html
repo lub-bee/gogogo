@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="STATIC-PLACEHOLDER">
+
+        <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+        <link rel="manifest" href="images/favicon/site.webmanifest">
+
+        <title>GoGoGo — All Topics</title>
+
+        <link href="assets/fonts/figtree.css" rel="stylesheet" />
+        <link rel="stylesheet" href="assets/app.css">
+        <script defer src="assets/app.js"></script>
+        <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" />
+        <style>
+            /* Topic card hover — scale + colors + title slab + readable excerpt */
+            .topic-card {
+                transition: transform 300ms ease, background-color 300ms ease, z-index 0s;
+                transform-origin: center center;
+                position: relative;
+                z-index: 1;
+                will-change: transform;
+                padding: 0;
+            }
+            .topic-card-left  { transform-origin: top left; }
+            .topic-card-right { transform-origin: top right; }
+            .topic-card:hover {
+                transform: scale(1.3);
+                z-index: 50;
+                background-color: #fff !important;
+            }
+            .topic-title {
+                transition: background-color 300ms ease, color 300ms ease;
+            }
+            .topic-card:hover .topic-title {
+                background-color: #334155; /* slate-700 */
+                color: #fff;
+            }
+            .topic-card:hover .topic-excerpt {
+                font-size: 0.8125rem;
+                line-height: 1.6;
+            }
+            /* README link — .btn mechanics, orange variant */
+            .topic-readme {
+                display: inline-block;
+                font-size: 1.5rem;
+                line-height: 2rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: -0.11em;
+                color: #f97316; /* orange-500 */
+                transition-property: all;
+                transition-timing-function: cubic-bezier(.4,0,.2,1);
+                transition-duration: .15s;
+            }
+            .topic-readme:hover {
+                letter-spacing: 0;
+                background-color: #f97316;
+                color: #fff;
+            }
+            /* Prevent parent clipping on scaled cards */
+            .topic-col {
+                overflow: visible !important;
+            }
+        </style>
+    </head>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-[#f1f2f4]">
+
+            <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'>
+            </aside>
+
+            <div class="top">
+                <header class='bg-white text-[#111725]'>
+                    Topic
+                </header>
+            </div>
+
+            <main class="max-w-5xl mx-auto px-4 md:px-8 lg:px-16 py-8" x-data="topicFeed()">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 lg:gap-x-16" style="overflow:visible">
+
+                    <!-- Left column -->
+                    <div class="flex flex-col gap-6 topic-col">
+                        <template x-for="(card, i) in cards" :key="'l'+i">
+                            <div x-show="i % 2 === 0" class="topic-card topic-card-left block" :style="'background-color: ' + card.bg">
+                                <div class="topic-title text-xl md:text-2xl font-bold -tracking-[0.04em] text-slate-700 px-5 md:px-6 py-3 md:py-4"
+                                     x-text="card.title"></div>
+                                <div class="topic-excerpt grid grid-cols-2 gap-3 text-xs leading-relaxed text-black px-5 md:px-6 pt-4 transition-all" style="text-align:justify;">
+                                    <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora consequuntur, libero cumque inventore saepe ad molestias sunt facilis error est iste...</div>
+                                    <div>これは、いつものように、猫を飼っている猿が、鶏を餌にしていることを知っています。</div>
+                                </div>
+                                <div class="px-5 md:px-6 pb-5 md:pb-6 pt-4" style="text-align:center">
+                                    <a href="topic-show.html" class="topic-readme">README</a>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Right column — offset -->
+                    <div class="flex flex-col gap-6 md:mt-16 lg:mt-24 topic-col">
+                        <template x-for="(card, i) in cards" :key="'r'+i">
+                            <div x-show="i % 2 === 1" class="topic-card topic-card-right block" :style="'background-color: ' + card.bg">
+                                <div class="topic-title text-xl md:text-2xl font-bold -tracking-[0.04em] text-slate-700 px-5 md:px-6 py-3 md:py-4"
+                                     x-text="card.title"></div>
+                                <div class="topic-excerpt grid grid-cols-2 gap-3 text-xs leading-relaxed text-black px-5 md:px-6 pt-4 transition-all" style="text-align:justify;">
+                                    <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora consequuntur, libero cumque inventore saepe ad molestias sunt facilis error est iste...</div>
+                                    <div>これは、いつものように、猫を飼っている猿が、鶏を餌にしていることを知っています。</div>
+                                </div>
+                                <div class="px-5 md:px-6 pb-5 md:pb-6 pt-4" style="text-align:center">
+                                    <a href="topic-show.html" class="topic-readme">README</a>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                </div>
+
+                <div x-ref="sentinel" class="h-4"></div>
+
+            </main>
+
+            <script>
+                function topicFeed() {
+                    var titles = [
+                        'I went to a crocodile park and was attacked by a baby one',
+                        'The perfect onigiri does not exist and here is why',
+                        "My neighbor's cat is plotting something against me",
+                        'Best convenience store food ranking of all time',
+                        'Why Japanese vending machines are actually a lifestyle',
+                        'Learning kanji through manga: a complete guide for beginners'
+                    ];
+                    // Exact hex tints: #fdc3c3 → #fddede → #fef0f0 (settles)
+                    var tints = [
+                        '#fdc3c3',
+                        '#fddede',
+                        '#fef0f0',
+                        '#fef0f0',
+                        '#fef0f0'
+                    ];
+
+                    return {
+                        cards: [],
+                        idx: 0,
+                        loading: false,
+                        init: function() {
+                            this.addBatch();
+                            var self = this;
+                            this.$nextTick(function() {
+                                var observer = new IntersectionObserver(function(entries) {
+                                    if (entries[0].isIntersecting && !self.loading) {
+                                        self.loading = true;
+                                        setTimeout(function() {
+                                            self.addBatch();
+                                            self.loading = false;
+                                        }, 300);
+                                    }
+                                }, { rootMargin: '200px' });
+                                observer.observe(self.$refs.sentinel);
+                            });
+                        },
+                        addBatch: function() {
+                            for (var i = 0; i < 6; i++) {
+                                var ti = this.idx % titles.length;
+                                var tint = tints[Math.min(this.idx, tints.length - 1)];
+                                this.cards.push({
+                                    title: titles[ti],
+                                    bg: tint
+                                });
+                                this.idx++;
+                            }
+                        }
+                    };
+                }
+            </script>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- static snapshot: csrf token placeholder -->
+        <meta name="csrf-token" content="STATIC-PLACEHOLDER">
+
+        <!-- favicon -->
+        <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+        <link rel="manifest" href="images/favicon/site.webmanifest">
+
+        <title>Laravel</title>
+
+        <!-- Fonts (self-hosted, was fonts.bunny.net) -->
+        <link href="assets/fonts/figtree.css" rel="stylesheet" />
+
+        <!-- Compiled Tailwind CSS (was @vite resources/css/app.css) -->
+        <link rel="stylesheet" href="assets/app.css">
+        <!-- Bundled Alpine.js + slot animation (was @vite resources/js/app.js) -->
+        <script defer src="assets/app.js"></script>
+
+        <!-- FontAwesome (self-hosted, was cdnjs 6.5.1) -->
+        <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" />
+
+        <style>
+            /* Media gallery — photo placeholder tiles */
+            .photo-tile {
+                position: relative;
+                overflow: hidden;
+                cursor: pointer;
+                flex-shrink: 0;
+                border-radius: 2px;
+                border: 2px solid transparent;
+                transition: transform 300ms ease, border-color 250ms ease;
+            }
+            .photo-tile:hover {
+                border-color: rgb(255 255 255);
+                transform: scale(1.04);
+            }
+            .photo-tile .tile-icon {
+                position: absolute;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0.12;
+                font-size: 2.5rem;
+                color: white;
+                pointer-events: none;
+                transition: opacity 300ms ease;
+            }
+            .photo-tile:hover .tile-icon {
+                opacity: 0.2;
+            }
+            .photo-tile::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: rgb(255 255 255);
+                transform: scaleX(0) skewX(-20deg);
+                transform-origin: left;
+                transition: transform 350ms ease;
+            }
+            .photo-tile:hover::after {
+                transform: scaleX(1) skewX(-20deg);
+            }
+            .gallery-strip {
+                display: flex;
+                gap: 0.75rem;
+                overflow-x: auto;
+                overflow-y: hidden;
+                align-items: center;
+                padding: 0.5rem 10px;
+                scrollbar-width: thin;
+                scrollbar-color: rgb(100 116 139) transparent;
+            }
+            .gallery-strip::-webkit-scrollbar { height: 6px; }
+            .gallery-strip::-webkit-scrollbar-track { background: transparent; }
+            .gallery-strip::-webkit-scrollbar-thumb { background: rgb(100 116 139); border-radius: 3px; }
+            .media-title-text { transition: letter-spacing 400ms ease, opacity 350ms ease; }
+            .media-date-text { transition: letter-spacing 350ms ease, opacity 350ms ease; }
+            .media-lightbox-overlay {
+                position: absolute;
+                inset: 0;
+                background: rgb(71 85 105);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 30;
+                cursor: pointer;
+            }
+            .media-lightbox-inner {
+                position: relative;
+                max-width: 85vw;
+                max-height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .media-lightbox-photo {
+                border-radius: 2px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 4rem;
+                opacity: 0.2;
+                transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1), opacity 300ms ease;
+            }
+            .media-lightbox-close {
+                position: absolute;
+                top: 1rem;
+                right: 1.5rem;
+                color: white;
+                font-size: 4.5rem;
+                cursor: pointer;
+                z-index: 40;
+                opacity: 0.5;
+                transition: opacity 200ms, transform 200ms;
+                font-weight: bold;
+                line-height: 1;
+            }
+            .media-lightbox-close:hover {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        </style>
+            <style>
+            .accordion-panel {
+                display: grid;
+                grid-template-rows: 0fr;
+                transition: grid-template-rows 350ms ease-in-out;
+            }
+            .accordion-panel.is-open {
+                grid-template-rows: 1fr;
+            }
+            .accordion-panel > div {
+                overflow: hidden;
+                min-height: 0;
+            }
+        </style>
+        <!-- ── Topic cards (namespaced .topic-card / .topic-readme) ── -->
+        <style>
+            .topic-card {
+                transition: transform 300ms ease, background-color 300ms ease, z-index 0s;
+                position: relative;
+                z-index: 1;
+                will-change: transform;
+                padding: 0;
+            }
+            .topic-card:hover {
+                transform: scale(1.2);
+                z-index: 50;
+                background-color: #fff !important;
+            }
+            .topic-card-tl { transform-origin: top left; }
+            .topic-card-tr { transform-origin: top right; }
+            .topic-card-bl { transform-origin: bottom left; }
+            .topic-card-br { transform-origin: bottom right; }
+            #topic .flex-1 { overflow: visible !important; }
+            #topic .flex-1 > div { overflow: visible !important; }
+            #topic .flex-col { overflow: visible !important; }
+            .topic-title {
+                transition: background-color 300ms ease, color 300ms ease;
+            }
+            .topic-card:hover .topic-title {
+                background-color: #334155;
+                color: #fff;
+            }
+            .topic-readme {
+                display: inline-block;
+                font-size: 1.5rem;
+                line-height: 2rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: -0.11em;
+                color: #f97316;
+                transition-property: all;
+                transition-timing-function: cubic-bezier(.4,0,.2,1);
+                transition-duration: .15s;
+            }
+            .topic-readme:hover {
+                letter-spacing: 0;
+                background-color: #f97316;
+                color: #fff;
+            }
+        </style>
+        <!-- ── Topic-show modal (namespaced ts-*) ── -->
+        <style>
+            .ts-overlay {
+                --ts-bg: #111625;
+                --ts-text: #8999ae;
+                --ts-hover-bg: #8999ae;
+                --ts-hover-text: #111625;
+                position: fixed;
+                inset: 0;
+                z-index: 9999;
+                background: var(--ts-bg);
+                color: var(--ts-text);
+                font-family: 'Figtree', sans-serif;
+                display: grid;
+                grid-template-rows: auto 1fr;
+                grid-template-columns: 1fr;
+                transition: background 0.3s ease, color 0.3s ease;
+            }
+            .ts-overlay.ts-light-mode {
+                --ts-bg: #eef1f5;
+                --ts-text: #2d3a4e;
+                --ts-hover-bg: #2d3a4e;
+                --ts-hover-text: #eef1f5;
+            }
+            .ts-top {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                padding: 2rem 2.5rem 1rem 2.5rem;
+            }
+            .ts-title {
+                font-size: clamp(2.2rem, 5vw, 4.5rem);
+                font-weight: 700;
+                line-height: 1.1;
+                max-width: 85%;
+            }
+            .ts-top-right {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1.2rem;
+                flex-shrink: 0;
+                padding-top: 0.2rem;
+            }
+            .ts-close {
+                font-size: 5rem;
+                line-height: 1;
+                text-decoration: none;
+                color: var(--ts-text);
+                cursor: pointer;
+                transition: color 0.2s;
+                font-weight: 700;
+            }
+            .ts-close:hover { opacity: 0.7; }
+            .ts-mode-toggle {
+                font-size: 5rem;
+                cursor: pointer;
+                color: var(--ts-text);
+                transition: color 0.2s;
+                background: none;
+                border: none;
+                padding: 0;
+            }
+            .ts-mode-toggle:hover { opacity: 0.7; }
+            .ts-body {
+                display: flex;
+                min-height: 0;
+                padding: 0 2.5rem 2rem 2.5rem;
+                gap: 2rem;
+            }
+            .ts-rail {
+                flex-shrink: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                min-width: 220px;
+                padding-top: 0.5rem;
+            }
+            .ts-lang-tabs {
+                display: flex;
+                flex-direction: column;
+                gap: 0.6rem;
+            }
+            .ts-lang-tab {
+                position: relative;
+                font-size: 2.3rem;
+                font-weight: 700;
+                letter-spacing: 0.04em;
+                text-transform: uppercase;
+                cursor: pointer;
+                padding: 0.3rem 0.8rem;
+                z-index: 1;
+                transition: color 0.25s ease;
+                user-select: none;
+                display: inline-block;
+                align-self: flex-start;
+            }
+            .ts-lang-tab.ja {
+                margin-left: 2.5rem;
+                text-transform: none;
+                font-size: 2.5rem;
+            }
+            .ts-lang-tab::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: var(--ts-hover-bg);
+                transform: skewX(-8deg) scaleX(0);
+                transform-origin: left center;
+                transition: transform 0.3s ease;
+                z-index: -1;
+            }
+            .ts-lang-tab:hover::before {
+                transform: skewX(-8deg) scaleX(1);
+            }
+            .ts-lang-tab:hover {
+                color: var(--ts-hover-text);
+            }
+            .ts-download-area {
+                position: relative;
+                cursor: pointer;
+                align-self: flex-start;
+                padding-bottom: 1rem;
+            }
+            .ts-download-label-topic {
+                font-size: 2rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+                opacity: 0;
+                transition: opacity 0.25s ease;
+                padding: 0.2rem 0.8rem 0;
+                position: relative;
+                z-index: 1;
+            }
+            .ts-download-label {
+                font-size: 2.3rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+                padding: 0 0.8rem 0.3rem;
+                position: relative;
+                z-index: 1;
+                transition: color 0.25s ease;
+            }
+            .ts-download-slab {
+                position: absolute;
+                inset: 0;
+                background: var(--ts-hover-bg);
+                transform: scaleY(0);
+                transform-origin: bottom center;
+                transition: transform 0.3s ease;
+                z-index: 0;
+            }
+            .ts-download-area:hover .ts-download-slab {
+                transform: scaleY(1);
+            }
+            .ts-download-area:hover .ts-download-label-topic {
+                opacity: 1;
+                color: var(--ts-hover-text);
+            }
+            .ts-download-area:hover .ts-download-label {
+                color: var(--ts-hover-text);
+            }
+            .ts-content {
+                flex: 1;
+                overflow-y: auto;
+                min-height: 0;
+                padding-right: 1rem;
+                padding-top: 0.5rem;
+                scrollbar-width: thin;
+                scrollbar-color: var(--ts-text) transparent;
+            }
+            .ts-content::-webkit-scrollbar { width: 6px; }
+            .ts-content::-webkit-scrollbar-track { background: transparent; }
+            .ts-content::-webkit-scrollbar-thumb { background: var(--ts-text); border-radius: 3px; opacity: 0.4; }
+            .ts-content .t1 {
+                font-size: 2rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.02em;
+                margin-bottom: 0.6rem;
+                border-bottom: 1px solid var(--ts-text);
+                padding-bottom: 0.3rem;
+                display: inline-block;
+            }
+            .ts-content .sub {
+                font-size: 1.3rem;
+                font-weight: 700;
+                margin-bottom: 0.3rem;
+            }
+            .ts-content .subsub {
+                font-size: 1.1rem;
+                font-weight: 500;
+                margin-bottom: 0.5rem;
+            }
+            .ts-content .normal {
+                font-size: 0.95rem;
+                line-height: 1.6;
+                margin-bottom: 0.8rem;
+            }
+            .ts-content ol {
+                list-style: decimal;
+                padding-left: 1.5rem;
+                margin-bottom: 1rem;
+                font-size: 0.95rem;
+                line-height: 1.7;
+            }
+            .ts-content .rich-line {
+                font-size: 0.95rem;
+                line-height: 1.7;
+                margin-bottom: 1.5rem;
+            }
+            .ts-content .rich-line a {
+                text-decoration: underline;
+                color: var(--ts-text);
+            }
+            .ts-content table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 0.95rem;
+                margin-bottom: 1.2rem;
+            }
+            .ts-content table th {
+                font-weight: 700;
+                text-align: left;
+                padding: 0.5rem 0.8rem;
+                border-bottom: 2px solid currentColor;
+                opacity: 0.8;
+            }
+            .ts-content table td {
+                padding: 0.45rem 0.8rem;
+                border-bottom: 1px solid;
+                border-color: color-mix(in srgb, currentColor 20%, transparent);
+            }
+            .ts-content table tr:last-child td {
+                border-bottom: none;
+            }
+            @media (max-width: 768px) {
+                .ts-top {
+                    padding: 1.2rem 1rem 0.5rem 1rem;
+                }
+                .ts-title {
+                    font-size: 2rem;
+                    max-width: 78%;
+                }
+                .ts-close {
+                    font-size: 3rem;
+                }
+                .ts-body {
+                    flex-direction: column;
+                    padding: 0 1rem 1rem 1rem;
+                    gap: 1rem;
+                }
+                .ts-rail {
+                    flex-direction: row;
+                    min-width: unset;
+                    align-items: center;
+                    gap: 1.5rem;
+                }
+                .ts-lang-tabs {
+                    flex-direction: row;
+                    gap: 1rem;
+                }
+                .ts-lang-tab { font-size: 1.2rem; }
+                .ts-lang-tab.ja { margin-left: 0; font-size: 1.3rem; }
+                .ts-download-label { font-size: 1.2rem; }
+                .ts-download-label-topic { font-size: 1.1rem; }
+            }
+        </style>
+    </head>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-gray-100" x-data="{ topicOpen: false }">
+
+            <!-- x-menu (route: top) -->
+            <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'>
+                <a href="#top">Top</a>
+                <a href="#event">Event</a>
+                <a href="#agenda">Agenda</a>
+                <a href="#about">About</a>
+                <a href="#topic">Topic</a>
+                <a href="#media">Media</a>
+                <a href="#location">Location</a>
+            </aside>
+
+            <script>
+                window.onload = function(){
+
+                    const sections = document.querySelectorAll(".top-section");
+                    const menu = document.querySelector(".menu");
+
+                    const options = {
+                        root: null,
+                        rootMargin: "0px",
+                        threshold: 0.5
+                    }
+
+                    const callback = (entries) => {
+                        entries.forEach((entry) => {
+                            if (entry.isIntersecting) {
+                                document.querySelectorAll(`.menu a`).forEach((link) => link.classList.remove("active"));
+                                document.querySelector(`a[href="#${entry.target.id}"]`).classList.add("active");
+
+                                switch (entry.target.id) {
+                                    case "top":
+                                    case "event":
+                                    case "about":
+                                    case "topic":
+                                    case "location":
+                                    case "profile-media":
+                                    case "profile-password":
+                                        menu.classList.remove("reversed");
+                                        break;
+                                    case "profile-top":
+                                    case "agenda":
+                                    case "media":
+                                    case "profile-info":
+                                    case "profile-delete":
+                                        menu.classList.add("reversed");
+                                        break;
+
+                                }
+                            }
+                        })
+                    };
+
+                    const intersectionObserver = new IntersectionObserver(callback, options)
+
+                    // start observing
+                    sections.forEach((section) => {
+                        intersectionObserver.observe(section);
+                    })
+
+                }
+            </script>
+
+            <!-- Page Content -->
+            <main class="top relativerelative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
+
+                <!-- ===== section: top ===== -->
+                <section id="top" class="top-section bg-white flex flex-col">
+                    <div class='flex-1 h-screen flex flex-col lg:flex-row overflow-hidden'>
+
+                        <!-- animated logo -->
+                        <div class='flex-1 font-bold flex justify-center items-center text-slate-700'>
+                            <a href="#about" class="flex cursor-pointer">
+                                <div id="slot1" class="slot h-[10rem] text-[5rem] md:text-[9rem] leading-[9rem] w-28 md:w-48 flex items-center justify-center overflow-hidden relative">
+                                    <div class="letters absolute inset-0 transition-transform duration-500 text-center">
+                                        <div>五</div>
+                                        <div>5</div>
+                                        <div>ご</div>
+                                        <div>ゴ</div>
+                                        <div>Go</div>
+                                    </div>
+                                </div>
+                                <div id="slot2" class="slot h-[10rem] text-[5rem] md:text-[9rem] leading-[9rem] w-28 md:w-48 flex items-center justify-center overflow-hidden relative">
+                                    <div class="letters absolute inset-0 transition-transform duration-500 text-center">
+                                        <div>語</div>
+                                        <div>ご</div>
+                                        <div>ゴ</div>
+                                        <div>Go</div>
+                                    </div>
+                                </div>
+                                <div id="slot3" class="slot h-[10rem] text-[5rem] md:text-[9rem] leading-[9rem] w-28 md:w-52 flex items-center justify-center overflow-hidden relative">
+                                    <div class="letters absolute inset-0 transition-transform duration-500 text-center">
+                                        <div>Go</div>
+                                        <div>ゴ</div>
+                                        <div>ご</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- side menu : guest state (login form). The authenticated state
+                             (greeting + Dashboard/Discord/Line/Profile/Logout menu) is not
+                             rendered in this static snapshot. -->
+                        <div class='flex-1 lg:flex-none lg:w-1/3 lg:max-w-[400px] lg:bg-gray-300'>
+                            <form method="POST" action="#login-placeholder" class="h-full flex flex-col gap-4 p-4 justify-center sm:max-w-sm lg:max-w-full mx-auto bg-slate-200 lg:bg-transparent">
+                                <!-- @csrf -->
+                                <input type="hidden" name="_token" value="STATIC-PLACEHOLDER">
+                                <div class='flex justify-between items-center border-b border-gray-400 mb-4 md:mt-8 uppercase text-slate-700'>
+                                    Not a member yet? <a href="#register-placeholder" class='btn btn-success'>Join us!</a>
+                                </div>
+                                <div class=''>
+                                    <input type="email" name="email" placeholder="email" class="form-input" autocomplete="username"/>
+                                </div>
+                                <div class=''>
+                                    <input type="password" name="password" placeholder="password" class="form-input" required autocomplete="current-password"/>
+                                </div>
+                                <div class='text-right'>
+                                    <a href="#password-request-placeholder" class="text-slate-700 hover:underline">You have forgot your password?</a>
+                                </div>
+                                <div class='text-center'>
+                                    <a href="top-in.html" class="btn btn-main">sign in</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class='flex-none h-4 bg-slate-700'></div>
+                </section>
+
+                <!-- ===== section: event (next upcoming published event — placeholder data) ===== -->
+                <section id="event" class="top-section flex flex-col bg-white relative">
+                    <header class='bg-slate-700 text-white'>
+                        event
+                    </header>
+
+                    <!-- x-event.event-navigation -->
+                    <nav class="text-slate-900 flex static md:absolute top-[8rem] right-0 text-[3.5rem] md:text-[7rem] leading-[2.3rem] md:leading-[4.5rem] uppercase  cursor-pointer">
+                        <a href="event.html" class='flex-1 md:block relative group pl-4 md:pl-0 bg-pink-200 md:bg-transparent'>
+                            <div class='hidden md:block absolute top-0 left-0 h-full w-full bg-pink-200 group-hover:bg-yellow-100 group-hover:scale-x-[10%] transform group-hover:rotate-[-30deg] transition-all'></div>
+                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all'>
+                                Prev
+                            </div>
+                        </a>
+
+                        <div class='flex-1 md:block relative group pr-4 md:pr-0 text-right bg-pink-200 md:bg-transparent'>
+                            <div class='hidden md:block absolute top-0 left-0 h-full w-full bg-pink-200 group-hover:bg-yellow-100 group-hover:scale-x-[10%] transform group-hover:rotate-[30deg] transition-all'></div>
+                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all'>
+                                Next
+                            </div>
+                        </div>
+                    </nav>
+
+                    <main class="flex-1 mt-4 md:mt-0 h-full flex flex-col md:flex-row items-center justify-evenly">
+                        <div class=' md:h-full md:w-auto flex flex-row md:flex-col justify-evenly items-center'>
+                            <!-- x-event.calendar-card -->
+                            <div class='w-40 md:w-60 text-slate-900'>
+                                <div class='font-bold text-[2rem] sm:text-[2.5rem] leading-[2rem] sm:leading-[3rem] text-center bg-slate-900 text-white'>
+                                    2024
+                                </div>
+                                <div class='text-[6rem] sm:text-[8rem] lg:text-[12rem] leading-[6rem] sm:leading-[7.5rem] lg:leading-[10rem] font-bold text-center'>
+                                    22
+                                </div>
+                                <div class='uppercase font-bold text-[3rem] sm:text-[4.5rem] lg:text-[7rem] leading-[2rem] sm:leading-[3rem] lg:leading-[7rem] tracking-[0.01em] text-center'>
+                                    Sep
+                                </div>
+                            </div>
+
+                            <!-- x-event.responsive-related-card -->
+                            <div class='text-[1.3rem] sm:text-[2rem] flex flex-col h-full md:h-[25vh]'>
+                                <div class='flex-1 flex items-center gap-4 group cursor-pointer'>
+                                    <i class='fa-solid fa-images fa-fw'></i>
+                                    <div class='bg-sky-200 leading-5 hover:bg-orange-200 transition-all'>Media</div>
+                                </div>
+                                <div class='flex-1 flex items-center gap-4 group cursor-pointer'>
+                                    <i class='fa-solid fa-file-alt fa-fw'></i>
+                                    <div class='bg-sky-200 leading-5 hover:bg-orange-200 transition-all'>Topic</div>
+                                </div>
+                                <div class='flex-1 flex items-center gap-4 group cursor-pointer'>
+                                    <i class='fa-solid fa-location-dot fa-fw'></i>
+                                    <div class='bg-sky-200 leading-5 hover:bg-orange-200 transition-all'>Location</div>
+                                </div>
+                                <div class='flex-1 flex items-center gap-4 group cursor-pointer'>
+                                    <i class="fa-solid fa-person-walking-luggage"></i>
+                                    <div class='bg-sky-200 leading-5 hover:bg-yellow-200 transition-all'>I'm going</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- x-event.event-info-card (placeholder content) -->
+                        <div class='w-full md:w-2/4'>
+                            <div class='xs:mt-4 px-4 lg:px-0 text-[2.5rem] xl:text-[5rem] leading-[2.5rem] xl:leading-[5rem] lg:tracking-tight font-bold uppercase'>
+                                Gogogo at The Mall
+                            </div>
+                            <div class='px-4 lg:px-0 mt-4 lg:hover:scale-105 lg:text-lg transition-all max-h-[18vh] md:h-[30vh] overflow-y-scroll formated-content'>
+                                <h2>Let's meet at the mall!</h2>
+                                <p>Join us for our weekly language exchange session. As usual: 5 minutes in English, 5 minutes in Japanese, repeat for 30 minutes.</p>
+                                <ul>
+                                    <li>Meeting point: main entrance</li>
+                                    <li>Start: 14:00</li>
+                                    <li>Fee: free</li>
+                                </ul>
+                            </div>
+                            <div class='px-4 lg:px-0 mt-4 lg:hover:scale-105 lg:text-lg transition-all max-h-[18vh] md:h-[30vh] overflow-y-scroll formated-content'>
+                                <h2>モールで会いましょう！</h2>
+                                <p>毎週の言語交換セッションにぜひご参加ください。いつも通り、英語5分、日本語5分を30分間繰り返します。</p>
+                                <ul>
+                                    <li>集合場所：正面入口</li>
+                                    <li>開始：14:00</li>
+                                    <li>参加費：無料</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </main>
+                </section>
+
+                <!-- ===== section: agenda (hard-coded demo data in the Blade source) ===== -->
+                <section id="agenda" class="top-section bg-slate-700 text-white flex flex-col">
+                    <header class='bg-white text-slate-700'>
+                        Agenda
+                    </header>
+
+                    <div class='flex-1 max-w-6xl mx-auto flex flex-col justify-evenly w-screen'>
+                        <div class='flex flex-col lg:flex-row gap-4 lg:gap-14 mx-4 overflow-hidden'>
+                            <div class='lg:text-right flex-none lg:w-1/4 font-bold text-[3rem] sm:text-[4.5rem] lg:text-[7rem] leading-[2rem] md:leading-[3rem] lg:leading-[6rem] -tracking-[0.12em]'>
+                                SEPT
+                            </div>
+                            <div class='flex-1 text-[2rem] sm:text-[2.5rem] leading-[3rem] sm:leading-[4.5rem] divide-y lg:divide-y-4'>
+                                <a class='flex gap-8 group' href="event.html">
+                                    <div class='font-bold tracking-widest'>22</div>
+                                    <div class=''><i class="fas fa-book fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo at The Mall</div>
+                                </a>
+                                <a class='flex gap-8 group' href="event.html">
+                                    <div class='font-bold tracking-widest'>25</div>
+                                    <div class=''><i class="fas fa-mug-hot fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Badminton night!</div>
+                                </a>
+                                <a class='flex gap-8 group' href="event.html">
+                                    <div class='font-bold tracking-widest'>29</div>
+                                    <div class=''><i class="fas fa-mug-hot fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Oktoberfes at Nichikichou Koen</div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class='flex flex-col lg:flex-row gap-4 lg:gap-14 mx-4'>
+                            <div class='lg:text-right flex-none lg:w-1/4 font-bold text-[3rem] sm:text-[4.5rem] lg:text-[7rem] leading-[2rem] sm:leading-[3rem] lg:leading-[6rem] -tracking-[0.12em]'>
+                                OCT
+                            </div>
+                            <div class='flex-1 font-bold text-[2rem] sm:text-[2.5rem] leading-[3rem] sm:leading-[4.5rem] divide-y lg:divide-y-4'>
+                                <a class='flex gap-8 group' href="event.html">
+                                    <div class='font-bold tracking-widest'>07</div>
+                                    <div class=''><i class="fas fa-mug-hot fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Trip to Matsushima</div>
+                                </a>
+                                <a class='flex gap-8 group' href="event.html">
+                                    <div class='font-bold tracking-widest'>12</div>
+                                    <div class=''><i class="fas fa-book fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo Friday</div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class='text-center lg:my-4'>
+                            <a href="agenda-all.html" class='btn btn-main' >
+                                See all
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== section: about ===== -->
+                <section id="about" class="top-section bg-slate-200 flex flex-col">
+                    <header class='bg-slate-700 text-white'>
+                        About US
+                    </header>
+
+                    <div class='flex-1 flex flex-col divide-y-4 divide-slate-700 w-screen lg:w-2/3 mx-auto justify-center px-4' x-data="{mode: '1'}">
+
+                        <div class='' x-data="{open: false}">
+                            <div class='text-3xl md:text-4xl py-2 font-bold uppercase flex flex-col items-start lg:items-center lg:flex-row gap-4 ' @click="mode = (mode == 1)?'false':'1'">
+                                <div class='flex-1'>
+                                    <i class='fa-solid fa-caret-right transition-all' :class="mode=='1' ? 'fa-rotate-90' : ''"></i>
+                                    五語Go, what is it?
+                                </div>
+                                <div class='text-slate-500 text-2xl self-end'>
+                                    五語Goって何ですか?
+                                </div>
+                            </div>
+
+                            <div class='accordion-panel' :class="mode == '1' ? 'is-open' : ''">
+                                <div>
+                                    <div class='text-2xl uppercase py-4'>
+                                        <div class=''>
+                                            It's a study group for people<br/>to learn English or Japanese
+                                        </div>
+
+                                        <div class='mt-4 text-right text-slate-500'>
+                                            英語や日本語を学ぶための勉強会です。
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class=''>
+                            <div class='text-3xl md:text-4xl py-2 font-bold uppercase flex flex-col items-start lg:items-center lg:flex-row gap-4 ' @click="mode = (mode == 2)?'false':'2'">
+                                <div class='flex-1 -tracking-[0.08em]'>
+                                    <i class='fa-solid fa-caret-right transition-all' :class="mode=='2' ? 'fa-rotate-90' : ''"></i>
+                                    How does it works?
+                                </div>
+                                <div class='text-slate-500 text-2xl self-end'>
+                                    どうやって機能しますか？
+                                </div>
+                            </div>
+
+                            <div class='accordion-panel' :class="mode == '2' ? 'is-open' : ''">
+                                <div>
+                                    <div class='md:text-2xl mx-auto grid grid-cols-3 md:grid-cols-2 items-center divide-x-4 divide-slate-700 py-4'>
+                                        <div class='text-6xl md:text-[6rem] lg:text-[9rem] uppercase font-bold -tracking-[0.12em] px-4 text-right'>we</div>
+                                        <div class='col-span-2 md:col-span-1 flex flex-col uppercase px-4'>
+                                            <div class=''>meet <b>every week</b></div>
+                                            <div class=''>talk <b>5 min</b> in <b>english</b></div>
+                                            <div class=''>talk <b>5 min</b> in <b>japanese</b></div>
+                                            <div class=''>repeat that for <b>30min</b></div>
+                                        </div>
+                                    </div>
+                                    <div class='md:text-2xl mx-auto grid grid-cols-3 md:grid-cols-2 items-center divide-x-4 divide-slate-700 py-4'>
+                                        <div class='text-3xl md:text-[5rem] lg:text-[7rem] uppercase font-bold -tracking-[0.12em] px-4 text-right'>私たち</div>
+                                        <div class='col-span-2 md:col-span-1 flex flex-col uppercase px-4'>
+                                            <div class=''>は<b>毎週</b>会います</div>
+                                            <div class=''>は<b>英語</b>で<b>5分</b>話します</div>
+                                            <div class=''>は<b>日本語</b>で<b>5分</b>話します</div>
+                                            <div class=''>は<b>30分</b>間繰り返します</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class=''>
+                            <div class='text-3xl md:text-4xl py-2 font-bold uppercase flex flex-col items-start lg:items-center lg:flex-row gap-4 ' @click="mode = (mode == 3)?'false':'3'">
+                                <div class='flex-1'>
+                                    <i class='fa-solid fa-caret-right transition-all' :class="mode=='3' ? 'fa-rotate-90' : ''"></i>
+                                    That's all?
+                                </div>
+                                <div class='text-slate-500 text-2xl self-end'>
+                                    それだけですか？
+                                </div>
+                            </div>
+                            <div class='accordion-panel' :class="mode == '3' ? 'is-open' : ''">
+                                <div>
+                                    <div class='grid grid-cols-2 gap-2 lg:flex lg:justify-between'>
+                                        <div class='text-2xl uppercase'>
+                                            <b>No!</b><br/>
+                                            We also do BBQs,<br/> festivals,<br/> sports activities,<br/> and much much more!
+                                        </div>
+                                        <div class='text-2xl text-right uppercase text-slate-500'>
+                                            <b>違います!</b><br/>
+                                            バーベキュー<br/>
+                                            やお祭り、<br/>スポーツ活動など、<br/>もっとたくさんのことを行っています！
+                                        </div>
+                                    </div>
+                                    <div class='text-center mt-8'>
+                                        <a href="#media" class="btn btn-danger">Take a look!</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- ===== section: topic ===== -->
+                <section id="topic" class="top-section bg-[#f1f2f4] flex flex-col" style="overflow:visible">
+                    <header class='bg-white text-[#111725]'>
+                        Topic
+                    </header>
+
+                    <!-- VIEW ALL — identical structure to NEXT -->
+                    <nav class="flex-none flex justify-end text-[3.5rem] md:text-[7rem] leading-[2.3rem] md:leading-[4.5rem] uppercase cursor-pointer text-[#111725]">
+                        <a href="topic-all.html" class='w-full md:w-[45%] md:block relative group pr-4 md:pr-0 text-center bg-[#b7d7fc] md:bg-transparent'>
+                            <div class='hidden md:block absolute top-0 left-0 h-full w-full bg-[#b7d7fc] group-hover:bg-yellow-100 group-hover:scale-x-[10%] transform group-hover:rotate-[30deg] transition-all'></div>
+                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all'>
+                                View all
+                            </div>
+                        </a>
+                    </nav>
+
+                    <!-- Staggered topic cards -->
+                    <div class="flex-1 px-4 md:px-8 lg:px-16 py-4" style="overflow:visible">
+                        <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-x-8 lg:gap-x-16">
+
+                            <!-- Left column -->
+                            <div class="flex flex-col gap-6 md:mt-4">
+                                <!-- #1 — upcoming (warmest) -->
+                                <div class="topic-card topic-card-tl block" style="background-color:#fdc3c3">
+                                    <div class="topic-title text-xl md:text-2xl font-bold -tracking-[0.04em] text-slate-700 px-5 md:px-6 py-3 md:py-4">
+                                        I went to a crocodile park and was attacked by a baby one
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-3 text-xs leading-relaxed text-black px-5 md:px-6 pt-4" style="text-align:justify;">
+                                        <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora consequuntur, libero cumque inventore saepe ad molestias sunt facilis error est iste...</div>
+                                        <div>これは、いつものように、猫を飼っている猿が、鶏を餌にしていることを知っています。</div>
+                                    </div>
+                                    <div class="px-5 md:px-6 pb-5 md:pb-6 pt-4" style="text-align:center">
+                                        <a href="#" @click.prevent="topicOpen = true" class="topic-readme">README</a>
+                                    </div>
+                                </div>
+                                <!-- #3 — older -->
+                                <div class="topic-card topic-card-bl block" style="background-color:#fef0f0">
+                                    <div class="topic-title text-xl md:text-2xl font-bold -tracking-[0.04em] text-slate-700 px-5 md:px-6 py-3 md:py-4">
+                                        My neighbor's cat is plotting something against me
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-3 text-xs leading-relaxed text-black px-5 md:px-6 pt-4" style="text-align:justify;">
+                                        <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora consequuntur, libero cumque inventore saepe ad molestias sunt facilis error est iste...</div>
+                                        <div>これは、いつものように、猫を飼っている猿が、鶏を餌にしていることを知っています。</div>
+                                    </div>
+                                    <div class="px-5 md:px-6 pb-5 md:pb-6 pt-4" style="text-align:center">
+                                        <a href="#" @click.prevent="topicOpen = true" class="topic-readme">README</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right column — offset lower -->
+                            <div class="flex flex-col gap-6 md:mt-16 lg:mt-24">
+                                <!-- #2 — second -->
+                                <div class="topic-card topic-card-tr block" style="background-color:#fddede">
+                                    <div class="topic-title text-xl md:text-2xl font-bold -tracking-[0.04em] text-slate-700 px-5 md:px-6 py-3 md:py-4">
+                                        The perfect onigiri does not exist and here is why
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-3 text-xs leading-relaxed text-black px-5 md:px-6 pt-4" style="text-align:justify;">
+                                        <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora consequuntur, libero cumque inventore saepe ad molestias sunt facilis error est iste...</div>
+                                        <div>これは、いつものように、猫を飼っている猿が、鶏を餌にしていることを知っています。</div>
+                                    </div>
+                                    <div class="px-5 md:px-6 pb-5 md:pb-6 pt-4" style="text-align:center">
+                                        <a href="#" @click.prevent="topicOpen = true" class="topic-readme">README</a>
+                                    </div>
+                                </div>
+                                <!-- #4 — coldest -->
+                                <div class="topic-card topic-card-br block" style="background-color:#fef0f0">
+                                    <div class="topic-title text-xl md:text-2xl font-bold -tracking-[0.04em] text-slate-700 px-5 md:px-6 py-3 md:py-4">
+                                        Best convenience store food ranking of all time
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-3 text-xs leading-relaxed text-black px-5 md:px-6 pt-4" style="text-align:justify;">
+                                        <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora consequuntur, libero cumque inventore saepe ad molestias sunt facilis error est iste...</div>
+                                        <div>これは、いつものように、猫を飼っている猿が、鶏を餌にしていることを知っています。</div>
+                                    </div>
+                                    <div class="px-5 md:px-6 pb-5 md:pb-6 pt-4" style="text-align:center">
+                                        <a href="#" @click.prevent="topicOpen = true" class="topic-readme">README</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== section: media ===== -->
+                <section id="media" class="top-section bg-slate-600 flex flex-col"
+                    x-data="{
+                        activeTitle: '',
+                        activeDate: '',
+                        displayTitle: '',
+                        displayDate: '',
+                        titleVisible: false,
+                        exitTimer: null,
+                        expanded: false,
+                        expandTitle: '',
+                        expandDate: '',
+                        expandBg: '',
+                        photoEntered: false,
+                        showTitle(title, date) {
+                            clearTimeout(this.exitTimer);
+                            this.activeTitle = title;
+                            this.activeDate = date;
+                            this.displayTitle = title;
+                            this.displayDate = date;
+                            this.titleVisible = true;
+                        },
+                        hideTitle() {
+                            this.activeTitle = '';
+                            this.activeDate = '';
+                            this.exitTimer = setTimeout(() => {
+                                if (!this.activeTitle && !this.expandTitle) {
+                                    this.titleVisible = false;
+                                    setTimeout(() => {
+                                        if (!this.activeTitle && !this.expandTitle) {
+                                            this.displayTitle = '';
+                                            this.displayDate = '';
+                                        }
+                                    }, 400);
+                                }
+                            }, 80);
+                        },
+                        get currentTitle() {
+                            return this.expandTitle || this.displayTitle || ' ';
+                        },
+                        get currentDate() {
+                            return this.expandDate || this.displayDate || ' ';
+                        },
+                        get isVisible() {
+                            return this.titleVisible || !!this.expandTitle;
+                        },
+                        openPhoto(title, date, bg) {
+                            this.expanded = true;
+                            this.expandTitle = title;
+                            this.expandDate = date;
+                            this.expandBg = bg;
+                            this.displayTitle = title;
+                            this.displayDate = date;
+                            this.titleVisible = true;
+                            this.photoEntered = false;
+                            this.$nextTick(() => { this.photoEntered = true; });
+                        },
+                        closePhoto() {
+                            this.photoEntered = false;
+                            setTimeout(() => {
+                                this.expanded = false;
+                                this.expandTitle = '';
+                                this.expandDate = '';
+                                this.expandBg = '';
+                                if (!this.activeTitle) {
+                                    this.titleVisible = false;
+                                    setTimeout(() => {
+                                        if (!this.activeTitle) {
+                                            this.displayTitle = '';
+                                            this.displayDate = '';
+                                        }
+                                    }, 400);
+                                }
+                            }, 300);
+                        }
+                    }">
+                    <header class='bg-slate-200 text-slate-600'>
+                        Media
+                    </header>
+
+                    <!-- Title + date zone: invisible by default, animates in/out on hover -->
+                    <div class="flex-none px-4 md:px-8 lg:px-16 pt-6 pb-2 overflow-hidden" style="min-height: 5.5rem;">
+                        <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-baseline md:justify-between gap-1">
+                            <div class="media-title-text font-bold text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[1.8rem] sm:leading-[2.8rem] lg:leading-[4rem] uppercase text-white"
+                                 :style="'letter-spacing: ' + (isVisible ? '-0.04em' : '-0.12em') + '; opacity: ' + (isVisible ? '1' : '0')"
+                                 x-text="currentTitle">
+                            </div>
+                            <div class="media-date-text text-slate-400 text-lg sm:text-xl lg:text-2xl font-bold uppercase text-right"
+                                 :style="'letter-spacing: ' + (isVisible ? '0.15em' : '0.05em') + '; opacity: ' + (isVisible ? '1' : '0')"
+                                 x-text="currentDate">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gallery strip: horizontally scrolling, vertically centered -->
+                    <div class="flex-1 flex flex-col justify-center px-4 md:px-8 lg:px-16 relative overflow-hidden">
+                        <div class="max-w-7xl mx-auto w-full">
+                            <div class="gallery-strip">
+
+                                <div class="photo-tile"
+                                     style="width: 280px; height: 200px; background: rgb(100 116 139);"
+                                     @mouseenter="showTitle('Gogogo at The Mall', '22 SEP 2024')"
+                                     @mouseleave="hideTitle()"
+                                     @click="openPhoto('Gogogo at The Mall', '22 SEP 2024', 'rgb(100 116 139)')">
+                                    <div class="tile-icon"><i class="fa-solid fa-image"></i></div>
+                                </div>
+
+                                <div class="photo-tile"
+                                     style="width: 160px; height: 240px; background: linear-gradient(135deg, rgb(51 65 85), rgb(30 41 59));"
+                                     @mouseenter="showTitle('Badminton night!', '25 SEP 2024')"
+                                     @mouseleave="hideTitle()"
+                                     @click="openPhoto('Badminton night!', '25 SEP 2024', 'linear-gradient(135deg, rgb(51 65 85), rgb(30 41 59))')">
+                                    <div class="tile-icon"><i class="fa-solid fa-camera"></i></div>
+                                </div>
+
+                                <div class="photo-tile"
+                                     style="width: 320px; height: 180px; background: rgb(71 85 105);"
+                                     @mouseenter="showTitle('Gogogo at The Mall', '22 SEP 2024')"
+                                     @mouseleave="hideTitle()"
+                                     @click="openPhoto('Gogogo at The Mall', '22 SEP 2024', 'rgb(71 85 105)')">
+                                    <div class="tile-icon"><i class="fa-solid fa-image"></i></div>
+                                </div>
+
+                                <div class="photo-tile"
+                                     style="width: 170px; height: 260px; background: linear-gradient(to bottom, rgb(71 85 105), rgb(51 65 85));"
+                                     @mouseenter="showTitle('Trip to Matsushima', '07 OCT 2024')"
+                                     @mouseleave="hideTitle()"
+                                     @click="openPhoto('Trip to Matsushima', '07 OCT 2024', 'linear-gradient(to bottom, rgb(71 85 105), rgb(51 65 85))')">
+                                    <div class="tile-icon"><i class="fa-solid fa-camera"></i></div>
+                                </div>
+
+                                <div class="photo-tile"
+                                     style="width: 260px; height: 190px; background: rgb(30 41 59);"
+                                     @mouseenter="showTitle('Oktoberfest at Nichikichou', '29 SEP 2024')"
+                                     @mouseleave="hideTitle()"
+                                     @click="openPhoto('Oktoberfest at Nichikichou', '29 SEP 2024', 'rgb(30 41 59)')">
+                                    <div class="tile-icon"><i class="fa-solid fa-image"></i></div>
+                                </div>
+
+                                <div class="photo-tile"
+                                     style="width: 210px; height: 210px; background: rgb(51 65 85);"
+                                     @mouseenter="showTitle('Badminton night!', '25 SEP 2024')"
+                                     @mouseleave="hideTitle()"
+                                     @click="openPhoto('Badminton night!', '25 SEP 2024', 'rgb(51 65 85)')">
+                                    <div class="tile-icon"><i class="fa-solid fa-image"></i></div>
+                                </div>
+
+                                <div class="photo-tile"
+                                     style="width: 300px; height: 200px; background: linear-gradient(to right, rgb(100 116 139), rgb(71 85 105));"
+                                     @mouseenter="showTitle('Trip to Matsushima', '07 OCT 2024')"
+                                     @mouseleave="hideTitle()"
+                                     @click="openPhoto('Trip to Matsushima', '07 OCT 2024', 'linear-gradient(to right, rgb(100 116 139), rgb(71 85 105))')">
+                                    <div class="tile-icon"><i class="fa-solid fa-image"></i></div>
+                                </div>
+
+                                <div class="photo-tile"
+                                     style="width: 150px; height: 230px; background: rgb(100 116 139 / 0.8);"
+                                     @mouseenter="showTitle('Gogogo at The Mall', '22 SEP 2024')"
+                                     @mouseleave="hideTitle()"
+                                     @click="openPhoto('Gogogo at The Mall', '22 SEP 2024', 'rgb(100 116 139 / 0.8)')">
+                                    <div class="tile-icon"><i class="fa-solid fa-camera"></i></div>
+                                </div>
+
+                                <div class="photo-tile"
+                                     style="width: 270px; height: 180px; background: linear-gradient(135deg, rgb(30 41 59), rgb(71 85 105));"
+                                     @mouseenter="showTitle('Oktoberfest at Nichikichou', '29 SEP 2024')"
+                                     @mouseleave="hideTitle()"
+                                     @click="openPhoto('Oktoberfest at Nichikichou', '29 SEP 2024', 'linear-gradient(135deg, rgb(30 41 59), rgb(71 85 105))')">
+                                    <div class="tile-icon"><i class="fa-solid fa-image"></i></div>
+                                </div>
+
+                                <div class="photo-tile"
+                                     style="width: 140px; height: 250px; background: rgb(71 85 105);"
+                                     @mouseenter="showTitle('Badminton night!', '25 SEP 2024')"
+                                     @mouseleave="hideTitle()"
+                                     @click="openPhoto('Badminton night!', '25 SEP 2024', 'rgb(71 85 105)')">
+                                    <div class="tile-icon"><i class="fa-solid fa-camera"></i></div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Lightbox -->
+                        <div class="media-lightbox-overlay"
+                             x-show="expanded"
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0"
+                             x-transition:enter-end="opacity-100"
+                             x-transition:leave="transition ease-in duration-300"
+                             x-transition:leave-start="opacity-100"
+                             x-transition:leave-end="opacity-0"
+                             @click.self="closePhoto()"
+                             style="display: none;">
+                            <div class="media-lightbox-inner">
+                                <div class="media-lightbox-close" @click="closePhoto()">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </div>
+                                <div class="media-lightbox-photo"
+                                     :style="'width: 70vw; height: 60vh; background: ' + expandBg + '; transform: scale(' + (photoEntered ? '1' : '0.7') + '); opacity: ' + (photoEntered ? '0.2' : '0')"
+                                     @click.stop>
+                                    <i class="fa-solid fa-image"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Moderation hint -->
+                    <div class="flex-none px-4 md:px-8 lg:px-16 pb-6 pt-2">
+                        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-baseline justify-between">
+                            <div class="text-slate-400 text-sm uppercase tracking-widest">
+                                <i class="fa-solid fa-check-circle fa-fw"></i> All photos reviewed by moderators
+                            </div>
+                            <div class="text-slate-400 text-sm uppercase tracking-widest text-right">
+                                すべての写真はモデレーターにより確認済み
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== section: location ===== -->
+                <section id="location" class="top-section bg-slate-200 flex flex-col">
+                    <header class='bg-slate-700 text-white flex-none'>
+                        Location
+                    </header>
+
+                    <div class='flex-1 max-w-6xl mx-auto flex flex-col justify-center w-full px-4'>
+
+                        <!-- Venue 1 — left -->
+                        <a href="location-show.html" class='group flex flex-col items-start py-2'>
+                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
+                                The Mall Sendai Nagamachi
+                            </div>
+                            <div class='flex gap-3 items-baseline mt-1'>
+                                <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>14 events</span>
+                                <span class='text-xs sm:text-sm text-slate-400'>14件</span>
+                            </div>
+                        </a>
+
+                        <!-- Venue 2 — right -->
+                        <a href="location-show.html" class='group flex flex-col items-end text-right py-2'>
+                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
+                                Nishikichou Koen
+                            </div>
+                            <div class='flex gap-3 items-baseline mt-1'>
+                                <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>8 events</span>
+                                <span class='text-xs sm:text-sm text-slate-400'>8件</span>
+                            </div>
+                        </a>
+
+                        <!-- Venue 3 — left -->
+                        <a href="location-show.html" class='group flex flex-col items-start py-2'>
+                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
+                                Mediatheque Sendai
+                            </div>
+                            <div class='flex gap-3 items-baseline mt-1'>
+                                <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>6 events</span>
+                                <span class='text-xs sm:text-sm text-slate-400'>6件</span>
+                            </div>
+                        </a>
+
+                        <!-- Venue 4 — right -->
+                        <a href="location-show.html" class='group flex flex-col items-end text-right py-2'>
+                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
+                                Kotodai Koen
+                            </div>
+                            <div class='flex gap-3 items-baseline mt-1'>
+                                <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>5 events</span>
+                                <span class='text-xs sm:text-sm text-slate-400'>5件</span>
+                            </div>
+                        </a>
+
+                        <!-- Venue 5 — left -->
+                        <a href="location-show.html" class='group flex flex-col items-start py-2'>
+                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
+                                Izumi Chuo Station Plaza
+                            </div>
+                            <div class='flex gap-3 items-baseline mt-1'>
+                                <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>3 events</span>
+                                <span class='text-xs sm:text-sm text-slate-400'>3件</span>
+                            </div>
+                        </a>
+
+                        <!-- Venue 6 — right -->
+                        <a href="location-show.html" class='group flex flex-col items-end text-right py-2'>
+                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
+                                Aoba Community Center
+                            </div>
+                            <div class='flex gap-3 items-baseline mt-1'>
+                                <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>2 events</span>
+                                <span class='text-xs sm:text-sm text-slate-400'>2件</span>
+                            </div>
+                        </a>
+
+                    </div>
+                </section>
+
+            </main>
+
+            <!-- ===== Topic-show modal overlay ===== -->
+            <div class="ts-overlay"
+                 x-cloak
+                 x-show="topicOpen"
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 scale-95"
+                 x-transition:enter-end="opacity-100 scale-100"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100 scale-100"
+                 x-transition:leave-end="opacity-0 scale-95"
+                 x-data="{ tsLang: 'en', tsDark: true }"
+                 :class="{ 'ts-light-mode': !tsDark }"
+                 @keydown.escape.window="topicOpen = false"
+                 style="display: none;">
+
+                <!-- Top row: title + close + mode toggle -->
+                <div class="ts-top">
+                    <h1 class="ts-title">How to grill sardines only using the power of the Force.</h1>
+                    <div class="ts-top-right">
+                        <a href="#" class="ts-close" title="Close" @click.prevent="topicOpen = false"><i class="fa-solid fa-xmark"></i></a>
+                        <button class="ts-mode-toggle" @click="tsDark = !tsDark" :title="tsDark ? 'Switch to light mode' : 'Switch to dark mode'">
+                            <i class="fa-solid" :class="tsDark ? 'fa-moon' : 'fa-sun'"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Body: rail + content -->
+                <div class="ts-body">
+
+                    <!-- Left rail -->
+                    <div class="ts-rail">
+                        <div class="ts-lang-tabs">
+                            <span class="ts-lang-tab" :style="tsLang === 'en' ? 'opacity:1' : 'opacity:0.6'" @click="tsLang = 'en'">English</span>
+                            <span class="ts-lang-tab ja" :style="tsLang === 'ja' ? 'opacity:1' : 'opacity:0.6'" @click="tsLang = 'ja'">日本語</span>
+                        </div>
+
+                        <div class="ts-download-area">
+                            <div class="ts-download-slab"></div>
+                            <div class="ts-download-label-topic">Topic</div>
+                            <div class="ts-download-label">Download</div>
+                        </div>
+                    </div>
+
+                    <!-- Content column — EN -->
+                    <div class="ts-content" x-show="tsLang === 'en'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+                        <div class="t1">Title 1</div>
+                        <div class="sub">Subtitle</div>
+                        <div class="subsub">Subsubtitle</div>
+                        <div class="normal">Normal text</div>
+                        <ol>
+                            <li>First item in the numbered list</li>
+                            <li>Second item in the numbered list</li>
+                            <li>Third item in the numbered list</li>
+                            <li>Fourth item in the numbered list</li>
+                            <li>Fifth item in the numbered list</li>
+                        </ol>
+                        <ol>
+                            <li>Another first item</li>
+                            <li>Another second item</li>
+                            <li>Another third item</li>
+                            <li>Another fourth item</li>
+                            <li>Another fifth item</li>
+                        </ol>
+                        <div class="rich-line">
+                            <a href="#">Some link here</a>, some <strong>bold text</strong>, some <u>underlined</u> and some <em>italic</em> there.
+                        </div>
+                        <div class="sub">Vocabulary list</div>
+                        <table>
+                            <thead>
+                                <tr><th>English</th><th>日本語</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Sardine</td><td>イワシ</td></tr>
+                                <tr><td>Grill</td><td>焼く</td></tr>
+                                <tr><td>Force</td><td>フォース</td></tr>
+                                <tr><td>Levitation</td><td>浮遊</td></tr>
+                                <tr><td>Seasoning</td><td>調味料</td></tr>
+                                <tr><td>Crispy</td><td>カリカリ</td></tr>
+                            </tbody>
+                        </table>
+                        <div class="t1">Additional section</div>
+                        <div class="sub">More details below</div>
+                        <div class="normal">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                        </div>
+                        <div class="normal">
+                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+                        </div>
+                        <div class="subsub">Technical notes</div>
+                        <ol>
+                            <li>Preheat the Force to approximately 350 degrees</li>
+                            <li>Lay the sardines in a single layer on the levitation grid</li>
+                            <li>Apply a steady telekinetic rotation every 3 minutes</li>
+                            <li>Season with salt using precision Force-grip</li>
+                            <li>Serve immediately once the scales achieve golden crispiness</li>
+                        </ol>
+                        <div class="normal">
+                            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.
+                        </div>
+                        <div class="sub">Safety warnings</div>
+                        <div class="normal">
+                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
+                        </div>
+                        <div class="normal">
+                            Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.
+                        </div>
+                    </div>
+
+                    <!-- Content column — JA -->
+                    <div class="ts-content" x-show="tsLang === 'ja'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+                        <div class="t1">タイトル 1</div>
+                        <div class="sub">サブタイトル</div>
+                        <div class="subsub">サブサブタイトル</div>
+                        <div class="normal">通常のテキスト</div>
+                        <ol>
+                            <li>番号付きリストの最初の項目</li>
+                            <li>番号付きリストの2番目の項目</li>
+                            <li>番号付きリストの3番目の項目</li>
+                            <li>番号付きリストの4番目の項目</li>
+                            <li>番号付きリストの5番目の項目</li>
+                        </ol>
+                        <ol>
+                            <li>もう一つの最初の項目</li>
+                            <li>もう一つの2番目の項目</li>
+                            <li>もう一つの3番目の項目</li>
+                            <li>もう一つの4番目の項目</li>
+                            <li>もう一つの5番目の項目</li>
+                        </ol>
+                        <div class="rich-line">
+                            <a href="#">リンクはこちら</a>、<strong>太字テキスト</strong>、<u>下線付き</u>、そして<em>イタリック</em>もあります。
+                        </div>
+                        <div class="sub">語彙リスト</div>
+                        <table>
+                            <thead>
+                                <tr><th>English</th><th>日本語</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Sardine</td><td>イワシ</td></tr>
+                                <tr><td>Grill</td><td>焼く</td></tr>
+                                <tr><td>Force</td><td>フォース</td></tr>
+                                <tr><td>Levitation</td><td>浮遊</td></tr>
+                                <tr><td>Seasoning</td><td>調味料</td></tr>
+                                <tr><td>Crispy</td><td>カリカリ</td></tr>
+                            </tbody>
+                        </table>
+                        <div class="t1">追加セクション</div>
+                        <div class="sub">詳細情報</div>
+                        <div class="normal">
+                            フォースの力だけでイワシを焼く方法は、古くからジェダイの間で伝えられてきた秘伝の技術です。この技術を習得するには、まずフォースとの深い繋がりを築く必要があります。瞑想を通じて内なる力を呼び覚まし、それを熱エネルギーに変換する訓練を行います。
+                        </div>
+                        <div class="normal">
+                            重要なのは、フォースの温度制御です。高すぎると焦げてしまい、低すぎると生焼けになります。理想的な温度は約175度で、これをフォースの集中力だけで維持するのは高度な技術を要します。多くのパダワンがこの段階で挫折しますが、忍耐強く練習を続けることが成功の鍵です。
+                        </div>
+                        <div class="subsub">技術的な注意事項</div>
+                        <ol>
+                            <li>フォースを約175度に予熱する</li>
+                            <li>浮遊グリッドにイワシを一列に並べる</li>
+                            <li>3分ごとにテレキネシスで回転させる</li>
+                            <li>フォースグリップで精密に塩を振る</li>
+                            <li>鱗が黄金色のカリカリになったらすぐに提供する</li>
+                        </ol>
+                        <div class="normal">
+                            この技術は特にヨーダマスターが得意としていたと言われています。彼の小さな手でも、フォースを使えば大量のイワシを一度に焼くことができました。現代のジェダイも同様の技術を使い、銀河中でこの料理法を広めています。
+                        </div>
+                        <div class="sub">安全上の警告</div>
+                        <div class="normal">
+                            フォースによる調理中は、ダークサイドに引き寄せられないよう注意してください。怒りや恐れの感情がフォースの温度を不安定にし、イワシだけでなく周囲の環境にも悪影響を及ぼす可能性があります。常に心の平静を保ち、フォースとの調和を維持することが重要です。
+                        </div>
+                        <div class="normal">
+                            また、フォースの使用は周囲の人々への影響も考慮する必要があります。テレキネシスの制御が不十分な場合、イワシが飛び散る事故が報告されています。十分な訓練を積んでから実践することを強くお勧めします。
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- /Topic-show modal overlay -->
+
+        </div>
+    </body>
+</html>

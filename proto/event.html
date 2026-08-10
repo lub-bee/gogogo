@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- static snapshot: csrf token placeholder -->
+        <meta name="csrf-token" content="STATIC-PLACEHOLDER">
+
+        <!-- favicon -->
+        <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+        <link rel="manifest" href="images/favicon/site.webmanifest">
+
+        <title>Laravel</title>
+
+        <!-- Fonts (self-hosted, was fonts.bunny.net) -->
+        <link href="assets/fonts/figtree.css" rel="stylesheet" />
+
+        <!-- Compiled Tailwind CSS (was @vite resources/css/app.css) -->
+        <link rel="stylesheet" href="assets/app.css">
+        <!-- Bundled Alpine.js + slot animation (was @vite resources/js/app.js) -->
+        <script defer src="assets/app.js"></script>
+
+        <!-- FontAwesome (self-hosted, was cdnjs 6.5.1) -->
+        <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" />
+    </head>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-gray-100">
+
+            <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'></aside>
+
+            <!-- Page Content -->
+            <main class="top relativerelative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
+
+                <!-- ===== section: event (next upcoming published event — placeholder data) ===== -->
+                <section id="event" class="top-section flex flex-col bg-white relative">
+                    <header class='bg-slate-700 text-white'>
+                        event
+                    </header>
+
+                    <!-- x-event.event-navigation -->
+                    <nav class="text-slate-900 flex static md:absolute top-[8rem] right-0 text-[3.5rem] md:text-[7rem] leading-[2.3rem] md:leading-[4.5rem] uppercase  cursor-pointer">
+                        <a href="event.html" class='flex-1 md:block relative group pl-4 md:pl-0 bg-pink-200 md:bg-transparent'>
+                            <div class='hidden md:block absolute top-0 left-0 h-full w-full bg-pink-200 group-hover:bg-yellow-100 group-hover:scale-x-[10%] transform group-hover:rotate-[-30deg] transition-all'></div>
+                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all'>
+                                Prev
+                            </div>
+                        </a>
+
+                        <div class='flex-1 md:block relative group pr-4 md:pr-0 text-right bg-pink-200 md:bg-transparent'>
+                            <div class='hidden md:block absolute top-0 left-0 h-full w-full bg-pink-200 group-hover:bg-yellow-100 group-hover:scale-x-[10%] transform group-hover:rotate-[30deg] transition-all'></div>
+                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all'>
+                                Next
+                            </div>
+                        </div>
+                    </nav>
+
+                    <main class="flex-1 mt-4 md:mt-0 h-full flex flex-col md:flex-row items-center justify-evenly">
+                        <div class=' md:h-full md:w-auto flex flex-row md:flex-col justify-evenly items-center'>
+                            <!-- x-event.calendar-card -->
+                            <div class='w-40 md:w-60 text-slate-900'>
+                                <div class='font-bold text-[2rem] sm:text-[2.5rem] leading-[2rem] sm:leading-[3rem] text-center bg-slate-900 text-white'>
+                                    2024
+                                </div>
+                                <div class='text-[6rem] sm:text-[8rem] lg:text-[12rem] leading-[6rem] sm:leading-[7.5rem] lg:leading-[10rem] font-bold text-center'>
+                                    22
+                                </div>
+                                <div class='uppercase font-bold text-[3rem] sm:text-[4.5rem] lg:text-[7rem] leading-[2rem] sm:leading-[3rem] lg:leading-[7rem] tracking-[0.01em] text-center'>
+                                    Sep
+                                </div>
+                            </div>
+
+                            <!-- x-event.responsive-related-card -->
+                            <div class='text-[1.3rem] sm:text-[2rem] flex flex-col h-full md:h-[25vh]'>
+                                <div class='flex-1 flex items-center gap-4 group cursor-pointer'>
+                                    <i class='fa-solid fa-images fa-fw'></i>
+                                    <div class='bg-sky-200 leading-5 hover:bg-orange-200 transition-all'>Media</div>
+                                </div>
+                                <div class='flex-1 flex items-center gap-4 group cursor-pointer'>
+                                    <i class='fa-solid fa-file-alt fa-fw'></i>
+                                    <div class='bg-sky-200 leading-5 hover:bg-orange-200 transition-all'>Topic</div>
+                                </div>
+                                <div class='flex-1 flex items-center gap-4 group cursor-pointer'>
+                                    <i class='fa-solid fa-location-dot fa-fw'></i>
+                                    <div class='bg-sky-200 leading-5 hover:bg-orange-200 transition-all'>Location</div>
+                                </div>
+                                <div class='flex-1 flex items-center gap-4 group cursor-pointer'>
+                                    <i class="fa-solid fa-person-walking-luggage"></i>
+                                    <div class='bg-sky-200 leading-5 hover:bg-yellow-200 transition-all'>I'm going</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- x-event.event-info-card (placeholder content) -->
+                        <div class='w-full md:w-2/4'>
+                            <div class='xs:mt-4 px-4 lg:px-0 text-[2.5rem] xl:text-[5rem] leading-[2.5rem] xl:leading-[5rem] lg:tracking-tight font-bold uppercase'>
+                                Gogogo at The Mall
+                            </div>
+                            <div class='px-4 lg:px-0 mt-4 lg:hover:scale-105 lg:text-lg transition-all max-h-[18vh] md:h-[30vh] overflow-y-scroll formated-content'>
+                                <h2>Let's meet at the mall!</h2>
+                                <p>Join us for our weekly language exchange session. As usual: 5 minutes in English, 5 minutes in Japanese, repeat for 30 minutes.</p>
+                                <ul>
+                                    <li>Meeting point: main entrance</li>
+                                    <li>Start: 14:00</li>
+                                    <li>Fee: free</li>
+                                </ul>
+                            </div>
+                            <div class='px-4 lg:px-0 mt-4 lg:hover:scale-105 lg:text-lg transition-all max-h-[18vh] md:h-[30vh] overflow-y-scroll formated-content'>
+                                <h2>モールで会いましょう！</h2>
+                                <p>毎週の言語交換セッションにぜひご参加ください。いつも通り、英語5分、日本語5分を30分間繰り返します。</p>
+                                <ul>
+                                    <li>集合場所：正面入口</li>
+                                    <li>開始：14:00</li>
+                                    <li>参加費：無料</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </main>
+                </section>
+
+            </main>
+        </div>
+    </body>
+</html>

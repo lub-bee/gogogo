@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- static snapshot: csrf token placeholder -->
+        <meta name="csrf-token" content="STATIC-PLACEHOLDER">
+
+        <!-- favicon -->
+        <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+        <link rel="manifest" href="images/favicon/site.webmanifest">
+
+        <title>Laravel</title>
+
+        <!-- Fonts (self-hosted, was fonts.bunny.net) -->
+        <link href="assets/fonts/figtree.css" rel="stylesheet" />
+
+        <!-- Compiled Tailwind CSS (was @vite resources/css/app.css) -->
+        <link rel="stylesheet" href="assets/app.css">
+        <!-- Bundled Alpine.js + slot animation (was @vite resources/js/app.js) -->
+        <script defer src="assets/app.js"></script>
+
+        <!-- FontAwesome (self-hosted, was cdnjs 6.5.1) -->
+        <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" />
+    </head>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-gray-100">
+
+            <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'></aside>
+
+            <!-- Page Content -->
+            <main class="top relativerelative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
+
+                <!-- ===== section: location (top-page venues list) ===== -->
+                <section id="location" class="top-section bg-slate-200 flex flex-col">
+                    <header class='bg-slate-700 text-white flex-none'>
+                        Location
+                    </header>
+
+                    <div class='flex-1 max-w-6xl mx-auto flex flex-col justify-center w-full px-4'>
+
+                        <!-- Venue 1 — left -->
+                        <a href="location-show.html" class='group flex flex-col items-start py-2'>
+                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
+                                The Mall Sendai Nagamachi
+                            </div>
+                            <div class='flex gap-3 items-baseline mt-1'>
+                                <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>14 events</span>
+                                <span class='text-xs sm:text-sm text-slate-400'>14件</span>
+                            </div>
+                        </a>
+
+                        <!-- Venue 2 — right -->
+                        <a href="location-show.html" class='group flex flex-col items-end text-right py-2'>
+                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
+                                Nishikichou Koen
+                            </div>
+                            <div class='flex gap-3 items-baseline mt-1'>
+                                <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>8 events</span>
+                                <span class='text-xs sm:text-sm text-slate-400'>8件</span>
+                            </div>
+                        </a>
+
+                        <!-- Venue 3 — left -->
+                        <a href="location-show.html" class='group flex flex-col items-start py-2'>
+                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
+                                Mediatheque Sendai
+                            </div>
+                            <div class='flex gap-3 items-baseline mt-1'>
+                                <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>6 events</span>
+                                <span class='text-xs sm:text-sm text-slate-400'>6件</span>
+                            </div>
+                        </a>
+
+                        <!-- Venue 4 — right -->
+                        <a href="location-show.html" class='group flex flex-col items-end text-right py-2'>
+                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
+                                Kotodai Koen
+                            </div>
+                            <div class='flex gap-3 items-baseline mt-1'>
+                                <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>5 events</span>
+                                <span class='text-xs sm:text-sm text-slate-400'>5件</span>
+                            </div>
+                        </a>
+
+                        <!-- Venue 5 — left -->
+                        <a href="location-show.html" class='group flex flex-col items-start py-2'>
+                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
+                                Izumi Chuo Station Plaza
+                            </div>
+                            <div class='flex gap-3 items-baseline mt-1'>
+                                <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>3 events</span>
+                                <span class='text-xs sm:text-sm text-slate-400'>3件</span>
+                            </div>
+                        </a>
+
+                        <!-- Venue 6 — right -->
+                        <a href="location-show.html" class='group flex flex-col items-end text-right py-2'>
+                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
+                                Aoba Community Center
+                            </div>
+                            <div class='flex gap-3 items-baseline mt-1'>
+                                <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>2 events</span>
+                                <span class='text-xs sm:text-sm text-slate-400'>2件</span>
+                            </div>
+                        </a>
+
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </body>
+</html>

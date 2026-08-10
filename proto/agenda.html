@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- static snapshot: csrf token placeholder -->
+        <meta name="csrf-token" content="STATIC-PLACEHOLDER">
+
+        <!-- favicon -->
+        <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+        <link rel="manifest" href="images/favicon/site.webmanifest">
+
+        <title>Laravel</title>
+
+        <!-- Fonts (self-hosted, was fonts.bunny.net) -->
+        <link href="assets/fonts/figtree.css" rel="stylesheet" />
+
+        <!-- Compiled Tailwind CSS (was @vite resources/css/app.css) -->
+        <link rel="stylesheet" href="assets/app.css">
+        <!-- Bundled Alpine.js + slot animation (was @vite resources/js/app.js) -->
+        <script defer src="assets/app.js"></script>
+
+        <!-- FontAwesome (self-hosted, was cdnjs 6.5.1) -->
+        <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" />
+    </head>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-gray-100">
+
+            <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'></aside>
+
+            <!-- Page Content -->
+            <main class="top relativerelative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
+
+                <!-- ===== section: agenda (hard-coded demo data in the Blade source) ===== -->
+                <section id="agenda" class="top-section bg-slate-700 text-white flex flex-col">
+                    <header class='bg-white text-slate-700'>
+                        Agenda
+                    </header>
+
+                    <div class='flex-1 max-w-6xl mx-auto flex flex-col justify-evenly w-screen'>
+                        <div class='flex flex-col lg:flex-row gap-4 lg:gap-14 mx-4 overflow-hidden'>
+                            <div class='lg:text-right flex-none lg:w-1/4 font-bold text-[3rem] sm:text-[4.5rem] lg:text-[7rem] leading-[2rem] md:leading-[3rem] lg:leading-[6rem] -tracking-[0.12em]'>
+                                SEPT
+                            </div>
+                            <div class='flex-1 text-[2rem] sm:text-[2.5rem] leading-[3rem] sm:leading-[4.5rem] divide-y lg:divide-y-4'>
+                                <a class='flex gap-8 group' href="event.html">
+                                    <div class='font-bold tracking-widest'>22</div>
+                                    <div class=''><i class="fas fa-book fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo at The Mall</div>
+                                </a>
+                                <a class='flex gap-8 group' href="event.html">
+                                    <div class='font-bold tracking-widest'>25</div>
+                                    <div class=''><i class="fas fa-mug-hot fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Badminton night!</div>
+                                </a>
+                                <a class='flex gap-8 group' href="event.html">
+                                    <div class='font-bold tracking-widest'>29</div>
+                                    <div class=''><i class="fas fa-mug-hot fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Oktoberfes at Nichikichou Koen</div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class='flex flex-col lg:flex-row gap-4 lg:gap-14 mx-4'>
+                            <div class='lg:text-right flex-none lg:w-1/4 font-bold text-[3rem] sm:text-[4.5rem] lg:text-[7rem] leading-[2rem] sm:leading-[3rem] lg:leading-[6rem] -tracking-[0.12em]'>
+                                OCT
+                            </div>
+                            <div class='flex-1 font-bold text-[2rem] sm:text-[2.5rem] leading-[3rem] sm:leading-[4.5rem] divide-y lg:divide-y-4'>
+                                <a class='flex gap-8 group' href="event.html">
+                                    <div class='font-bold tracking-widest'>07</div>
+                                    <div class=''><i class="fas fa-mug-hot fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Trip to Matsushima</div>
+                                </a>
+                                <a class='flex gap-8 group' href="event.html">
+                                    <div class='font-bold tracking-widest'>12</div>
+                                    <div class=''><i class="fas fa-book fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo Friday</div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class='text-center lg:my-4'>
+                            <a href="agenda-all.html" class='btn btn-main' >
+                                See all
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </body>
+</html>
