@@ -13,21 +13,21 @@ class LocationFactory extends Factory
 {
     protected $model = Location::class;
 
-    /** Sample JP venue names for realistic seeding. */
-    private const JP_VENUES = [
-        '渋谷コミュニティセンター',
-        '新宿カフェスペース',
-        '池袋国際交流ラウンジ',
-        '六本木ヒルズ会議室',
-        '下北沢カルチャーハウス',
-        '中目黒カフェ',
-        '代官山ワークスペース',
-        '表参道コワーキング',
+    /** Romanized Sendai-area venue names for realistic seeding. */
+    private const VENUES = [
+        'The Mall Sendai Nagamachi',
+        'Nishikichou Koen',
+        'Mediatheque Sendai',
+        'Kotodai Koen',
+        'Izumi Chuo Station Plaza',
+        'Aoba Community Center',
+        'Jozenji-dori Avenue',
+        'Sendai Station East Exit',
     ];
 
     public function definition(): array
     {
-        $name = fake()->randomElement(self::JP_VENUES) . ' ' . fake()->numberBetween(1, 99);
+        $name = fake()->unique()->randomElement(self::VENUES);
 
         return [
             'name' => $name,
@@ -39,8 +39,8 @@ class LocationFactory extends Factory
                 '広々とした明るいスペースです。',
                 '少人数向けのアットホームな会場。',
             ]),
-            'gps_lat' => fake()->optional(0.5)->latitude(35.6, 35.8),
-            'gps_lng' => fake()->optional(0.5)->longitude(139.6, 139.8),
+            'gps_lat' => fake()->optional(0.5)->latitude(38.24, 38.30),
+            'gps_lng' => fake()->optional(0.5)->longitude(140.85, 140.92),
             'website_url' => fake()->optional(0.3)->url(),
             'cost' => fake()->optional(0.5)->numberBetween(0, 5000),
         ];

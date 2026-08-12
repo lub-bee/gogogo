@@ -52,6 +52,53 @@ class FrontRoutesTest extends TestCase
             ->assertSee('Hello, ' . $user->name);
     }
 
+    public function test_top_agenda_limits_to_9_events(): void
+    {
+        // Create 12 events spread across the next 2 months
+        for ($i = 0; $i < 12; $i++) {
+            Event::factory()->published()->create([
+                'start_at' => now()->addDays($i + 1),
+            ]);
+        }
+
+        $response = $this->get('/');
+        $response->assertOk();
+
+        // Count agenda-row components rendered — each has the 'group' link class
+        // The agenda section should contain at most 9 event rows
+        $content = $response->getContent();
+        // agenda-row uses class "flex gap-8 group" for each event link
+        $agendaSection = $this->extractAgendaMonths($content);
+        $this->assertLessThanOrEqual(9, $agendaSection);
+    }
+
+    public function test_top_agenda_excludes_events_beyond_3_months(): void
+    {
+        // Event within 3 months — should appear
+        $near = Event::factory()->published()->create([
+            'start_at' => now()->addMonth(),
+        ]);
+        // Event beyond 3 months — should NOT appear
+        $far = Event::factory()->published()->create([
+            'start_at' => now()->addMonths(4),
+        ]);
+
+        $response = $this->get('/');
+        $response->assertOk();
+        $response->assertSee($near->name);
+        $response->assertDontSee($far->name);
+    }
+
+    /**
+     * Count event rows in the agenda section of the top page.
+     */
+    private function extractAgendaMonths(string $html): int
+    {
+        // Each agenda-row component renders an <a> with the agenda-row class pattern
+        // Count occurrences of the agenda-row component marker
+        return substr_count($html, 'group-hover:tracking-tight transition-all whitespace-nowrap');
+    }
+
     // ─── EVENT SHOW ──────────────────────────────────────────
 
     public function test_published_event_visible_to_guest(): void

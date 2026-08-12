@@ -44,11 +44,12 @@ class TopController extends Controller
             $nextEventUrl = $next ? url('/event/' . $next->slug) : null;
         }
 
-        // Agenda: upcoming published events grouped by month (next 2 months shown)
+        // Agenda: upcoming published events — at most 3 months ahead or 9 events
         $agendaEvents = Event::published()
             ->where('start_at', '>=', now()->startOfMonth())
+            ->where('start_at', '<', now()->startOfMonth()->addMonths(3))
             ->orderBy('start_at')
-            ->limit(20)
+            ->limit(9)
             ->get();
 
         $agendaMonths = $agendaEvents->groupBy(fn ($e) => $e->start_at->format('Y-m'))
