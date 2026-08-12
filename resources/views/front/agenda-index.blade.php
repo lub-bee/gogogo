@@ -1,7 +1,7 @@
 {{--
     Agenda index — all events with infinite scroll, walking backward in time.
+    Fetches real data from /agenda?page=N JSON endpoint.
 --}}
-@props([])
 
 <x-layouts.public
     :menuBack="['url' => url('/#agenda'), 'label' => 'Back']"
@@ -43,62 +43,59 @@
                 </div>
             </template>
 
+            {{-- Empty state --}}
+            <div x-show="items.length === 0 && !loading && !nextPage" class="text-center py-16">
+                <div class="text-2xl text-slate-400 uppercase font-light">No events yet</div>
+            </div>
+
+            {{-- Loading indicator --}}
+            <div x-show="loading" class="text-center py-8">
+                <div class="text-slate-400">Loading...</div>
+            </div>
+
             {{-- Infinite scroll sentinel --}}
             <div x-ref="sentinel" class="h-4"></div>
         </main>
 
         <script>
             function agendaFeed() {
-                const monthNames = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEPT','OCT','NOV','DEC'];
-                const eventPool = [
-                    { title: 'Gogogo at The Mall', icon: 'fa-book', slug: 'gogogo-mall' },
-                    { title: 'Badminton night!', icon: 'fa-mug-hot', slug: 'badminton' },
-                    { title: 'Oktoberfest at Nichikichou Koen', icon: 'fa-mug-hot', slug: 'oktoberfest' },
-                    { title: 'Trip to Matsushima', icon: 'fa-mug-hot', slug: 'matsushima' },
-                    { title: 'Gogogo Friday', icon: 'fa-book', slug: 'gogogo-friday' },
-                    { title: 'Hanami picnic', icon: 'fa-mug-hot', slug: 'hanami' },
-                    { title: 'Gogogo Sunday', icon: 'fa-book', slug: 'gogogo-sunday' },
-                    { title: 'Board game night', icon: 'fa-mug-hot', slug: 'board-game' }
-                ];
                 return {
                     items: [],
-                    curMonth: new Date().getMonth(),
-                    curYear: new Date().getFullYear(),
-                    startYear: new Date().getFullYear(),
+                    nextPage: '/agenda?page=1',
                     loading: false,
+                    lastYear: null,
                     init() {
-                        this.addBatch();
+                        this.loadMore();
                         this.$nextTick(() => {
                             const observer = new IntersectionObserver((entries) => {
-                                if (entries[0].isIntersecting && !this.loading) {
-                                    this.loading = true;
-                                    setTimeout(() => { this.addBatch(); this.loading = false; }, 300);
+                                if (entries[0].isIntersecting && !this.loading && this.nextPage) {
+                                    this.loadMore();
                                 }
                             }, { rootMargin: '200px' });
                             observer.observe(this.$refs.sentinel);
                         });
                     },
-                    addBatch() {
-                        for (let b = 0; b < 3; b++) {
-                            const name = monthNames[this.curMonth];
-                            const seed = this.curMonth + this.curYear * 12;
-                            const count = 2 + (seed % 3);
-                            const events = [];
-                            for (let e = 0; e < count; e++) {
-                                const pool = eventPool[(seed * 3 + e) % eventPool.length];
-                                const day = String(5 + e * 7 + (seed % 5)).padStart(2, '0');
-                                events.push({ day, title: pool.title, icon: pool.icon, slug: pool.slug });
-                            }
-                            this.items.push({ type: 'month', name, events });
-                            this.curMonth--;
-                            if (this.curMonth < 0) {
-                                this.curMonth = 11;
-                                this.curYear--;
-                                if (this.curYear !== this.startYear) {
-                                    this.items.push({ type: 'year', year: String(this.curYear) });
+                    async loadMore() {
+                        if (!this.nextPage || this.loading) return;
+                        this.loading = true;
+                        try {
+                            const res = await fetch(this.nextPage, {
+                                headers: { 'Accept': 'application/json' }
+                            });
+                            const data = await res.json();
+                            for (const month of data.months) {
+                                const year = month.year;
+                                if (this.lastYear && year !== this.lastYear) {
+                                    this.items.push({ type: 'year', year: year });
                                 }
+                                this.lastYear = year;
+                                this.items.push(month);
                             }
+                            this.nextPage = data.next_page;
+                        } catch (e) {
+                            console.error('Agenda load error:', e);
                         }
+                        this.loading = false;
                     }
                 };
             }

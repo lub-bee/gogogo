@@ -2,9 +2,6 @@
     Media index — full-page gallery with lightbox.
     Same structure as the media section on the top page.
 --}}
-@props([
-    'photos' => null,
-])
 
 <x-layouts.public
     :menuBack="['url' => url('/#media'), 'label' => 'Back']"
@@ -16,7 +13,7 @@
 
             <x-front.diagonal-nav href="/media" color="blue" label="See all" />
 
-            <x-front.media-gallery :photos="$photos ?? []" />
+            <x-front.media-gallery :photos="$photos" />
         </section>
     </main>
 </x-layouts.public>

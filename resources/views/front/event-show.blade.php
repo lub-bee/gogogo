@@ -1,28 +1,14 @@
 {{--
     Event show page — single event detail with Prev/Next navigation.
 --}}
-@props([
-    'event' => [
-        'name' => 'Gogogo at The Mall',
-        'slug' => 'gogogo-at-the-mall',
-        'type' => 'gogogo',
-        'start_at' => '2024-09-22 14:00:00',
-        'end_at' => '2024-09-22 16:00:00',
-        'description_en' => '<h2>Let\'s meet at the mall!</h2><p>Join us for our weekly language exchange session.</p><ul><li>Meeting point: main entrance</li><li>Start: 14:00</li><li>Fee: free</li></ul>',
-        'description_ja' => '<h2>モールで会いましょう！</h2><p>毎週の言語交換セッションにぜひご参加ください。</p><ul><li>集合場所：正面入口</li><li>開始：14:00</li><li>参加費：無料</li></ul>',
-        'published_at' => '2024-09-20',
-    ],
-    'prevEventUrl' => '/event/prev-placeholder',
-    'nextEventUrl' => null,
-])
 
 @php
-    $startAt = \Carbon\Carbon::parse($event['start_at'] ?? now());
+    $startAt = $event->start_at ?? now();
 @endphp
 
 <x-layouts.public
     :menuBack="['url' => url('/#event'), 'label' => 'Back']"
-    :title="($event['name'] ?? 'Event') . ' — GoGoGo'">
+    :title="$event->name . ' — GoGoGo'">
 
     <main class="top relative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
         <section id="event" class="top-section flex flex-col bg-white relative">
@@ -38,34 +24,50 @@
                         :month="$startAt->format('M')" />
 
                     <div class="text-[1.3rem] sm:text-[2rem] flex flex-col h-full md:h-[25vh]">
+                        @if($event->topic)
+                        <a href="{{ route('topic.show', $event->topic) }}" class="flex-1 flex items-center gap-4 group cursor-pointer">
+                            <i class="fa-solid fa-file-alt fa-fw"></i>
+                            <div class="bg-sky-200 leading-5 hover:bg-orange-200 transition-all">Topic</div>
+                        </a>
+                        @endif
+                        @if($event->location)
+                        <a href="{{ route('location.show', $event->location) }}" class="flex-1 flex items-center gap-4 group cursor-pointer">
+                            <i class="fa-solid fa-location-dot fa-fw"></i>
+                            <div class="bg-sky-200 leading-5 hover:bg-orange-200 transition-all">Location</div>
+                        </a>
+                        @endif
                         <div class="flex-1 flex items-center gap-4 group cursor-pointer">
                             <i class="fa-solid fa-images fa-fw"></i>
                             <div class="bg-sky-200 leading-5 hover:bg-orange-200 transition-all">Media</div>
                         </div>
-                        <div class="flex-1 flex items-center gap-4 group cursor-pointer">
-                            <i class="fa-solid fa-file-alt fa-fw"></i>
-                            <div class="bg-sky-200 leading-5 hover:bg-orange-200 transition-all">Topic</div>
-                        </div>
-                        <div class="flex-1 flex items-center gap-4 group cursor-pointer">
-                            <i class="fa-solid fa-location-dot fa-fw"></i>
-                            <div class="bg-sky-200 leading-5 hover:bg-orange-200 transition-all">Location</div>
-                        </div>
-                        <div class="flex-1 flex items-center gap-4 group cursor-pointer">
+                        @auth
+                        <form method="POST" action="{{ route('event.rsvp', $event) }}" class="flex-1 flex items-center">
+                            @csrf
+                            <button type="submit" class="flex items-center gap-4 group cursor-pointer">
+                                <i class="fa-solid fa-person-walking-luggage"></i>
+                                <div class="{{ $isAttending ? 'bg-yellow-200' : 'bg-sky-200' }} leading-5 hover:bg-yellow-200 transition-all">
+                                    {{ $isAttending ? "I'm going!" : "I'm going" }}
+                                </div>
+                            </button>
+                        </form>
+                        @else
+                        <a href="{{ route('login') }}" class="flex-1 flex items-center gap-4 group cursor-pointer">
                             <i class="fa-solid fa-person-walking-luggage"></i>
                             <div class="bg-sky-200 leading-5 hover:bg-yellow-200 transition-all">I'm going</div>
-                        </div>
+                        </a>
+                        @endauth
                     </div>
                 </div>
 
                 <div class="w-full md:w-2/4">
                     <div class="xs:mt-4 px-4 lg:px-0 text-[2.5rem] xl:text-[5rem] leading-[2.5rem] xl:leading-[5rem] lg:tracking-tight font-bold uppercase">
-                        {{ $event['name'] }}
+                        {{ $event->name }}
                     </div>
-                    <div class="px-4 lg:px-0 mt-4 lg:hover:scale-105 lg:text-lg transition-all max-h-[18vh] md:h-[30vh] overflow-y-scroll formated-content">
-                        {!! $event['description_en'] !!}
+                    <div class="px-4 lg:px-0 mt-4 lg:hover:scale-105 lg:text-lg transition-all max-h-[18vh] md:h-[30vh] overflow-y-scroll formatted-content">
+                        {!! $event->description_en !!}
                     </div>
-                    <div class="px-4 lg:px-0 mt-4 lg:hover:scale-105 lg:text-lg transition-all max-h-[18vh] md:h-[30vh] overflow-y-scroll formated-content">
-                        {!! $event['description_ja'] !!}
+                    <div class="px-4 lg:px-0 mt-4 lg:hover:scale-105 lg:text-lg transition-all max-h-[18vh] md:h-[30vh] overflow-y-scroll formatted-content">
+                        {!! $event->description_ja !!}
                     </div>
                 </div>
             </main>
