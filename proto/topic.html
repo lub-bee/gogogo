@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- static snapshot: csrf token placeholder -->
+        <meta name="csrf-token" content="STATIC-PLACEHOLDER">
+
+        <!-- favicon -->
+        <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+        <link rel="manifest" href="images/favicon/site.webmanifest">
+
+        <title>Laravel</title>
+
+        <!-- Fonts (self-hosted, was fonts.bunny.net) -->
+        <link href="assets/fonts/figtree.css" rel="stylesheet" />
+
+        <!-- Compiled Tailwind CSS (was @vite resources/css/app.css) -->
+        <link rel="stylesheet" href="assets/app.css">
+        <!-- Bundled Alpine.js + slot animation (was @vite resources/js/app.js) -->
+        <script defer src="assets/app.js"></script>
+
+        <!-- FontAwesome (self-hosted, was cdnjs 6.5.1) -->
+        <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" />
+
+        <!-- ── Topic section styles ── -->
+        <style>
+            .diag-band-topic { background-color: #fef9c3; }
+            .group:hover .diag-band-topic { background-color: #b7d7fc !important; }
+            .diag-bg-yellow { background-color: #fef9c3; }
+            @media (min-width: 768px) { .diag-bg-yellow { background-color: transparent; } }
+            .no-wrap { white-space: nowrap; }
+            @media (max-width: 767px) {
+                #topic > header { background-color: #334155 !important; color: #fff !important; }
+                #topic { overflow: hidden !important; }
+            }
+        </style>
+        <!-- ── Topic accordion (ts2-*) ── -->
+        <style>
+            .ts2-rows { flex:1; min-height:0; overflow-y:auto; display:flex; flex-direction:column; justify-content:center; padding:0 1rem; }
+            @media (min-width:768px) { .ts2-rows { padding:0 2rem; } }
+            @media (min-width:1024px) { .ts2-rows { padding:0 4rem; max-width:72rem; margin:0 auto; width:100%; } }
+            .ts2-row { border-bottom:1px solid #cbd5e1; cursor:pointer; }
+            @media (min-width:768px) { .ts2-row { border-bottom:4px solid #334155; } }
+            .ts2-title-bar { display:flex; align-items:center; gap:1rem; padding:0.8rem 0; }
+            @media (min-width:768px) { .ts2-title-bar { padding:1rem 0; } }
+            .ts2-row-icon { flex-shrink:0; width:1.6rem; font-size:1.2rem; color:#64748b; opacity:1; transition:opacity 250ms ease,width 350ms ease,margin 350ms ease; overflow:hidden; margin-right:0.4rem; }
+            @media (min-width:640px) { .ts2-row-icon { width:2rem; font-size:1.5rem; } }
+            @media (min-width:768px) { .ts2-row-icon { width:2.4rem; font-size:1.8rem; } }
+            .ts2-row.ts2-open .ts2-row-icon, .ts2-row:hover .ts2-row-icon { opacity:0; width:0; margin-right:0; }
+            a.ts2-title { text-decoration:none; color:inherit; display:block; }
+            .ts2-title { flex:1; min-width:0; font-size:1.3rem; font-weight:700; text-transform:uppercase; letter-spacing:-0.08em; line-height:1.2; transition:font-size 350ms ease,letter-spacing 400ms ease; }
+            @media (min-width:640px) { .ts2-title { font-size:1.8rem; } }
+            @media (min-width:768px) { .ts2-title { font-size:2.2rem; } }
+            .ts2-row:hover .ts2-title { letter-spacing:-0.02em; }
+            .ts2-row.ts2-open .ts2-title { font-size:1.6rem; }
+            @media (min-width:640px) { .ts2-row.ts2-open .ts2-title { font-size:2.2rem; } }
+            @media (min-width:768px) { .ts2-row.ts2-open .ts2-title { font-size:2.8rem; } }
+            .ts2-chevron { flex-shrink:0; font-size:1.4rem; color:#334155; opacity:0; transform:translateX(-0.5rem); transition:opacity 300ms ease,transform 300ms ease,color 200ms ease; padding:0.4rem; }
+            @media (min-width:768px) { .ts2-chevron { font-size:2rem; padding:0.5rem 0.8rem; } }
+            .ts2-row.ts2-open .ts2-chevron { opacity:1; transform:translateX(0); }
+            .ts2-chevron:hover { color:#b7d7fc; }
+            .ts2-panel { display:grid; grid-template-rows:0fr; transition:grid-template-rows 350ms ease-in-out; }
+            .ts2-row.ts2-open .ts2-panel { grid-template-rows:1fr; }
+            .ts2-panel-inner { overflow:hidden; min-height:0; }
+            .ts2-rail { display:flex; flex-direction:row; gap:0.6rem; align-items:center; padding:0.4rem 0 0.5rem 0.5rem; flex-wrap:wrap; }
+            .ts2-date { margin-left:auto; font-size:0.75rem; font-weight:700; letter-spacing:0.08em; color:#94a3b8; white-space:nowrap; }
+            @media (min-width:768px) { .ts2-date { font-size:0.85rem; } }
+            .ts2-lang { position:relative; font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; cursor:pointer; padding:0.15rem 0.5rem; z-index:1; transition:color 0.25s ease; user-select:none; display:flex; align-items:center; gap:0.3rem; color:#334155; }
+            @media (min-width:768px) { .ts2-lang { font-size:1rem; } }
+            .ts2-lang.ts2-off { color:#94a3b8; }
+            .ts2-lang::before { content:''; position:absolute; inset:0; background:#334155; transform:skewX(-8deg) scaleX(0); transform-origin:left center; transition:transform 0.3s ease; z-index:-1; }
+            .ts2-lang:hover::before { transform:skewX(-8deg) scaleX(1); }
+            .ts2-lang:hover { color:#fff; }
+            .ts2-lang .ts2-eye { font-size:0.7em; opacity:0.5; }
+            .ts2-excerpt { display:flex; flex-direction:column; gap:0.4rem; padding-bottom:0.8rem; }
+            @media (min-width:768px) { .ts2-excerpt.ts2-dual { flex-direction:row; gap:2rem; } .ts2-excerpt.ts2-dual > .ts2-ex-col { flex:1; min-width:0; } }
+            .ts2-ex-col { display:-webkit-box; -webkit-box-orient:vertical; overflow:hidden; -webkit-line-clamp:4; font-size:0.9rem; line-height:1.6; color:#475569; }
+            @media (min-width:640px) { .ts2-ex-col { font-size:1rem; -webkit-line-clamp:5; } }
+            @media (min-width:768px) { .ts2-ex-col { font-size:1.05rem; -webkit-line-clamp:6; } }
+        </style>
+    </head>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-gray-100">
+
+            <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'>
+                <a href="index.html#topic">&#8249; Back</a>
+            </aside>
+
+            <!-- Page Content -->
+            <main class="top relativerelative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
+
+                <!-- ===== section: topic (accordion) ===== -->
+                <section id="topic" class="top-section bg-white flex flex-col"
+                         x-data="{
+                            ts2En: true, ts2Ja: true, ts2Open: 1,
+                            ts2ToggleEn() { this.ts2En = !this.ts2En; if (!this.ts2En && !this.ts2Ja) this.ts2Ja = true; },
+                            ts2ToggleJa() { this.ts2Ja = !this.ts2Ja; if (!this.ts2En && !this.ts2Ja) this.ts2En = true; },
+                            ts2Toggle(id) { if (id !== this.ts2Open) this.ts2Open = id; }
+                         }">
+                    <header class='bg-slate-200 text-slate-700'>
+                        Topic
+                    </header>
+
+                    <nav class="flex-none flex justify-end text-[3.5rem] md:text-[7rem] leading-[2.3rem] md:leading-[4.5rem] uppercase cursor-pointer text-[#111725]">
+                        <a href="topic-all.html" class='w-full md:w-[45%] md:block relative group pr-4 md:pr-0 text-center diag-bg-yellow md:bg-transparent'>
+                            <div class='hidden md:block absolute top-0 left-0 h-full w-full diag-band-topic group-hover:scale-x-[10%] transform group-hover:rotate-[30deg] transition-all'></div>
+                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all no-wrap'>
+                                See all
+                            </div>
+                        </a>
+                    </nav>
+
+                    <div class="ts2-rows flex-1">
+                        <div class="ts2-row" :class="ts2Open === 1 && 'ts2-open'" @click="ts2Toggle(1)">
+                            <div class="ts2-title-bar">
+                                <span class="ts2-row-icon"><i class="fa-solid fa-align-left fa-fw"></i></span>
+                                <a href="topic-show.html" class="ts2-title" @click.stop="if (ts2Open !== 1) { $event.preventDefault(); ts2Toggle(1); }">I went to a crocodile park and was attacked by a baby one</a>
+                                <span class="ts2-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+                            </div>
+                            <div class="ts2-panel"><div class="ts2-panel-inner">
+                                <div class="ts2-rail" @click.stop>
+                                    <span class="ts2-lang" :class="!ts2En && 'ts2-off'" @click="ts2ToggleEn()"><i class="ts2-eye fa-solid" :class="ts2En ? 'fa-eye' : 'fa-eye-slash'"></i> EN</span>
+                                    <span class="ts2-lang" :class="!ts2Ja && 'ts2-off'" @click="ts2ToggleJa()"><i class="ts2-eye fa-solid" :class="ts2Ja ? 'fa-eye' : 'fa-eye-slash'"></i> 日本語</span>
+                                    <span class="ts2-date">2024-09-22</span>
+                                </div>
+                                <div class="ts2-excerpt" :class="ts2En && ts2Ja && 'ts2-dual'">
+                                    <div class="ts2-ex-col" x-show="ts2En">Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora consequuntur, libero cumque inventore saepe ad molestias sunt facilis error est iste. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+                                    <div class="ts2-ex-col" x-show="ts2Ja">これは、いつものように、猫を飼っている猿が、鶏を餌にしていることを知っています。フォースの力だけでイワシを焼く方法は、古くからジェダイの間で伝えられてきた秘伝の技術です。</div>
+                                </div>
+                            </div></div>
+                        </div>
+                        <div class="ts2-row" :class="ts2Open === 2 && 'ts2-open'" @click="ts2Toggle(2)">
+                            <div class="ts2-title-bar">
+                                <span class="ts2-row-icon"><i class="fa-solid fa-align-left fa-fw"></i></span>
+                                <a href="topic-show.html" class="ts2-title" @click.stop="if (ts2Open !== 2) { $event.preventDefault(); ts2Toggle(2); }">The perfect onigiri does not exist and here is why</a>
+                                <span class="ts2-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+                            </div>
+                            <div class="ts2-panel"><div class="ts2-panel-inner">
+                                <div class="ts2-rail" @click.stop>
+                                    <span class="ts2-lang" :class="!ts2En && 'ts2-off'" @click="ts2ToggleEn()"><i class="ts2-eye fa-solid" :class="ts2En ? 'fa-eye' : 'fa-eye-slash'"></i> EN</span>
+                                    <span class="ts2-lang" :class="!ts2Ja && 'ts2-off'" @click="ts2ToggleJa()"><i class="ts2-eye fa-solid" :class="ts2Ja ? 'fa-eye' : 'fa-eye-slash'"></i> 日本語</span>
+                                    <span class="ts2-date">2024-09-15</span>
+                                </div>
+                                <div class="ts2-excerpt" :class="ts2En && ts2Ja && 'ts2-dual'">
+                                    <div class="ts2-ex-col" x-show="ts2En">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</div>
+                                    <div class="ts2-ex-col" x-show="ts2Ja">重要なのは、フォースの温度制御です。高すぎると焦げてしまい、低すぎると生焼けになります。理想的な温度は約175度で、これをフォースの集中力だけで維持するのは高度な技術を要します。</div>
+                                </div>
+                            </div></div>
+                        </div>
+                        <div class="ts2-row" :class="ts2Open === 3 && 'ts2-open'" @click="ts2Toggle(3)">
+                            <div class="ts2-title-bar">
+                                <span class="ts2-row-icon"><i class="fa-solid fa-align-left fa-fw"></i></span>
+                                <a href="topic-show.html" class="ts2-title" @click.stop="if (ts2Open !== 3) { $event.preventDefault(); ts2Toggle(3); }">My neighbor's cat is plotting something against me</a>
+                                <span class="ts2-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+                            </div>
+                            <div class="ts2-panel"><div class="ts2-panel-inner">
+                                <div class="ts2-rail" @click.stop>
+                                    <span class="ts2-lang" :class="!ts2En && 'ts2-off'" @click="ts2ToggleEn()"><i class="ts2-eye fa-solid" :class="ts2En ? 'fa-eye' : 'fa-eye-slash'"></i> EN</span>
+                                    <span class="ts2-lang" :class="!ts2Ja && 'ts2-off'" @click="ts2ToggleJa()"><i class="ts2-eye fa-solid" :class="ts2Ja ? 'fa-eye' : 'fa-eye-slash'"></i> 日本語</span>
+                                    <span class="ts2-date">2024-09-08</span>
+                                </div>
+                                <div class="ts2-excerpt" :class="ts2En && ts2Ja && 'ts2-dual'">
+                                    <div class="ts2-ex-col" x-show="ts2En">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</div>
+                                    <div class="ts2-ex-col" x-show="ts2Ja">フォースによる調理中は、ダークサイドに引き寄せられないよう注意してください。怒りや恐れの感情がフォースの温度を不安定にし、イワシだけでなく周囲の環境にも悪影響を及ぼす可能性があります。</div>
+                                </div>
+                            </div></div>
+                        </div>
+                        <div class="ts2-row" :class="ts2Open === 4 && 'ts2-open'" @click="ts2Toggle(4)">
+                            <div class="ts2-title-bar">
+                                <span class="ts2-row-icon"><i class="fa-solid fa-align-left fa-fw"></i></span>
+                                <a href="topic-show.html" class="ts2-title" @click.stop="if (ts2Open !== 4) { $event.preventDefault(); ts2Toggle(4); }">Best convenience store food ranking of all time</a>
+                                <span class="ts2-chevron"><i class="fa-solid fa-chevron-right"></i></span>
+                            </div>
+                            <div class="ts2-panel"><div class="ts2-panel-inner">
+                                <div class="ts2-rail" @click.stop>
+                                    <span class="ts2-lang" :class="!ts2En && 'ts2-off'" @click="ts2ToggleEn()"><i class="ts2-eye fa-solid" :class="ts2En ? 'fa-eye' : 'fa-eye-slash'"></i> EN</span>
+                                    <span class="ts2-lang" :class="!ts2Ja && 'ts2-off'" @click="ts2ToggleJa()"><i class="ts2-eye fa-solid" :class="ts2Ja ? 'fa-eye' : 'fa-eye-slash'"></i> 日本語</span>
+                                    <span class="ts2-date">2024-08-25</span>
+                                </div>
+                                <div class="ts2-excerpt" :class="ts2En && ts2Ja && 'ts2-dual'">
+                                    <div class="ts2-ex-col" x-show="ts2En">Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</div>
+                                    <div class="ts2-ex-col" x-show="ts2Ja">この技術は特にヨーダマスターが得意としていたと言われています。彼の小さな手でも、フォースを使えば大量のイワシを一度に焼くことができました。</div>
+                                </div>
+                            </div></div>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </body>
+</html>

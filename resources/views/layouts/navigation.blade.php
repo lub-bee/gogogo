@@ -12,31 +12,14 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('event.index')" :active="request()->routeIs('event.*')">
-                        {{ __('Event') }}
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('topic.index')" :active="request()->routeIs('topic.*')">
-                        {{ __('Topic') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('location.index')" :active="request()->routeIs('location.*')">
-                        {{ __('Location') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.*')">
-                        {{ __('User') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('media.index')" :active="request()->routeIs('media.*')">
-                        {{ __('Media') }}
-                    </x-nav-link>
-                    {{-- <x-nav-link :href="route('tag.index')" :active="request()->routeIs('tag.*')">
-                        {{ __('Tags') }}
-                    </x-nav-link> --}}
                 </div>
             </div>
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <a href="{{ route('top') }}">See site</a>
-
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -51,14 +34,6 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <div class='flex w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 justify-between border-b'>
-                            <div class=''>
-                                Rank
-                            </div>
-                            <div class='uppercase'>
-                                {{ Auth::user()->rank }}
-                            </div>
-                        </div>
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
@@ -92,24 +67,9 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('event.index')" :active="request()->routeIs('event.*')">
-                {{ __('Event') }}
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('topic.index')" :active="request()->routeIs('topic.*')">
-                {{ __('Topic') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('location.index')" :active="request()->routeIs('location.*')">
-                {{ __('Location') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('user.index')" :active="request()->routeIs('user.*')">
-                {{ __('User') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('media.index')" :active="request()->routeIs('media.*')">
-                {{ __('Media') }}
-            </x-responsive-nav-link>
-            {{-- <x-responsive-nav-link :href="route('tag.index')" :active="request()->routeIs('tag.*')">
-                {{ __('Tag') }}
-            </x-responsive-nav-link> --}}
         </div>
 
         <!-- Responsive Settings Options -->
@@ -117,10 +77,6 @@
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-            </div>
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800">Role</div>
-                <div class="font-medium text-sm text-gray-500 uppercase">{{ Auth::user()->rank }}</div>
             </div>
 
             <div class="mt-3 space-y-1">

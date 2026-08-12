@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="STATIC-PLACEHOLDER">
+
+        <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+        <link rel="manifest" href="images/favicon/site.webmanifest">
+
+        <title>GoGoGo — All Events</title>
+
+        <link href="assets/fonts/figtree.css" rel="stylesheet" />
+        <link rel="stylesheet" href="assets/app.css">
+        <script defer src="assets/app.js"></script>
+        <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" />
+    </head>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-slate-700 text-white">
+
+            <aside class='menu reversed hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'>
+                <a href="index.html#agenda">&#8249; Back</a>
+            </aside>
+
+            <!-- Giant header — wrapped in .top for header CSS -->
+            <div class="top">
+                <header class='bg-white text-slate-700'>
+                    Agenda
+                </header>
+            </div>
+
+            <!-- Main content — normal vertical scroll -->
+            <main class="max-w-6xl mx-auto px-4 md:px-8 py-8" x-data="agendaFeed()">
+
+                <template x-for="(item, ii) in items" :key="'i'+ii">
+                    <div>
+                        <!-- Year marker -->
+                        <template x-if="item.type === 'year'">
+                            <div class="text-center font-bold text-[5rem] sm:text-[8rem] lg:text-[12rem] leading-[4rem] sm:leading-[6rem] lg:leading-[10rem] -tracking-[0.14em] text-white mb-6 mt-2"
+                                 x-text="item.year"></div>
+                        </template>
+                        <!-- Month row -->
+                        <template x-if="item.type === 'month'">
+                            <div class="flex flex-col lg:flex-row gap-4 lg:gap-14 mb-10">
+                                <div class="lg:text-right flex-none lg:w-1/4 font-bold text-[3rem] sm:text-[4.5rem] lg:text-[7rem] leading-[2rem] md:leading-[3rem] lg:leading-[6rem] -tracking-[0.12em]"
+                                     x-text="item.name"></div>
+                                <div class="flex-1 text-[2rem] sm:text-[2.5rem] leading-[3rem] sm:leading-[4.5rem] divide-y lg:divide-y-4">
+                                    <template x-for="(ev, ei) in item.events" :key="'e'+ii+'-'+ei">
+                                        <a class="flex gap-8 group" href="event.html">
+                                            <div class="font-bold tracking-widest" x-text="ev.day"></div>
+                                            <div><i class="fas fa-fw" :class="ev.icon"></i></div>
+                                            <div class="-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap"
+                                                 x-text="ev.title"></div>
+                                        </a>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <!-- Infinite scroll sentinel -->
+                <div x-ref="sentinel" class="h-4"></div>
+
+            </main>
+
+            <script>
+                function agendaFeed() {
+                    const monthNames = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEPT','OCT','NOV','DEC'];
+                    const eventPool = [
+                        { title: 'Gogogo at The Mall', icon: 'fa-book' },
+                        { title: 'Badminton night!', icon: 'fa-mug-hot' },
+                        { title: 'Oktoberfest at Nichikichou Koen', icon: 'fa-mug-hot' },
+                        { title: 'Trip to Matsushima', icon: 'fa-mug-hot' },
+                        { title: 'Gogogo Friday', icon: 'fa-book' },
+                        { title: 'Hanami picnic', icon: 'fa-mug-hot' },
+                        { title: 'Gogogo Sunday', icon: 'fa-book' },
+                        { title: 'Board game night', icon: 'fa-mug-hot' }
+                    ];
+                    return {
+                        items: [],
+                        curMonth: new Date().getMonth(),  // 0-based (0=Jan)
+                        curYear: new Date().getFullYear(),
+                        startYear: new Date().getFullYear(), // never gets a marker
+                        loading: false,
+                        init() {
+                            this.addBatch();
+                            this.$nextTick(() => {
+                                const observer = new IntersectionObserver((entries) => {
+                                    if (entries[0].isIntersecting && !this.loading) {
+                                        this.loading = true;
+                                        setTimeout(() => {
+                                            this.addBatch();
+                                            this.loading = false;
+                                        }, 300);
+                                    }
+                                }, { rootMargin: '200px' });
+                                observer.observe(this.$refs.sentinel);
+                            });
+                        },
+                        addBatch() {
+                            for (let b = 0; b < 3; b++) {
+                                const name = monthNames[this.curMonth];
+                                // 2-4 events per month
+                                const seed = this.curMonth + this.curYear * 12;
+                                const count = 2 + (seed % 3);
+                                const events = [];
+                                for (let e = 0; e < count; e++) {
+                                    const pool = eventPool[(seed * 3 + e) % eventPool.length];
+                                    const day = String(5 + e * 7 + (seed % 5)).padStart(2, '0');
+                                    events.push({ day: day, title: pool.title, icon: pool.icon });
+                                }
+                                this.items.push({ type: 'month', name: name, events: events });
+                                // After pushing this month, step back one month
+                                this.curMonth--;
+                                if (this.curMonth < 0) {
+                                    // Crossed from JAN down to DEC — entering previous year
+                                    this.curMonth = 11;
+                                    this.curYear--;
+                                    // Insert year marker for the year we're entering (skip start year)
+                                    if (this.curYear !== this.startYear) {
+                                        this.items.push({ type: 'year', year: String(this.curYear) });
+                                    }
+                                }
+                            }
+                        }
+                    };
+                }
+            </script>
+        </div>
+    </body>
+</html>
