@@ -296,13 +296,6 @@
             .no-wrap {
                 white-space: nowrap;
             }
-            /* Mobile: hide eye icons, exclusive tab style */
-            @media (max-width: 767px) {
-                .tsd-eye { display: none; }
-                .tsd-lang-tab.tsd-hidden-lang {
-                    opacity: 0.4;
-                }
-            }
         </style>
     </head>
     <body class="font-sans antialiased">
@@ -314,16 +307,8 @@
              x-data="{
                 showEn: true,
                 showJa: true,
-                get mob() { return window.innerWidth < 768; },
-                toggleEn() {
-                    if (this.mob) { this.showEn = true; this.showJa = false; }
-                    else { this.showEn = !this.showEn; if (!this.showEn && !this.showJa) this.showJa = true; }
-                },
-                toggleJa() {
-                    if (this.mob) { this.showJa = true; this.showEn = false; }
-                    else { this.showJa = !this.showJa; if (!this.showEn && !this.showJa) this.showEn = true; }
-                },
-                init() { if (this.mob) { this.showJa = false; } }
+                toggleEn() { this.showEn = !this.showEn; if (!this.showEn && !this.showJa) this.showJa = true; },
+                toggleJa() { this.showJa = !this.showJa; if (!this.showEn && !this.showJa) this.showEn = true; }
              }">
 
             <!-- ===== #1 Section header (inline CSS reproduces .top header) ===== -->
