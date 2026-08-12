@@ -25,6 +25,16 @@
         <!-- FontAwesome (self-hosted, was cdnjs 6.5.1) -->
         <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" />
 
+        <!-- ── Fix: classes missing from precompiled Tailwind ── -->
+        <style>
+            .no-wrap {
+                white-space: nowrap;
+            }
+            .group:hover .see-white {
+                color: #fff;
+            }
+        </style>
+
         <style>
             /* Media gallery — photo placeholder tiles */
             .photo-tile {
@@ -88,7 +98,7 @@
             .media-lightbox-overlay {
                 position: absolute;
                 inset: 0;
-                background: rgb(71 85 105);
+                background: rgb(51 65 85);
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -135,13 +145,15 @@
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
 
-            <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'></aside>
+            <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'>
+                <a href="index.html#media">&#8249; Back</a>
+            </aside>
 
             <!-- Page Content -->
             <main class="top relativerelative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
 
                 <!-- ===== section: media ===== -->
-                <section id="media" class="top-section bg-slate-600 flex flex-col"
+                <section id="media" class="top-section bg-slate-700 flex flex-col"
                     x-data="{
                         activeTitle: '',
                         activeDate: '',
@@ -216,9 +228,18 @@
                             }, 300);
                         }
                     }">
-                    <header class='bg-slate-200 text-slate-600'>
+                    <header class='bg-white text-slate-700'>
                         Media
                     </header>
+
+                    <nav class="flex-none flex justify-end text-[3.5rem] md:text-[7rem] leading-[2.3rem] md:leading-[4.5rem] uppercase cursor-pointer text-[#111725]">
+                        <a href="media.html" class='w-full md:w-[45%] md:block relative group pr-4 md:pr-0 text-center bg-[#b7d7fc] md:bg-transparent'>
+                            <div class='hidden md:block absolute top-0 left-0 h-full w-full bg-[#b7d7fc] group-hover:bg-yellow-100 group-hover:scale-x-[10%] transform group-hover:rotate-[30deg] transition-all'></div>
+                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all no-wrap see-white'>
+                                See all
+                            </div>
+                        </a>
+                    </nav>
 
                     <!-- Title + date zone: invisible by default, animates in/out on hover -->
                     <div class="flex-none px-4 md:px-8 lg:px-16 pt-6 pb-2 overflow-hidden" style="min-height: 5.5rem;">
@@ -342,18 +363,6 @@
                                      @click.stop>
                                     <i class="fa-solid fa-image"></i>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Moderation hint -->
-                    <div class="flex-none px-4 md:px-8 lg:px-16 pb-6 pt-2">
-                        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-baseline justify-between">
-                            <div class="text-slate-400 text-sm uppercase tracking-widest">
-                                <i class="fa-solid fa-check-circle fa-fw"></i> All photos reviewed by moderators
-                            </div>
-                            <div class="text-slate-400 text-sm uppercase tracking-widest text-right">
-                                すべての写真はモデレーターにより確認済み
                             </div>
                         </div>
                     </div>

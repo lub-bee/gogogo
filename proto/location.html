@@ -24,11 +24,64 @@
 
         <!-- FontAwesome (self-hosted, was cdnjs 6.5.1) -->
         <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" />
+
+        <!-- ── Fix: classes missing from precompiled Tailwind ── -->
+        <style>
+            .loc-row {
+                gap: 1rem;
+                transition: gap 300ms ease;
+            }
+            .loc-line:hover .loc-row {
+                gap: 50px;
+            }
+            .loc-icon {
+                font-size: 1.5rem;
+            }
+            @media (min-width: 640px) {
+                .loc-icon { font-size: 2rem; }
+            }
+            @media (min-width: 1024px) {
+                .loc-icon { font-size: 3rem; }
+            }
+            .loc-title {
+                transition: font-size 300ms ease, line-height 300ms ease, letter-spacing 300ms ease;
+            }
+            .loc-line:hover .loc-title {
+                font-size: 2.2rem;
+                line-height: 2.4rem;
+            }
+            @media (min-width: 640px) {
+                .loc-line:hover .loc-title {
+                    font-size: 3.2rem;
+                    line-height: 3.4rem;
+                }
+            }
+            @media (min-width: 1024px) {
+                .loc-line:hover .loc-title {
+                    font-size: 4.8rem;
+                    line-height: 5rem;
+                }
+            }
+            .loc-sub {
+                margin-left: 2.5rem;
+            }
+            @media (min-width: 640px) {
+                .loc-sub { margin-left: 3rem; }
+            }
+            @media (min-width: 1024px) {
+                .loc-sub { margin-left: 4rem; }
+            }
+            .no-wrap {
+                white-space: nowrap;
+            }
+        </style>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
 
-            <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'></aside>
+            <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'>
+                <a href="index.html#location">&#8249; Back</a>
+            </aside>
 
             <!-- Page Content -->
             <main class="top relativerelative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
@@ -39,69 +92,96 @@
                         Location
                     </header>
 
+                    <nav class="flex-none flex justify-end text-[3.5rem] md:text-[7rem] leading-[2.3rem] md:leading-[4.5rem] uppercase cursor-pointer text-[#111725]">
+                        <a href="location.html" class='w-full md:w-[45%] md:block relative group pr-4 md:pr-0 text-center bg-pink-200 md:bg-transparent'>
+                            <div class='hidden md:block absolute top-0 left-0 h-full w-full bg-pink-200 group-hover:bg-yellow-100 group-hover:scale-x-[10%] transform group-hover:rotate-[30deg] transition-all'></div>
+                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all no-wrap'>
+                                See all
+                            </div>
+                        </a>
+                    </nav>
+
                     <div class='flex-1 max-w-6xl mx-auto flex flex-col justify-center w-full px-4'>
 
-                        <!-- Venue 1 — left -->
-                        <a href="location-show.html" class='group flex flex-col items-start py-2'>
-                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
-                                The Mall Sendai Nagamachi
+                        <!-- Venue 1 — coffee shop -->
+                        <a href="location-show.html" class='loc-line group flex flex-col items-start py-2'>
+                            <div class='flex loc-row items-center'>
+                                <i class="fa-solid fa-mug-hot fa-fw loc-icon"></i>
+                                <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight loc-title'>
+                                    The Mall Sendai Nagamachi
+                                </div>
                             </div>
-                            <div class='flex gap-3 items-baseline mt-1'>
+                            <div class='flex gap-3 items-baseline mt-1 loc-sub'>
                                 <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>14 events</span>
                                 <span class='text-xs sm:text-sm text-slate-400'>14件</span>
                             </div>
                         </a>
 
-                        <!-- Venue 2 — right -->
-                        <a href="location-show.html" class='group flex flex-col items-end text-right py-2'>
-                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
-                                Nishikichou Koen
+                        <!-- Venue 2 — other -->
+                        <a href="location-show.html" class='loc-line group flex flex-col items-start py-2'>
+                            <div class='flex loc-row items-center'>
+                                <i class="fa-solid fa-location-dot fa-fw loc-icon"></i>
+                                <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight loc-title'>
+                                    Nishikichou Koen
+                                </div>
                             </div>
-                            <div class='flex gap-3 items-baseline mt-1'>
+                            <div class='flex gap-3 items-baseline mt-1 loc-sub'>
                                 <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>8 events</span>
                                 <span class='text-xs sm:text-sm text-slate-400'>8件</span>
                             </div>
                         </a>
 
-                        <!-- Venue 3 — left -->
-                        <a href="location-show.html" class='group flex flex-col items-start py-2'>
-                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
-                                Mediatheque Sendai
+                        <!-- Venue 3 — study room -->
+                        <a href="location-show.html" class='loc-line group flex flex-col items-start py-2'>
+                            <div class='flex loc-row items-center'>
+                                <i class="fa-solid fa-book fa-fw loc-icon"></i>
+                                <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight loc-title'>
+                                    Mediatheque Sendai
+                                </div>
                             </div>
-                            <div class='flex gap-3 items-baseline mt-1'>
+                            <div class='flex gap-3 items-baseline mt-1 loc-sub'>
                                 <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>6 events</span>
                                 <span class='text-xs sm:text-sm text-slate-400'>6件</span>
                             </div>
                         </a>
 
-                        <!-- Venue 4 — right -->
-                        <a href="location-show.html" class='group flex flex-col items-end text-right py-2'>
-                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
-                                Kotodai Koen
+                        <!-- Venue 4 — other -->
+                        <a href="location-show.html" class='loc-line group flex flex-col items-start py-2'>
+                            <div class='flex loc-row items-center'>
+                                <i class="fa-solid fa-location-dot fa-fw loc-icon"></i>
+                                <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight loc-title'>
+                                    Kotodai Koen
+                                </div>
                             </div>
-                            <div class='flex gap-3 items-baseline mt-1'>
+                            <div class='flex gap-3 items-baseline mt-1 loc-sub'>
                                 <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>5 events</span>
                                 <span class='text-xs sm:text-sm text-slate-400'>5件</span>
                             </div>
                         </a>
 
-                        <!-- Venue 5 — left -->
-                        <a href="location-show.html" class='group flex flex-col items-start py-2'>
-                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
-                                Izumi Chuo Station Plaza
+                        <!-- Venue 5 — restaurant -->
+                        <a href="location-show.html" class='loc-line group flex flex-col items-start py-2'>
+                            <div class='flex loc-row items-center'>
+                                <i class="fa-solid fa-utensils fa-fw loc-icon"></i>
+                                <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight loc-title'>
+                                    Izumi Chuo Station Plaza
+                                </div>
                             </div>
-                            <div class='flex gap-3 items-baseline mt-1'>
+                            <div class='flex gap-3 items-baseline mt-1 loc-sub'>
                                 <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>3 events</span>
                                 <span class='text-xs sm:text-sm text-slate-400'>3件</span>
                             </div>
                         </a>
 
-                        <!-- Venue 6 — right -->
-                        <a href="location-show.html" class='group flex flex-col items-end text-right py-2'>
-                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
-                                Aoba Community Center
+                        <!-- Venue 6 — study room -->
+                        <a href="location-show.html" class='loc-line group flex flex-col items-start py-2'>
+                            <div class='flex loc-row items-center'>
+                                <i class="fa-solid fa-book fa-fw loc-icon"></i>
+                                <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight loc-title'>
+                                    Aoba Community Center
+                                </div>
                             </div>
-                            <div class='flex gap-3 items-baseline mt-1'>
+                            <div class='flex gap-3 items-baseline mt-1 loc-sub'>
                                 <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>2 events</span>
                                 <span class='text-xs sm:text-sm text-slate-400'>2件</span>
                             </div>

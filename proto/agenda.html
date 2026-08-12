@@ -24,11 +24,23 @@
 
         <!-- FontAwesome (self-hosted, was cdnjs 6.5.1) -->
         <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" />
+
+        <!-- ── Fix: classes missing from precompiled Tailwind ── -->
+        <style>
+            .no-wrap {
+                white-space: nowrap;
+            }
+            .group:hover .see-white {
+                color: #fff;
+            }
+        </style>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
 
-            <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'></aside>
+            <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'>
+                <a href="index.html#agenda">&#8249; Back</a>
+            </aside>
 
             <!-- Page Content -->
             <main class="top relativerelative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
@@ -38,6 +50,15 @@
                     <header class='bg-white text-slate-700'>
                         Agenda
                     </header>
+
+                    <nav class="flex-none flex justify-end text-[3.5rem] md:text-[7rem] leading-[2.3rem] md:leading-[4.5rem] uppercase cursor-pointer text-[#111725]">
+                        <a href="agenda-all.html" class='w-full md:w-[45%] md:block relative group pr-4 md:pr-0 text-center bg-[#b7d7fc] md:bg-transparent'>
+                            <div class='hidden md:block absolute top-0 left-0 h-full w-full bg-[#b7d7fc] group-hover:bg-yellow-100 group-hover:scale-x-[10%] transform group-hover:rotate-[30deg] transition-all'></div>
+                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all no-wrap see-white'>
+                                See all
+                            </div>
+                        </a>
+                    </nav>
 
                     <div class='flex-1 max-w-6xl mx-auto flex flex-col justify-evenly w-screen'>
                         <div class='flex flex-col lg:flex-row gap-4 lg:gap-14 mx-4 overflow-hidden'>
@@ -81,11 +102,6 @@
                             </div>
                         </div>
 
-                        <div class='text-center lg:my-4'>
-                            <a href="agenda-all.html" class='btn btn-main' >
-                                See all
-                            </a>
-                        </div>
                     </div>
                 </section>
 

@@ -25,6 +25,76 @@
         <!-- FontAwesome (self-hosted, was cdnjs 6.5.1) -->
         <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" />
 
+        <!-- ── Fix: classes missing from precompiled Tailwind ── -->
+        <style>
+            /* Location venue lines */
+            .loc-row {
+                gap: 1rem;
+                transition: gap 300ms ease;
+            }
+            .loc-line:hover .loc-row {
+                gap: 50px;
+            }
+            .loc-icon {
+                font-size: 1.5rem;
+            }
+            @media (min-width: 640px) {
+                .loc-icon { font-size: 2rem; }
+            }
+            @media (min-width: 1024px) {
+                .loc-icon { font-size: 3rem; }
+            }
+            .loc-title {
+                transition: font-size 300ms ease, line-height 300ms ease, letter-spacing 300ms ease;
+            }
+            .loc-line:hover .loc-title {
+                font-size: 2.2rem;
+                line-height: 2.4rem;
+            }
+            @media (min-width: 640px) {
+                .loc-line:hover .loc-title {
+                    font-size: 3.2rem;
+                    line-height: 3.4rem;
+                }
+            }
+            @media (min-width: 1024px) {
+                .loc-line:hover .loc-title {
+                    font-size: 4.8rem;
+                    line-height: 5rem;
+                }
+            }
+            .loc-sub {
+                margin-left: 2.5rem;
+            }
+            @media (min-width: 640px) {
+                .loc-sub { margin-left: 3rem; }
+            }
+            @media (min-width: 1024px) {
+                .loc-sub { margin-left: 4rem; }
+            }
+            /* Topic "See all" band — yellow initial, blue hover */
+            .diag-band-topic {
+                background-color: #fef9c3;
+            }
+            .group:hover .diag-band-topic {
+                background-color: #b7d7fc !important;
+            }
+            .diag-bg-yellow {
+                background-color: #fef9c3;
+            }
+            @media (min-width: 768px) {
+                .diag-bg-yellow { background-color: transparent; }
+            }
+            /* Whitespace nowrap (missing from compiled CSS) */
+            .no-wrap {
+                white-space: nowrap;
+            }
+            /* Diagonal nav label — white on hover (agenda + media) */
+            .group:hover .see-white {
+                color: #fff;
+            }
+        </style>
+
         <style>
             /* Media gallery — photo placeholder tiles */
             .photo-tile {
@@ -88,7 +158,7 @@
             .media-lightbox-overlay {
                 position: absolute;
                 inset: 0;
-                background: rgb(71 85 105);
+                background: rgb(51 65 85);
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -157,7 +227,7 @@
             .topic-card:hover {
                 transform: scale(1.2);
                 z-index: 50;
-                background-color: #fff !important;
+                background-color: #e2e8f0 !important;
             }
             .topic-card-tl { transform-origin: top left; }
             .topic-card-tr { transform-origin: top right; }
@@ -180,290 +250,21 @@
                 font-weight: 700;
                 text-transform: uppercase;
                 letter-spacing: -0.11em;
-                color: #f97316;
+                color: #334155;
                 transition-property: all;
                 transition-timing-function: cubic-bezier(.4,0,.2,1);
                 transition-duration: .15s;
             }
             .topic-readme:hover {
                 letter-spacing: 0;
-                background-color: #f97316;
+                background-color: #334155;
                 color: #fff;
             }
         </style>
-        <!-- ── Topic-show modal (namespaced ts-*) ── -->
-        <style>
-            .ts-overlay {
-                --ts-bg: #111625;
-                --ts-text: #8999ae;
-                --ts-hover-bg: #8999ae;
-                --ts-hover-text: #111625;
-                position: fixed;
-                inset: 0;
-                z-index: 9999;
-                background: var(--ts-bg);
-                color: var(--ts-text);
-                font-family: 'Figtree', sans-serif;
-                display: grid;
-                grid-template-rows: auto 1fr;
-                grid-template-columns: 1fr;
-                transition: background 0.3s ease, color 0.3s ease;
-            }
-            .ts-overlay.ts-light-mode {
-                --ts-bg: #eef1f5;
-                --ts-text: #2d3a4e;
-                --ts-hover-bg: #2d3a4e;
-                --ts-hover-text: #eef1f5;
-            }
-            .ts-top {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-                padding: 2rem 2.5rem 1rem 2.5rem;
-            }
-            .ts-title {
-                font-size: clamp(2.2rem, 5vw, 4.5rem);
-                font-weight: 700;
-                line-height: 1.1;
-                max-width: 85%;
-            }
-            .ts-top-right {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 1.2rem;
-                flex-shrink: 0;
-                padding-top: 0.2rem;
-            }
-            .ts-close {
-                font-size: 5rem;
-                line-height: 1;
-                text-decoration: none;
-                color: var(--ts-text);
-                cursor: pointer;
-                transition: color 0.2s;
-                font-weight: 700;
-            }
-            .ts-close:hover { opacity: 0.7; }
-            .ts-mode-toggle {
-                font-size: 5rem;
-                cursor: pointer;
-                color: var(--ts-text);
-                transition: color 0.2s;
-                background: none;
-                border: none;
-                padding: 0;
-            }
-            .ts-mode-toggle:hover { opacity: 0.7; }
-            .ts-body {
-                display: flex;
-                min-height: 0;
-                padding: 0 2.5rem 2rem 2.5rem;
-                gap: 2rem;
-            }
-            .ts-rail {
-                flex-shrink: 0;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                min-width: 220px;
-                padding-top: 0.5rem;
-            }
-            .ts-lang-tabs {
-                display: flex;
-                flex-direction: column;
-                gap: 0.6rem;
-            }
-            .ts-lang-tab {
-                position: relative;
-                font-size: 2.3rem;
-                font-weight: 700;
-                letter-spacing: 0.04em;
-                text-transform: uppercase;
-                cursor: pointer;
-                padding: 0.3rem 0.8rem;
-                z-index: 1;
-                transition: color 0.25s ease;
-                user-select: none;
-                display: inline-block;
-                align-self: flex-start;
-            }
-            .ts-lang-tab.ja {
-                margin-left: 2.5rem;
-                text-transform: none;
-                font-size: 2.5rem;
-            }
-            .ts-lang-tab::before {
-                content: '';
-                position: absolute;
-                inset: 0;
-                background: var(--ts-hover-bg);
-                transform: skewX(-8deg) scaleX(0);
-                transform-origin: left center;
-                transition: transform 0.3s ease;
-                z-index: -1;
-            }
-            .ts-lang-tab:hover::before {
-                transform: skewX(-8deg) scaleX(1);
-            }
-            .ts-lang-tab:hover {
-                color: var(--ts-hover-text);
-            }
-            .ts-download-area {
-                position: relative;
-                cursor: pointer;
-                align-self: flex-start;
-                padding-bottom: 1rem;
-            }
-            .ts-download-label-topic {
-                font-size: 2rem;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: 0.04em;
-                opacity: 0;
-                transition: opacity 0.25s ease;
-                padding: 0.2rem 0.8rem 0;
-                position: relative;
-                z-index: 1;
-            }
-            .ts-download-label {
-                font-size: 2.3rem;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: 0.04em;
-                padding: 0 0.8rem 0.3rem;
-                position: relative;
-                z-index: 1;
-                transition: color 0.25s ease;
-            }
-            .ts-download-slab {
-                position: absolute;
-                inset: 0;
-                background: var(--ts-hover-bg);
-                transform: scaleY(0);
-                transform-origin: bottom center;
-                transition: transform 0.3s ease;
-                z-index: 0;
-            }
-            .ts-download-area:hover .ts-download-slab {
-                transform: scaleY(1);
-            }
-            .ts-download-area:hover .ts-download-label-topic {
-                opacity: 1;
-                color: var(--ts-hover-text);
-            }
-            .ts-download-area:hover .ts-download-label {
-                color: var(--ts-hover-text);
-            }
-            .ts-content {
-                flex: 1;
-                overflow-y: auto;
-                min-height: 0;
-                padding-right: 1rem;
-                padding-top: 0.5rem;
-                scrollbar-width: thin;
-                scrollbar-color: var(--ts-text) transparent;
-            }
-            .ts-content::-webkit-scrollbar { width: 6px; }
-            .ts-content::-webkit-scrollbar-track { background: transparent; }
-            .ts-content::-webkit-scrollbar-thumb { background: var(--ts-text); border-radius: 3px; opacity: 0.4; }
-            .ts-content .t1 {
-                font-size: 2rem;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: 0.02em;
-                margin-bottom: 0.6rem;
-                border-bottom: 1px solid var(--ts-text);
-                padding-bottom: 0.3rem;
-                display: inline-block;
-            }
-            .ts-content .sub {
-                font-size: 1.3rem;
-                font-weight: 700;
-                margin-bottom: 0.3rem;
-            }
-            .ts-content .subsub {
-                font-size: 1.1rem;
-                font-weight: 500;
-                margin-bottom: 0.5rem;
-            }
-            .ts-content .normal {
-                font-size: 0.95rem;
-                line-height: 1.6;
-                margin-bottom: 0.8rem;
-            }
-            .ts-content ol {
-                list-style: decimal;
-                padding-left: 1.5rem;
-                margin-bottom: 1rem;
-                font-size: 0.95rem;
-                line-height: 1.7;
-            }
-            .ts-content .rich-line {
-                font-size: 0.95rem;
-                line-height: 1.7;
-                margin-bottom: 1.5rem;
-            }
-            .ts-content .rich-line a {
-                text-decoration: underline;
-                color: var(--ts-text);
-            }
-            .ts-content table {
-                width: 100%;
-                border-collapse: collapse;
-                font-size: 0.95rem;
-                margin-bottom: 1.2rem;
-            }
-            .ts-content table th {
-                font-weight: 700;
-                text-align: left;
-                padding: 0.5rem 0.8rem;
-                border-bottom: 2px solid currentColor;
-                opacity: 0.8;
-            }
-            .ts-content table td {
-                padding: 0.45rem 0.8rem;
-                border-bottom: 1px solid;
-                border-color: color-mix(in srgb, currentColor 20%, transparent);
-            }
-            .ts-content table tr:last-child td {
-                border-bottom: none;
-            }
-            @media (max-width: 768px) {
-                .ts-top {
-                    padding: 1.2rem 1rem 0.5rem 1rem;
-                }
-                .ts-title {
-                    font-size: 2rem;
-                    max-width: 78%;
-                }
-                .ts-close {
-                    font-size: 3rem;
-                }
-                .ts-body {
-                    flex-direction: column;
-                    padding: 0 1rem 1rem 1rem;
-                    gap: 1rem;
-                }
-                .ts-rail {
-                    flex-direction: row;
-                    min-width: unset;
-                    align-items: center;
-                    gap: 1.5rem;
-                }
-                .ts-lang-tabs {
-                    flex-direction: row;
-                    gap: 1rem;
-                }
-                .ts-lang-tab { font-size: 1.2rem; }
-                .ts-lang-tab.ja { margin-left: 0; font-size: 1.3rem; }
-                .ts-download-label { font-size: 1.2rem; }
-                .ts-download-label-topic { font-size: 1.1rem; }
-            }
-        </style>
+        <!-- ts-overlay styles removed — replaced by topic-show.html standalone page -->
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100" x-data="{ topicOpen: false }">
+        <div class="min-h-screen bg-gray-100">
 
             <!-- x-menu (route: top) -->
             <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'>
@@ -602,14 +403,14 @@
                     <nav class="text-slate-900 flex static md:absolute top-[8rem] right-0 text-[3.5rem] md:text-[7rem] leading-[2.3rem] md:leading-[4.5rem] uppercase  cursor-pointer">
                         <a href="event.html" class='flex-1 md:block relative group pl-4 md:pl-0 bg-pink-200 md:bg-transparent'>
                             <div class='hidden md:block absolute top-0 left-0 h-full w-full bg-pink-200 group-hover:bg-yellow-100 group-hover:scale-x-[10%] transform group-hover:rotate-[-30deg] transition-all'></div>
-                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all'>
+                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all no-wrap'>
                                 Prev
                             </div>
                         </a>
 
                         <div class='flex-1 md:block relative group pr-4 md:pr-0 text-right bg-pink-200 md:bg-transparent'>
                             <div class='hidden md:block absolute top-0 left-0 h-full w-full bg-pink-200 group-hover:bg-yellow-100 group-hover:scale-x-[10%] transform group-hover:rotate-[30deg] transition-all'></div>
-                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all'>
+                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all no-wrap'>
                                 Next
                             </div>
                         </div>
@@ -684,6 +485,15 @@
                         Agenda
                     </header>
 
+                    <nav class="flex-none flex justify-end text-[3.5rem] md:text-[7rem] leading-[2.3rem] md:leading-[4.5rem] uppercase cursor-pointer text-[#111725]">
+                        <a href="agenda-all.html" class='w-full md:w-[45%] md:block relative group pr-4 md:pr-0 text-center bg-[#b7d7fc] md:bg-transparent'>
+                            <div class='hidden md:block absolute top-0 left-0 h-full w-full bg-[#b7d7fc] group-hover:bg-yellow-100 group-hover:scale-x-[10%] transform group-hover:rotate-[30deg] transition-all'></div>
+                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all no-wrap see-white'>
+                                See all
+                            </div>
+                        </a>
+                    </nav>
+
                     <div class='flex-1 max-w-6xl mx-auto flex flex-col justify-evenly w-screen'>
                         <div class='flex flex-col lg:flex-row gap-4 lg:gap-14 mx-4 overflow-hidden'>
                             <div class='lg:text-right flex-none lg:w-1/4 font-bold text-[3rem] sm:text-[4.5rem] lg:text-[7rem] leading-[2rem] md:leading-[3rem] lg:leading-[6rem] -tracking-[0.12em]'>
@@ -726,11 +536,6 @@
                             </div>
                         </div>
 
-                        <div class='text-center lg:my-4'>
-                            <a href="agenda-all.html" class='btn btn-main' >
-                                See all
-                            </a>
-                        </div>
                     </div>
                 </section>
 
@@ -837,17 +642,17 @@
                 </section>
 
                 <!-- ===== section: topic ===== -->
-                <section id="topic" class="top-section bg-[#f1f2f4] flex flex-col" style="overflow:visible">
-                    <header class='bg-white text-[#111725]'>
+                <section id="topic" class="top-section bg-white flex flex-col" style="overflow:visible">
+                    <header class='bg-slate-200 text-slate-700'>
                         Topic
                     </header>
 
                     <!-- VIEW ALL — identical structure to NEXT -->
                     <nav class="flex-none flex justify-end text-[3.5rem] md:text-[7rem] leading-[2.3rem] md:leading-[4.5rem] uppercase cursor-pointer text-[#111725]">
-                        <a href="topic-all.html" class='w-full md:w-[45%] md:block relative group pr-4 md:pr-0 text-center bg-[#b7d7fc] md:bg-transparent'>
-                            <div class='hidden md:block absolute top-0 left-0 h-full w-full bg-[#b7d7fc] group-hover:bg-yellow-100 group-hover:scale-x-[10%] transform group-hover:rotate-[30deg] transition-all'></div>
-                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all'>
-                                View all
+                        <a href="topic-all.html" class='w-full md:w-[45%] md:block relative group pr-4 md:pr-0 text-center diag-bg-yellow md:bg-transparent'>
+                            <div class='hidden md:block absolute top-0 left-0 h-full w-full diag-band-topic group-hover:scale-x-[10%] transform group-hover:rotate-[30deg] transition-all'></div>
+                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all no-wrap'>
+                                See all
                             </div>
                         </a>
                     </nav>
@@ -868,7 +673,7 @@
                                         <div>これは、いつものように、猫を飼っている猿が、鶏を餌にしていることを知っています。</div>
                                     </div>
                                     <div class="px-5 md:px-6 pb-5 md:pb-6 pt-4" style="text-align:center">
-                                        <a href="#" @click.prevent="topicOpen = true" class="topic-readme">README</a>
+                                        <a href="topic-show.html" class="topic-readme">README</a>
                                     </div>
                                 </div>
                                 <!-- #3 — older -->
@@ -881,7 +686,7 @@
                                         <div>これは、いつものように、猫を飼っている猿が、鶏を餌にしていることを知っています。</div>
                                     </div>
                                     <div class="px-5 md:px-6 pb-5 md:pb-6 pt-4" style="text-align:center">
-                                        <a href="#" @click.prevent="topicOpen = true" class="topic-readme">README</a>
+                                        <a href="topic-show.html" class="topic-readme">README</a>
                                     </div>
                                 </div>
                             </div>
@@ -898,7 +703,7 @@
                                         <div>これは、いつものように、猫を飼っている猿が、鶏を餌にしていることを知っています。</div>
                                     </div>
                                     <div class="px-5 md:px-6 pb-5 md:pb-6 pt-4" style="text-align:center">
-                                        <a href="#" @click.prevent="topicOpen = true" class="topic-readme">README</a>
+                                        <a href="topic-show.html" class="topic-readme">README</a>
                                     </div>
                                 </div>
                                 <!-- #4 — coldest -->
@@ -911,7 +716,7 @@
                                         <div>これは、いつものように、猫を飼っている猿が、鶏を餌にしていることを知っています。</div>
                                     </div>
                                     <div class="px-5 md:px-6 pb-5 md:pb-6 pt-4" style="text-align:center">
-                                        <a href="#" @click.prevent="topicOpen = true" class="topic-readme">README</a>
+                                        <a href="topic-show.html" class="topic-readme">README</a>
                                     </div>
                                 </div>
                             </div>
@@ -921,7 +726,7 @@
                 </section>
 
                 <!-- ===== section: media ===== -->
-                <section id="media" class="top-section bg-slate-600 flex flex-col"
+                <section id="media" class="top-section bg-slate-700 flex flex-col"
                     x-data="{
                         activeTitle: '',
                         activeDate: '',
@@ -996,9 +801,18 @@
                             }, 300);
                         }
                     }">
-                    <header class='bg-slate-200 text-slate-600'>
+                    <header class='bg-white text-slate-700'>
                         Media
                     </header>
+
+                    <nav class="flex-none flex justify-end text-[3.5rem] md:text-[7rem] leading-[2.3rem] md:leading-[4.5rem] uppercase cursor-pointer text-[#111725]">
+                        <a href="media.html" class='w-full md:w-[45%] md:block relative group pr-4 md:pr-0 text-center bg-[#b7d7fc] md:bg-transparent'>
+                            <div class='hidden md:block absolute top-0 left-0 h-full w-full bg-[#b7d7fc] group-hover:bg-yellow-100 group-hover:scale-x-[10%] transform group-hover:rotate-[30deg] transition-all'></div>
+                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all no-wrap see-white'>
+                                See all
+                            </div>
+                        </a>
+                    </nav>
 
                     <!-- Title + date zone: invisible by default, animates in/out on hover -->
                     <div class="flex-none px-4 md:px-8 lg:px-16 pt-6 pb-2 overflow-hidden" style="min-height: 5.5rem;">
@@ -1125,18 +939,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Moderation hint -->
-                    <div class="flex-none px-4 md:px-8 lg:px-16 pb-6 pt-2">
-                        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-baseline justify-between">
-                            <div class="text-slate-400 text-sm uppercase tracking-widest">
-                                <i class="fa-solid fa-check-circle fa-fw"></i> All photos reviewed by moderators
-                            </div>
-                            <div class="text-slate-400 text-sm uppercase tracking-widest text-right">
-                                すべての写真はモデレーターにより確認済み
-                            </div>
-                        </div>
-                    </div>
                 </section>
 
                 <!-- ===== section: location ===== -->
@@ -1145,69 +947,96 @@
                         Location
                     </header>
 
+                    <nav class="flex-none flex justify-end text-[3.5rem] md:text-[7rem] leading-[2.3rem] md:leading-[4.5rem] uppercase cursor-pointer text-[#111725]">
+                        <a href="location.html" class='w-full md:w-[45%] md:block relative group pr-4 md:pr-0 text-center bg-pink-200 md:bg-transparent'>
+                            <div class='hidden md:block absolute top-0 left-0 h-full w-full bg-pink-200 group-hover:bg-yellow-100 group-hover:scale-x-[10%] transform group-hover:rotate-[30deg] transition-all'></div>
+                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all no-wrap'>
+                                See all
+                            </div>
+                        </a>
+                    </nav>
+
                     <div class='flex-1 max-w-6xl mx-auto flex flex-col justify-center w-full px-4'>
 
-                        <!-- Venue 1 — left -->
-                        <a href="location-show.html" class='group flex flex-col items-start py-2'>
-                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
-                                The Mall Sendai Nagamachi
+                        <!-- Venue 1 — coffee shop -->
+                        <a href="location-show.html" class='loc-line group flex flex-col items-start py-2'>
+                            <div class='flex loc-row items-center'>
+                                <i class="fa-solid fa-mug-hot fa-fw loc-icon"></i>
+                                <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight loc-title'>
+                                    The Mall Sendai Nagamachi
+                                </div>
                             </div>
-                            <div class='flex gap-3 items-baseline mt-1'>
+                            <div class='flex gap-3 items-baseline mt-1 loc-sub'>
                                 <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>14 events</span>
                                 <span class='text-xs sm:text-sm text-slate-400'>14件</span>
                             </div>
                         </a>
 
-                        <!-- Venue 2 — right -->
-                        <a href="location-show.html" class='group flex flex-col items-end text-right py-2'>
-                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
-                                Nishikichou Koen
+                        <!-- Venue 2 — other -->
+                        <a href="location-show.html" class='loc-line group flex flex-col items-start py-2'>
+                            <div class='flex loc-row items-center'>
+                                <i class="fa-solid fa-location-dot fa-fw loc-icon"></i>
+                                <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight loc-title'>
+                                    Nishikichou Koen
+                                </div>
                             </div>
-                            <div class='flex gap-3 items-baseline mt-1'>
+                            <div class='flex gap-3 items-baseline mt-1 loc-sub'>
                                 <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>8 events</span>
                                 <span class='text-xs sm:text-sm text-slate-400'>8件</span>
                             </div>
                         </a>
 
-                        <!-- Venue 3 — left -->
-                        <a href="location-show.html" class='group flex flex-col items-start py-2'>
-                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
-                                Mediatheque Sendai
+                        <!-- Venue 3 — study room -->
+                        <a href="location-show.html" class='loc-line group flex flex-col items-start py-2'>
+                            <div class='flex loc-row items-center'>
+                                <i class="fa-solid fa-book fa-fw loc-icon"></i>
+                                <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight loc-title'>
+                                    Mediatheque Sendai
+                                </div>
                             </div>
-                            <div class='flex gap-3 items-baseline mt-1'>
+                            <div class='flex gap-3 items-baseline mt-1 loc-sub'>
                                 <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>6 events</span>
                                 <span class='text-xs sm:text-sm text-slate-400'>6件</span>
                             </div>
                         </a>
 
-                        <!-- Venue 4 — right -->
-                        <a href="location-show.html" class='group flex flex-col items-end text-right py-2'>
-                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
-                                Kotodai Koen
+                        <!-- Venue 4 — other -->
+                        <a href="location-show.html" class='loc-line group flex flex-col items-start py-2'>
+                            <div class='flex loc-row items-center'>
+                                <i class="fa-solid fa-location-dot fa-fw loc-icon"></i>
+                                <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight loc-title'>
+                                    Kotodai Koen
+                                </div>
                             </div>
-                            <div class='flex gap-3 items-baseline mt-1'>
+                            <div class='flex gap-3 items-baseline mt-1 loc-sub'>
                                 <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>5 events</span>
                                 <span class='text-xs sm:text-sm text-slate-400'>5件</span>
                             </div>
                         </a>
 
-                        <!-- Venue 5 — left -->
-                        <a href="location-show.html" class='group flex flex-col items-start py-2'>
-                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
-                                Izumi Chuo Station Plaza
+                        <!-- Venue 5 — restaurant -->
+                        <a href="location-show.html" class='loc-line group flex flex-col items-start py-2'>
+                            <div class='flex loc-row items-center'>
+                                <i class="fa-solid fa-utensils fa-fw loc-icon"></i>
+                                <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight loc-title'>
+                                    Izumi Chuo Station Plaza
+                                </div>
                             </div>
-                            <div class='flex gap-3 items-baseline mt-1'>
+                            <div class='flex gap-3 items-baseline mt-1 loc-sub'>
                                 <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>3 events</span>
                                 <span class='text-xs sm:text-sm text-slate-400'>3件</span>
                             </div>
                         </a>
 
-                        <!-- Venue 6 — right -->
-                        <a href="location-show.html" class='group flex flex-col items-end text-right py-2'>
-                            <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight transition-all'>
-                                Aoba Community Center
+                        <!-- Venue 6 — study room -->
+                        <a href="location-show.html" class='loc-line group flex flex-col items-start py-2'>
+                            <div class='flex loc-row items-center'>
+                                <i class="fa-solid fa-book fa-fw loc-icon"></i>
+                                <div class='text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[2rem] sm:leading-[3rem] lg:leading-[4.5rem] font-bold uppercase -tracking-[0.12em] group-hover:tracking-tight loc-title'>
+                                    Aoba Community Center
+                                </div>
                             </div>
-                            <div class='flex gap-3 items-baseline mt-1'>
+                            <div class='flex gap-3 items-baseline mt-1 loc-sub'>
                                 <span class='text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-bold'>2 events</span>
                                 <span class='text-xs sm:text-sm text-slate-400'>2件</span>
                             </div>
@@ -1218,182 +1047,6 @@
 
             </main>
 
-            <!-- ===== Topic-show modal overlay ===== -->
-            <div class="ts-overlay"
-                 x-cloak
-                 x-show="topicOpen"
-                 x-transition:enter="transition ease-out duration-300"
-                 x-transition:enter-start="opacity-0 scale-95"
-                 x-transition:enter-end="opacity-100 scale-100"
-                 x-transition:leave="transition ease-in duration-200"
-                 x-transition:leave-start="opacity-100 scale-100"
-                 x-transition:leave-end="opacity-0 scale-95"
-                 x-data="{ tsLang: 'en', tsDark: true }"
-                 :class="{ 'ts-light-mode': !tsDark }"
-                 @keydown.escape.window="topicOpen = false"
-                 style="display: none;">
-
-                <!-- Top row: title + close + mode toggle -->
-                <div class="ts-top">
-                    <h1 class="ts-title">How to grill sardines only using the power of the Force.</h1>
-                    <div class="ts-top-right">
-                        <a href="#" class="ts-close" title="Close" @click.prevent="topicOpen = false"><i class="fa-solid fa-xmark"></i></a>
-                        <button class="ts-mode-toggle" @click="tsDark = !tsDark" :title="tsDark ? 'Switch to light mode' : 'Switch to dark mode'">
-                            <i class="fa-solid" :class="tsDark ? 'fa-moon' : 'fa-sun'"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Body: rail + content -->
-                <div class="ts-body">
-
-                    <!-- Left rail -->
-                    <div class="ts-rail">
-                        <div class="ts-lang-tabs">
-                            <span class="ts-lang-tab" :style="tsLang === 'en' ? 'opacity:1' : 'opacity:0.6'" @click="tsLang = 'en'">English</span>
-                            <span class="ts-lang-tab ja" :style="tsLang === 'ja' ? 'opacity:1' : 'opacity:0.6'" @click="tsLang = 'ja'">日本語</span>
-                        </div>
-
-                        <div class="ts-download-area">
-                            <div class="ts-download-slab"></div>
-                            <div class="ts-download-label-topic">Topic</div>
-                            <div class="ts-download-label">Download</div>
-                        </div>
-                    </div>
-
-                    <!-- Content column — EN -->
-                    <div class="ts-content" x-show="tsLang === 'en'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
-                        <div class="t1">Title 1</div>
-                        <div class="sub">Subtitle</div>
-                        <div class="subsub">Subsubtitle</div>
-                        <div class="normal">Normal text</div>
-                        <ol>
-                            <li>First item in the numbered list</li>
-                            <li>Second item in the numbered list</li>
-                            <li>Third item in the numbered list</li>
-                            <li>Fourth item in the numbered list</li>
-                            <li>Fifth item in the numbered list</li>
-                        </ol>
-                        <ol>
-                            <li>Another first item</li>
-                            <li>Another second item</li>
-                            <li>Another third item</li>
-                            <li>Another fourth item</li>
-                            <li>Another fifth item</li>
-                        </ol>
-                        <div class="rich-line">
-                            <a href="#">Some link here</a>, some <strong>bold text</strong>, some <u>underlined</u> and some <em>italic</em> there.
-                        </div>
-                        <div class="sub">Vocabulary list</div>
-                        <table>
-                            <thead>
-                                <tr><th>English</th><th>日本語</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>Sardine</td><td>イワシ</td></tr>
-                                <tr><td>Grill</td><td>焼く</td></tr>
-                                <tr><td>Force</td><td>フォース</td></tr>
-                                <tr><td>Levitation</td><td>浮遊</td></tr>
-                                <tr><td>Seasoning</td><td>調味料</td></tr>
-                                <tr><td>Crispy</td><td>カリカリ</td></tr>
-                            </tbody>
-                        </table>
-                        <div class="t1">Additional section</div>
-                        <div class="sub">More details below</div>
-                        <div class="normal">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                        </div>
-                        <div class="normal">
-                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-                        </div>
-                        <div class="subsub">Technical notes</div>
-                        <ol>
-                            <li>Preheat the Force to approximately 350 degrees</li>
-                            <li>Lay the sardines in a single layer on the levitation grid</li>
-                            <li>Apply a steady telekinetic rotation every 3 minutes</li>
-                            <li>Season with salt using precision Force-grip</li>
-                            <li>Serve immediately once the scales achieve golden crispiness</li>
-                        </ol>
-                        <div class="normal">
-                            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.
-                        </div>
-                        <div class="sub">Safety warnings</div>
-                        <div class="normal">
-                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
-                        </div>
-                        <div class="normal">
-                            Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.
-                        </div>
-                    </div>
-
-                    <!-- Content column — JA -->
-                    <div class="ts-content" x-show="tsLang === 'ja'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
-                        <div class="t1">タイトル 1</div>
-                        <div class="sub">サブタイトル</div>
-                        <div class="subsub">サブサブタイトル</div>
-                        <div class="normal">通常のテキスト</div>
-                        <ol>
-                            <li>番号付きリストの最初の項目</li>
-                            <li>番号付きリストの2番目の項目</li>
-                            <li>番号付きリストの3番目の項目</li>
-                            <li>番号付きリストの4番目の項目</li>
-                            <li>番号付きリストの5番目の項目</li>
-                        </ol>
-                        <ol>
-                            <li>もう一つの最初の項目</li>
-                            <li>もう一つの2番目の項目</li>
-                            <li>もう一つの3番目の項目</li>
-                            <li>もう一つの4番目の項目</li>
-                            <li>もう一つの5番目の項目</li>
-                        </ol>
-                        <div class="rich-line">
-                            <a href="#">リンクはこちら</a>、<strong>太字テキスト</strong>、<u>下線付き</u>、そして<em>イタリック</em>もあります。
-                        </div>
-                        <div class="sub">語彙リスト</div>
-                        <table>
-                            <thead>
-                                <tr><th>English</th><th>日本語</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>Sardine</td><td>イワシ</td></tr>
-                                <tr><td>Grill</td><td>焼く</td></tr>
-                                <tr><td>Force</td><td>フォース</td></tr>
-                                <tr><td>Levitation</td><td>浮遊</td></tr>
-                                <tr><td>Seasoning</td><td>調味料</td></tr>
-                                <tr><td>Crispy</td><td>カリカリ</td></tr>
-                            </tbody>
-                        </table>
-                        <div class="t1">追加セクション</div>
-                        <div class="sub">詳細情報</div>
-                        <div class="normal">
-                            フォースの力だけでイワシを焼く方法は、古くからジェダイの間で伝えられてきた秘伝の技術です。この技術を習得するには、まずフォースとの深い繋がりを築く必要があります。瞑想を通じて内なる力を呼び覚まし、それを熱エネルギーに変換する訓練を行います。
-                        </div>
-                        <div class="normal">
-                            重要なのは、フォースの温度制御です。高すぎると焦げてしまい、低すぎると生焼けになります。理想的な温度は約175度で、これをフォースの集中力だけで維持するのは高度な技術を要します。多くのパダワンがこの段階で挫折しますが、忍耐強く練習を続けることが成功の鍵です。
-                        </div>
-                        <div class="subsub">技術的な注意事項</div>
-                        <ol>
-                            <li>フォースを約175度に予熱する</li>
-                            <li>浮遊グリッドにイワシを一列に並べる</li>
-                            <li>3分ごとにテレキネシスで回転させる</li>
-                            <li>フォースグリップで精密に塩を振る</li>
-                            <li>鱗が黄金色のカリカリになったらすぐに提供する</li>
-                        </ol>
-                        <div class="normal">
-                            この技術は特にヨーダマスターが得意としていたと言われています。彼の小さな手でも、フォースを使えば大量のイワシを一度に焼くことができました。現代のジェダイも同様の技術を使い、銀河中でこの料理法を広めています。
-                        </div>
-                        <div class="sub">安全上の警告</div>
-                        <div class="normal">
-                            フォースによる調理中は、ダークサイドに引き寄せられないよう注意してください。怒りや恐れの感情がフォースの温度を不安定にし、イワシだけでなく周囲の環境にも悪影響を及ぼす可能性があります。常に心の平静を保ち、フォースとの調和を維持することが重要です。
-                        </div>
-                        <div class="normal">
-                            また、フォースの使用は周囲の人々への影響も考慮する必要があります。テレキネシスの制御が不十分な場合、イワシが飛び散る事故が報告されています。十分な訓練を積んでから実践することを強くお勧めします。
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <!-- /Topic-show modal overlay -->
 
         </div>
     </body>

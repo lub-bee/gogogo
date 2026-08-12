@@ -24,6 +24,25 @@
 
         <!-- FontAwesome (self-hosted, was cdnjs 6.5.1) -->
         <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" />
+
+        <!-- ── Fix: classes missing from precompiled Tailwind ── -->
+        <style>
+            .diag-band-topic {
+                background-color: #fef9c3;
+            }
+            .group:hover .diag-band-topic {
+                background-color: #b7d7fc !important;
+            }
+            .diag-bg-yellow {
+                background-color: #fef9c3;
+            }
+            @media (min-width: 768px) {
+                .diag-bg-yellow { background-color: transparent; }
+            }
+            .no-wrap {
+                white-space: nowrap;
+            }
+        </style>
         <style>
             /* Topic card hover — scale + colors + title slab */
             .topic-card {
@@ -36,7 +55,7 @@
             .topic-card:hover {
                 transform: scale(1.2);
                 z-index: 50;
-                background-color: #fff !important;
+                background-color: #e2e8f0 !important;
             }
             /* Per-corner transform origins for the 2×2 grid */
             .topic-card-tl { transform-origin: top left; }
@@ -62,14 +81,14 @@
                 font-weight: 700;
                 text-transform: uppercase;
                 letter-spacing: -0.11em;
-                color: #f97316;
+                color: #334155;
                 transition-property: all;
                 transition-timing-function: cubic-bezier(.4,0,.2,1);
                 transition-duration: .15s;
             }
             .topic-readme:hover {
                 letter-spacing: 0;
-                background-color: #f97316;
+                background-color: #334155;
                 color: #fff;
             }
         </style>
@@ -77,23 +96,25 @@
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
 
-            <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'></aside>
+            <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'>
+                <a href="index.html#topic">&#8249; Back</a>
+            </aside>
 
             <!-- Page Content -->
             <main class="top relativerelative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
 
                 <!-- ===== section: topic ===== -->
-                <section id="topic" class="top-section bg-[#f1f2f4] flex flex-col" style="overflow:visible">
-                    <header class='bg-white text-[#111725]'>
+                <section id="topic" class="top-section bg-white flex flex-col" style="overflow:visible">
+                    <header class='bg-slate-200 text-slate-700'>
                         Topic
                     </header>
 
                     <!-- VIEW ALL — identical structure to NEXT -->
                     <nav class="flex-none flex justify-end text-[3.5rem] md:text-[7rem] leading-[2.3rem] md:leading-[4.5rem] uppercase cursor-pointer text-[#111725]">
-                        <a href="topic-all.html" class='w-full md:w-[45%] md:block relative group pr-4 md:pr-0 text-center bg-[#b7d7fc] md:bg-transparent'>
-                            <div class='hidden md:block absolute top-0 left-0 h-full w-full bg-[#b7d7fc] group-hover:bg-yellow-100 group-hover:scale-x-[10%] transform group-hover:rotate-[30deg] transition-all'></div>
-                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all'>
-                                View all
+                        <a href="topic-all.html" class='w-full md:w-[45%] md:block relative group pr-4 md:pr-0 text-center diag-bg-yellow md:bg-transparent'>
+                            <div class='hidden md:block absolute top-0 left-0 h-full w-full diag-band-topic group-hover:scale-x-[10%] transform group-hover:rotate-[30deg] transition-all'></div>
+                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all no-wrap'>
+                                See all
                             </div>
                         </a>
                     </nav>

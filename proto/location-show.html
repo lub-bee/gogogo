@@ -24,11 +24,41 @@
 
         <!-- FontAwesome (self-hosted, was cdnjs 6.5.1) -->
         <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" />
+
+        <!-- ── Fix: location-show inline overrides ── -->
+        <style>
+            /* #1 Title: keep overflow-hidden for scroll containment, add bottom padding for descenders */
+            .ls-title {
+                padding-bottom: 0.15em;
+            }
+            /* #2 Remove border before the "Past" label so the last upcoming row has no trailing border */
+            .ls-section-label {
+                border-top: none !important;
+            }
+            /* #3 Fixed-width date column for vertical alignment */
+            .ls-date {
+                flex: 0 0 7rem;
+            }
+            @media (min-width: 640px) {
+                .ls-date { flex: 0 0 10rem; }
+            }
+            /* #4 Hide map attribution — clip iframe bottom */
+            .ls-map-wrap {
+                position: relative;
+                overflow: hidden;
+            }
+            .ls-map-wrap iframe {
+                display: block;
+                height: calc(100% + 26px);
+            }
+        </style>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
 
-            <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'></aside>
+            <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'>
+                <a href="index.html#location">&#8249; Back</a>
+            </aside>
 
             <!-- Page Content -->
             <main class="top relativerelative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
@@ -39,20 +69,11 @@
                         Location
                     </header>
 
-                    <!-- VIEW ALL — same structure as Topic section -->
-                    <nav class="flex-none flex justify-end text-[3.5rem] md:text-[7rem] leading-[2.3rem] md:leading-[4.5rem] uppercase cursor-pointer text-slate-700">
-                        <a href="#" class='w-full md:w-[45%] md:block relative group pr-4 md:pr-0 text-center bg-[#b7d7fc] md:bg-transparent'>
-                            <div class='hidden md:block absolute top-0 left-0 h-full w-full bg-[#b7d7fc] group-hover:bg-yellow-100 group-hover:scale-x-[10%] transform group-hover:rotate-[30deg] transition-all'></div>
-                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all'>
-                                View all
-                            </div>
-                        </a>
-                    </nav>
 
                     <div class='flex-1 min-h-0 max-w-6xl mx-auto flex flex-col gap-6 w-full px-4 py-8 justify-start overflow-y-auto'>
 
                         <!-- Location name (event-title scale) -->
-                        <div class='text-[calc(2.5rem-2px)] xl:text-[calc(5rem-2px)] leading-[2.5rem] xl:leading-[5rem] lg:tracking-tight font-bold uppercase overflow-hidden'>
+                        <div class='text-[calc(2.5rem-2px)] xl:text-[calc(5rem-2px)] leading-[2.5rem] xl:leading-[5rem] lg:tracking-tight font-bold uppercase overflow-hidden ls-title'>
                             The Mall Sendai Nagamachi
                         </div>
 
@@ -60,7 +81,7 @@
 
                         <!-- LEFT: map + address -->
                         <div class='w-full lg:w-[38%] flex flex-col gap-4 flex-shrink-0'>
-                            <div class='w-full aspect-[4/3] overflow-hidden'>
+                            <div class='ls-map-wrap w-full aspect-[4/3] overflow-hidden'>
                                 <iframe
                                     width="100%"
                                     height="100%"
@@ -99,60 +120,60 @@
                                 <!-- upcoming -->
                                 <div class='text-xs uppercase tracking-widest text-slate-500 pt-2 pb-1 font-bold'>Upcoming</div>
                                 <a class='flex gap-8 group' href="event-show.html">
-                                    <div class='font-bold tracking-widest text-nowrap'>AUG 17</div>
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>AUG 17</div>
                                     <div class=''><i class="fas fa-book fa-fw"></i></div>
                                     <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo Friday</div>
                                 </a>
                                 <a class='flex gap-8 group' href="event-show.html">
-                                    <div class='font-bold tracking-widest text-nowrap'>AUG 24</div>
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>AUG 24</div>
                                     <div class=''><i class="fas fa-book fa-fw"></i></div>
                                     <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo at The Mall</div>
                                 </a>
                                 <a class='flex gap-8 group' href="event-show.html">
-                                    <div class='font-bold tracking-widest text-nowrap'>SEPT 07</div>
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>SEPT 07</div>
                                     <div class=''><i class="fas fa-book fa-fw"></i></div>
                                     <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo Friday</div>
                                 </a>
 
                                 <!-- past -->
-                                <div class='text-xs uppercase tracking-widest text-slate-500 pt-4 pb-1 font-bold'>Past</div>
+                                <div class='ls-section-label text-xs uppercase tracking-widest text-slate-500 pt-4 pb-1 font-bold'>Past</div>
                                 <a class='flex gap-8 group text-slate-500' href="event-show.html">
-                                    <div class='font-bold tracking-widest text-nowrap'>AUG 10</div>
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>AUG 10</div>
                                     <div class=''><i class="fas fa-book fa-fw"></i></div>
                                     <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo Friday</div>
                                 </a>
                                 <a class='flex gap-8 group text-slate-500' href="event-show.html">
-                                    <div class='font-bold tracking-widest text-nowrap'>JUL 27</div>
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>JUL 27</div>
                                     <div class=''><i class="fas fa-mug-hot fa-fw"></i></div>
                                     <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Summer BBQ</div>
                                 </a>
                                 <a class='flex gap-8 group text-slate-500' href="event-show.html">
-                                    <div class='font-bold tracking-widest text-nowrap'>JUL 20</div>
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>JUL 20</div>
                                     <div class=''><i class="fas fa-book fa-fw"></i></div>
                                     <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo at The Mall</div>
                                 </a>
                                 <a class='flex gap-8 group text-slate-500' href="event-show.html">
-                                    <div class='font-bold tracking-widest text-nowrap'>JUL 06</div>
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>JUL 06</div>
                                     <div class=''><i class="fas fa-book fa-fw"></i></div>
                                     <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo Friday</div>
                                 </a>
                                 <a class='flex gap-8 group text-slate-500' href="event-show.html">
-                                    <div class='font-bold tracking-widest text-nowrap'>JUN 29</div>
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>JUN 29</div>
                                     <div class=''><i class="fas fa-mug-hot fa-fw"></i></div>
                                     <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Tanabata Festival Outing</div>
                                 </a>
                                 <a class='flex gap-8 group text-slate-500' href="event-show.html">
-                                    <div class='font-bold tracking-widest text-nowrap'>JUN 22</div>
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>JUN 22</div>
                                     <div class=''><i class="fas fa-book fa-fw"></i></div>
                                     <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo at The Mall</div>
                                 </a>
                                 <a class='flex gap-8 group text-slate-500' href="event-show.html">
-                                    <div class='font-bold tracking-widest text-nowrap'>JUN 08</div>
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>JUN 08</div>
                                     <div class=''><i class="fas fa-book fa-fw"></i></div>
                                     <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo Friday</div>
                                 </a>
                                 <a class='flex gap-8 group text-slate-500' href="event-show.html">
-                                    <div class='font-bold tracking-widest text-nowrap'>MAY 25</div>
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>MAY 25</div>
                                     <div class=''><i class="fas fa-book fa-fw"></i></div>
                                     <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo at The Mall</div>
                                 </a>
