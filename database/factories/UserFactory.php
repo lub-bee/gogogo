@@ -42,4 +42,19 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    public function admin(): static
+    {
+        return $this->state(fn () => ['rank' => User::RANK_ADMIN]);
+    }
+
+    public function support(): static
+    {
+        return $this->state(fn () => ['rank' => User::RANK_SUPPORT]);
+    }
+
+    public function member(): static
+    {
+        return $this->state(fn () => ['rank' => User::RANK_MEMBER]);
+    }
 }
