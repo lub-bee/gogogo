@@ -95,19 +95,19 @@
     }
 
     /* ── Formatted content (bilingual rich text from Topics) ── */
-    .formated-content {
+    .formatted-content {
         @apply w-full;
     }
-    .formated-content h1 {
+    .formatted-content h1 {
         @apply mb-2 mt-4 text-3xl font-bold;
     }
-    .formated-content h2 {
+    .formatted-content h2 {
         @apply mb-2 mt-4 text-2xl font-bold;
     }
-    .formated-content h3 {
+    .formatted-content h3 {
         @apply mb-2 mt-2 text-xl;
     }
-    .formated-content ul {
+    .formatted-content ul {
         @apply list-disc pl-4;
     }
 
