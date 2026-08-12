@@ -1,0 +1,280 @@
+{{--
+    Top page — one-page with snap-scroll sections:
+    Top → Event → Agenda → About → Topic → Media → Location
+--}}
+@props([
+    'event' => [
+        'name' => 'Gogogo at The Mall',
+        'slug' => 'gogogo-at-the-mall',
+        'type' => 'gogogo',
+        'start_at' => '2024-09-22 14:00:00',
+        'end_at' => '2024-09-22 16:00:00',
+        'description_en' => '<h2>Let\'s meet at the mall!</h2><p>Join us for our weekly language exchange session. As usual: 5 minutes in English, 5 minutes in Japanese, repeat for 30 minutes.</p><ul><li>Meeting point: main entrance</li><li>Start: 14:00</li><li>Fee: free</li></ul>',
+        'description_ja' => '<h2>モールで会いましょう！</h2><p>毎週の言語交換セッションにぜひご参加ください。いつも通り、英語5分、日本語5分を30分間繰り返します。</p><ul><li>集合場所：正面入口</li><li>開始：14:00</li><li>参加費：無料</li></ul>',
+        'published_at' => '2024-09-20',
+    ],
+    'prevEventUrl' => '/event/prev-placeholder',
+    'nextEventUrl' => null,
+    'agendaMonths' => [
+        ['name' => 'SEPT', 'events' => [
+            ['day' => '22', 'icon' => 'fa-book', 'title' => 'Gogogo at The Mall', 'slug' => 'gogogo-at-the-mall'],
+            ['day' => '25', 'icon' => 'fa-mug-hot', 'title' => 'Badminton night!', 'slug' => 'badminton-night'],
+            ['day' => '29', 'icon' => 'fa-mug-hot', 'title' => 'Oktoberfest at Nichikichou Koen', 'slug' => 'oktoberfest'],
+        ]],
+        ['name' => 'OCT', 'events' => [
+            ['day' => '07', 'icon' => 'fa-mug-hot', 'title' => 'Trip to Matsushima', 'slug' => 'matsushima'],
+            ['day' => '12', 'icon' => 'fa-book', 'title' => 'Gogogo Friday', 'slug' => 'gogogo-friday'],
+        ]],
+    ],
+    'topics' => null,
+    'photos' => null,
+    'locations' => [
+        ['icon' => 'fa-mug-hot', 'name' => 'The Mall Sendai Nagamachi', 'slug' => 'the-mall', 'count' => 14],
+        ['icon' => 'fa-location-dot', 'name' => 'Nishikichou Koen', 'slug' => 'nishikichou', 'count' => 8],
+        ['icon' => 'fa-book', 'name' => 'Mediatheque Sendai', 'slug' => 'mediatheque', 'count' => 6],
+        ['icon' => 'fa-location-dot', 'name' => 'Kotodai Koen', 'slug' => 'kotodai', 'count' => 5],
+        ['icon' => 'fa-utensils', 'name' => 'Izumi Chuo Station Plaza', 'slug' => 'izumi-chuo', 'count' => 3],
+        ['icon' => 'fa-book', 'name' => 'Aoba Community Center', 'slug' => 'aoba', 'count' => 2],
+    ],
+])
+
+@php
+    $startAt = \Carbon\Carbon::parse($event['start_at'] ?? now());
+@endphp
+
+<x-layouts.public
+    :menuItems="['top','event','agenda','about','topic','media','location']"
+    title="GoGoGo">
+
+    <main class="top relative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
+
+        {{-- ===== SECTION: TOP ===== --}}
+        <section id="top" class="top-section bg-white flex flex-col">
+            <div class="flex-1 h-screen flex flex-col lg:flex-row overflow-hidden">
+                {{-- Animated logo --}}
+                <div class="flex-1 font-bold flex justify-center items-center text-slate-700">
+                    <x-front.slot-logo />
+                </div>
+
+                {{-- Login form (guest state) --}}
+                <div class="flex-1 lg:flex-none lg:w-1/3 lg:max-w-[400px] lg:bg-gray-300">
+                    <form method="POST" action="{{ route('login') }}" class="h-full flex flex-col gap-4 p-4 justify-center sm:max-w-sm lg:max-w-full mx-auto bg-slate-200 lg:bg-transparent">
+                        @csrf
+                        <div class="flex justify-between items-center border-b border-gray-400 mb-4 md:mt-8 uppercase text-slate-700">
+                            Not a member yet? <a href="{{ route('register') }}" class="btn btn-success">Join us!</a>
+                        </div>
+                        <div>
+                            <input type="email" name="email" placeholder="email" class="form-input" autocomplete="username" />
+                        </div>
+                        <div>
+                            <input type="password" name="password" placeholder="password" class="form-input" required autocomplete="current-password" />
+                        </div>
+                        <div class="text-right">
+                            <a href="{{ route('password.request') }}" class="text-slate-700 hover:underline">You have forgot your password?</a>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-main">sign in</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="flex-none h-4 bg-slate-700"></div>
+        </section>
+
+        {{-- ===== SECTION: EVENT ===== --}}
+        <section id="event" class="top-section flex flex-col bg-white relative">
+            <x-front.section-header bg="bg-slate-700" text="text-white">event</x-front.section-header>
+
+            <x-front.event-nav :prevUrl="$prevEventUrl" :nextUrl="$nextEventUrl" />
+
+            <main class="flex-1 mt-4 md:mt-0 h-full flex flex-col md:flex-row items-center justify-evenly">
+                <div class="md:h-full md:w-auto flex flex-row md:flex-col justify-evenly items-center">
+                    <x-front.calendar-card
+                        :year="$startAt->format('Y')"
+                        :day="$startAt->format('d')"
+                        :month="$startAt->format('M')" />
+
+                    {{-- Related links --}}
+                    <div class="text-[1.3rem] sm:text-[2rem] flex flex-col h-full md:h-[25vh]">
+                        <div class="flex-1 flex items-center gap-4 group cursor-pointer">
+                            <i class="fa-solid fa-images fa-fw"></i>
+                            <div class="bg-sky-200 leading-5 hover:bg-orange-200 transition-all">Media</div>
+                        </div>
+                        <div class="flex-1 flex items-center gap-4 group cursor-pointer">
+                            <i class="fa-solid fa-file-alt fa-fw"></i>
+                            <div class="bg-sky-200 leading-5 hover:bg-orange-200 transition-all">Topic</div>
+                        </div>
+                        <div class="flex-1 flex items-center gap-4 group cursor-pointer">
+                            <i class="fa-solid fa-location-dot fa-fw"></i>
+                            <div class="bg-sky-200 leading-5 hover:bg-orange-200 transition-all">Location</div>
+                        </div>
+                        <div class="flex-1 flex items-center gap-4 group cursor-pointer">
+                            <i class="fa-solid fa-person-walking-luggage"></i>
+                            <div class="bg-sky-200 leading-5 hover:bg-yellow-200 transition-all">I'm going</div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Event info --}}
+                <div class="w-full md:w-2/4">
+                    <div class="xs:mt-4 px-4 lg:px-0 text-[2.5rem] xl:text-[5rem] leading-[2.5rem] xl:leading-[5rem] lg:tracking-tight font-bold uppercase">
+                        {{ $event['name'] }}
+                    </div>
+                    <div class="px-4 lg:px-0 mt-4 lg:hover:scale-105 lg:text-lg transition-all max-h-[18vh] md:h-[30vh] overflow-y-scroll formated-content">
+                        {!! $event['description_en'] !!}
+                    </div>
+                    <div class="px-4 lg:px-0 mt-4 lg:hover:scale-105 lg:text-lg transition-all max-h-[18vh] md:h-[30vh] overflow-y-scroll formated-content">
+                        {!! $event['description_ja'] !!}
+                    </div>
+                </div>
+            </main>
+        </section>
+
+        {{-- ===== SECTION: AGENDA ===== --}}
+        <section id="agenda" class="top-section bg-slate-700 text-white flex flex-col">
+            <x-front.section-header bg="bg-white" text="text-slate-700">Agenda</x-front.section-header>
+
+            <x-front.diagonal-nav href="/agenda" color="blue" />
+
+            <div class="flex-1 max-w-6xl mx-auto flex flex-col justify-evenly w-screen">
+                @foreach($agendaMonths as $month)
+                    <div class="flex flex-col lg:flex-row gap-4 lg:gap-14 mx-4 overflow-hidden">
+                        <div class="lg:text-right flex-none lg:w-1/4 font-bold text-section-xs sm:text-section-sm lg:text-section tracking-poster">
+                            {{ $month['name'] }}
+                        </div>
+                        <div class="flex-1 text-[2rem] sm:text-[2.5rem] leading-[3rem] sm:leading-[4.5rem] divide-y lg:divide-y-4">
+                            @foreach($month['events'] as $evt)
+                                <x-front.agenda-row
+                                    :day="$evt['day']"
+                                    :icon="$evt['icon']"
+                                    :title="$evt['title']"
+                                    :href="url('/event/' . ($evt['slug'] ?? '#'))" />
+                            @endforeach
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </section>
+
+        {{-- ===== SECTION: ABOUT ===== --}}
+        <section id="about" class="top-section bg-slate-200 flex flex-col">
+            <x-front.section-header bg="bg-slate-700" text="text-white">About US</x-front.section-header>
+
+            <div class="flex-1 flex flex-col divide-y-4 divide-slate-700 w-screen lg:w-2/3 mx-auto justify-center px-4" x-data="{mode: '1'}">
+                {{-- Q1: What is it? --}}
+                <div>
+                    <div class="text-3xl md:text-4xl py-2 font-bold uppercase flex flex-col items-start lg:items-center lg:flex-row gap-4" @click="mode = (mode == 1)?'false':'1'">
+                        <div class="flex-1">
+                            <i class="fa-solid fa-caret-right transition-all" :class="mode=='1' ? 'fa-rotate-90' : ''"></i>
+                            五語Go, what is it?
+                        </div>
+                        <div class="text-slate-500 text-2xl self-end">五語Goって何ですか?</div>
+                    </div>
+                    <div class="accordion-panel" :class="mode == '1' ? 'is-open' : ''">
+                        <div>
+                            <div class="text-2xl uppercase py-4">
+                                <div>It's a study group for people<br/>to learn English or Japanese</div>
+                                <div class="mt-4 text-right text-slate-500">英語や日本語を学ぶための勉強会です。</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Q2: How does it work? --}}
+                <div>
+                    <div class="text-3xl md:text-4xl py-2 font-bold uppercase flex flex-col items-start lg:items-center lg:flex-row gap-4" @click="mode = (mode == 2)?'false':'2'">
+                        <div class="flex-1 -tracking-[0.08em]">
+                            <i class="fa-solid fa-caret-right transition-all" :class="mode=='2' ? 'fa-rotate-90' : ''"></i>
+                            How does it works?
+                        </div>
+                        <div class="text-slate-500 text-2xl self-end">どうやって機能しますか？</div>
+                    </div>
+                    <div class="accordion-panel" :class="mode == '2' ? 'is-open' : ''">
+                        <div>
+                            <div class="md:text-2xl mx-auto grid grid-cols-3 md:grid-cols-2 items-center divide-x-4 divide-slate-700 py-4">
+                                <div class="text-6xl md:text-[6rem] lg:text-[9rem] uppercase font-bold tracking-poster px-4 text-right">we</div>
+                                <div class="col-span-2 md:col-span-1 flex flex-col uppercase px-4">
+                                    <div>meet <b>every week</b></div>
+                                    <div>talk <b>5 min</b> in <b>english</b></div>
+                                    <div>talk <b>5 min</b> in <b>japanese</b></div>
+                                    <div>repeat that for <b>30min</b></div>
+                                </div>
+                            </div>
+                            <div class="md:text-2xl mx-auto grid grid-cols-3 md:grid-cols-2 items-center divide-x-4 divide-slate-700 py-4">
+                                <div class="text-3xl md:text-[5rem] lg:text-[7rem] uppercase font-bold tracking-poster px-4 text-right">私たち</div>
+                                <div class="col-span-2 md:col-span-1 flex flex-col uppercase px-4">
+                                    <div>は<b>毎週</b>会います</div>
+                                    <div>は<b>英語</b>で<b>5分</b>話します</div>
+                                    <div>は<b>日本語</b>で<b>5分</b>話します</div>
+                                    <div>は<b>30分</b>間繰り返します</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Q3: That's all? --}}
+                <div>
+                    <div class="text-3xl md:text-4xl py-2 font-bold uppercase flex flex-col items-start lg:items-center lg:flex-row gap-4" @click="mode = (mode == 3)?'false':'3'">
+                        <div class="flex-1">
+                            <i class="fa-solid fa-caret-right transition-all" :class="mode=='3' ? 'fa-rotate-90' : ''"></i>
+                            That's all?
+                        </div>
+                        <div class="text-slate-500 text-2xl self-end">それだけですか？</div>
+                    </div>
+                    <div class="accordion-panel" :class="mode == '3' ? 'is-open' : ''">
+                        <div>
+                            <div class="grid grid-cols-2 gap-2 lg:flex lg:justify-between">
+                                <div class="text-2xl uppercase">
+                                    <b>No!</b><br/>We also do BBQs,<br/> festivals,<br/> sports activities,<br/> and much much more!
+                                </div>
+                                <div class="text-2xl text-right uppercase text-slate-500">
+                                    <b>違います!</b><br/>バーベキュー<br/>やお祭り、<br/>スポーツ活動など、<br/>もっとたくさんのことを行っています！
+                                </div>
+                            </div>
+                            <div class="text-center mt-8">
+                                <a href="#media" class="btn btn-danger">Take a look!</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {{-- ===== SECTION: TOPIC ===== --}}
+        <section id="topic" class="top-section bg-white flex flex-col">
+            <x-front.section-header bg="bg-slate-200" text="text-slate-700">Topic</x-front.section-header>
+
+            <x-front.diagonal-nav href="/topics" color="topic" />
+
+            <x-front.topic-accordion :topics="$topics ?? []" />
+        </section>
+
+        {{-- ===== SECTION: MEDIA ===== --}}
+        <section id="media" class="top-section bg-slate-700 flex flex-col">
+            <x-front.section-header bg="bg-white" text="text-slate-700">Media</x-front.section-header>
+
+            <x-front.diagonal-nav href="/media" color="blue" />
+
+            <x-front.media-gallery :photos="$photos ?? []" />
+        </section>
+
+        {{-- ===== SECTION: LOCATION ===== --}}
+        <section id="location" class="top-section bg-slate-200 flex flex-col">
+            <x-front.section-header bg="bg-slate-700" text="text-white">Location</x-front.section-header>
+
+            <x-front.diagonal-nav href="/locations" color="pink" />
+
+            <div class="flex-1 max-w-6xl mx-auto flex flex-col justify-center w-full px-4">
+                @foreach($locations as $loc)
+                    <x-front.location-row
+                        :icon="$loc['icon']"
+                        :name="$loc['name']"
+                        :count="$loc['count']"
+                        :href="url('/location/' . ($loc['slug'] ?? '#'))" />
+                @endforeach
+            </div>
+        </section>
+
+    </main>
+</x-layouts.public>
