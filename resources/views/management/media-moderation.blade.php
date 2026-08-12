@@ -1,186 +1,291 @@
-{{--
-    Media moderation inbox — admin/support only.
-    Grid of pending thumbnails with individual + bulk accept/refuse.
---}}
+<x-layouts.management title="Media Moderation">
+    <x-slot:heading>
+        <i class="fas fa-photo-video mr-2"></i> Media Moderation
+    </x-slot:heading>
 
-<x-layouts.public
-    :menuBack="['url' => url('/'), 'label' => 'Back']"
-    title="Media Moderation — GoGoGo">
+    {{-- Tab bar --}}
+    <div class="flex items-center gap-1 mb-6 border-b border-slate-700">
+        @php
+            $tabs = [
+                'pending'  => ['label' => 'Pending',  'icon' => 'fas fa-clock'],
+                'approved' => ['label' => 'Approved', 'icon' => 'fas fa-check-circle'],
+                'refused'  => ['label' => 'Refused',  'icon' => 'fas fa-ban'],
+            ];
+        @endphp
+        @foreach ($tabs as $key => $t)
+            <a href="{{ route('management.media', ['tab' => $key]) }}"
+               class="px-4 py-2.5 text-sm font-medium border-b-2 transition-colors
+                      {{ $tab === $key
+                          ? 'border-white text-white'
+                          : 'border-transparent text-slate-400 hover:text-slate-200' }}">
+                <i class="{{ $t['icon'] }} mr-1"></i>
+                {{ $t['label'] }}
+                <span class="ml-1 text-xs px-1.5 py-0.5 rounded-full
+                             {{ $tab === $key ? 'bg-slate-600 text-white' : 'bg-slate-700 text-slate-400' }}">
+                    {{ $counts[$key] ?? 0 }}
+                </span>
+            </a>
+        @endforeach
+    </div>
 
-    <main class="min-h-screen bg-slate-100">
-        {{-- Header bar --}}
-        <div class="bg-slate-700 text-white px-4 md:px-8 py-4">
-            <div class="max-w-7xl mx-auto flex items-center justify-between">
-                <div class="text-2xl md:text-4xl font-bold uppercase -tracking-[0.06em]">
-                    <i class="fa-solid fa-shield-halved fa-fw mr-2 text-lg"></i>Media Moderation
-                </div>
-                <div class="text-sm uppercase tracking-widest text-slate-300 font-bold">
-                    {{ $pending->count() }} pending
-                </div>
+    {{-- ============================================================ --}}
+    {{-- PENDING TAB                                                   --}}
+    {{-- ============================================================ --}}
+    @if ($tab === 'pending')
+
+        @if ($media->isEmpty())
+            <div class="text-center py-16 text-slate-500">
+                <i class="fas fa-inbox text-4xl mb-3"></i>
+                <p class="text-sm">Inbox empty &mdash; nothing to moderate.</p>
             </div>
-        </div>
+        @else
+            <div x-data="{
+                    selected: [],
+                    toggleAll(checked) {
+                        this.selected = checked
+                            ? Array.from(document.querySelectorAll('[data-media-id]')).map(el => el.dataset.mediaId)
+                            : [];
+                    },
+                    preview: null
+                 }">
 
-        <div class="max-w-7xl mx-auto px-4 md:px-8 py-6" x-data="{
-            selected: [],
-            selectAll: false,
-            toggleAll() {
-                if (this.selectAll) {
-                    this.selected = Array.from(document.querySelectorAll('[data-media-id]')).map(el => el.dataset.mediaId);
-                } else {
-                    this.selected = [];
-                }
-            },
-            preview: null,
-            openPreview(media) {
-                this.preview = media;
-            },
-            closePreview() {
-                this.preview = null;
-            }
-        }">
-
-            @if(session('status'))
-                <div class="mb-4 bg-green-100 text-green-700 px-4 py-2 rounded text-sm uppercase tracking-widest font-bold">
-                    <i class="fa-solid fa-check mr-1"></i>{{ session('status') }}
-                </div>
-            @endif
-
-            @if($pending->count() > 0)
-                {{-- Bulk actions bar --}}
-                <div class="flex items-center gap-4 mb-4 bg-white p-3 rounded shadow-sm">
-                    <label class="flex items-center gap-2 cursor-pointer text-sm uppercase tracking-widest text-slate-500 font-bold">
-                        <input type="checkbox" x-model="selectAll" @change="toggleAll()" class="rounded border-slate-400" />
-                        Select all
-                    </label>
-                    <div class="flex-1"></div>
-                    <template x-if="selected.length > 0">
-                        <div class="flex items-center gap-2">
-                            <span class="text-sm uppercase tracking-widest text-slate-500 font-bold" x-text="selected.length + ' selected'"></span>
-                            <form method="POST" action="{{ route('management.media.bulk') }}" class="inline">
-                                @csrf
-                                <template x-for="id in selected" :key="id">
-                                    <input type="hidden" name="media_ids[]" :value="id" />
-                                </template>
-                                <button type="submit" name="action" value="approve" class="btn btn-success text-base">
-                                    <i class="fa-solid fa-check mr-1"></i>Accept
-                                </button>
-                            </form>
-                            <form method="POST" action="{{ route('management.media.bulk') }}" class="inline">
-                                @csrf
-                                <template x-for="id in selected" :key="id">
-                                    <input type="hidden" name="media_ids[]" :value="id" />
-                                </template>
-                                <button type="submit" name="action" value="refuse" class="btn btn-danger text-base"
-                                        onclick="return confirm('Refuse selected items? Original files will be deleted.')">
-                                    <i class="fa-solid fa-xmark mr-1"></i>Refuse
-                                </button>
-                            </form>
-                        </div>
-                    </template>
+                {{-- Bulk actions --}}
+                <div class="flex items-center justify-between mb-4" x-show="selected.length > 0" x-cloak>
+                    <span class="text-sm text-slate-300">
+                        <span x-text="selected.length"></span> selected
+                    </span>
+                    <div class="flex gap-2">
+                        <form method="POST" action="{{ route('management.media.bulk') }}">
+                            @csrf
+                            <template x-for="id in selected" :key="id">
+                                <input type="hidden" name="media_ids[]" :value="id">
+                            </template>
+                            <button type="submit" name="action" value="approve"
+                                    class="px-3 py-1.5 text-xs font-medium rounded bg-emerald-700 hover:bg-emerald-600 text-white">
+                                <i class="fas fa-check mr-1"></i> Bulk Approve
+                            </button>
+                            <button type="submit" name="action" value="refuse"
+                                    class="px-3 py-1.5 text-xs font-medium rounded bg-red-700 hover:bg-red-600 text-white ml-1">
+                                <i class="fas fa-times mr-1"></i> Bulk Refuse
+                            </button>
+                        </form>
+                    </div>
                 </div>
 
-                {{-- Grid of pending media --}}
+                {{-- Select all --}}
+                <label class="flex items-center gap-2 mb-3 text-sm text-slate-400 cursor-pointer">
+                    <input type="checkbox"
+                           class="rounded border-slate-600 bg-slate-700 text-emerald-500 focus:ring-emerald-500"
+                           @change="toggleAll($event.target.checked)">
+                    Select all
+                </label>
+
+                {{-- Grid --}}
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-                    @foreach($pending as $media)
-                        <div class="relative bg-white rounded shadow-sm overflow-hidden group" data-media-id="{{ $media->id }}">
+                    @foreach ($media as $item)
+                        <div class="relative group bg-slate-800 border border-slate-700 rounded-lg overflow-hidden"
+                             :data-media-id="'{{ $item->id }}'">
                             {{-- Checkbox --}}
                             <label class="absolute top-2 left-2 z-10 cursor-pointer">
-                                <input type="checkbox" value="{{ $media->id }}" x-model="selected" class="rounded border-slate-400 shadow" />
+                                <input type="checkbox" value="{{ $item->id }}"
+                                       class="rounded border-slate-500 bg-slate-700/80 text-emerald-500 focus:ring-emerald-500"
+                                       x-model="selected"
+                                       data-media-id="{{ $item->id }}">
                             </label>
 
                             {{-- Thumbnail --}}
-                            <div class="aspect-[4/3] bg-slate-200 cursor-pointer"
-                                 @click="openPreview({
-                                    id: {{ $media->id }},
-                                    thumb: '{{ $media->thumbnail_path ? asset('storage/' . $media->thumbnail_path) : '' }}',
-                                    full: '{{ $media->path ? asset('storage/' . $media->path) : '' }}',
-                                    legend: '{{ addslashes($media->legend ?? '') }}',
-                                    user: '{{ addslashes($media->user?->name ?? 'Unknown') }}',
-                                    event: '{{ addslashes($media->event?->name ?? 'Unknown') }}',
-                                    date: '{{ $media->created_at->format('Y-m-d H:i') }}'
-                                 })">
-                                @if($media->thumbnail_path)
-                                    <img src="{{ asset('storage/' . $media->thumbnail_path) }}" alt="{{ $media->legend ?? 'Pending photo' }}" class="w-full h-full object-cover" loading="lazy" />
-                                @else
-                                    <div class="w-full h-full flex items-center justify-center text-slate-400 text-3xl">
-                                        <i class="fa-solid fa-image"></i>
-                                    </div>
-                                @endif
+                            <div class="aspect-square cursor-pointer"
+                                 @click="preview = {
+                                     id: {{ $item->id }},
+                                     src: '{{ $item->url }}',
+                                     user: '{{ addslashes($item->user->name ?? 'Unknown') }}',
+                                     event: '{{ addslashes($item->event->name ?? '') }}',
+                                     legend: '{{ addslashes($item->legend ?? '') }}',
+                                     date: '{{ $item->created_at->format('Y-m-d H:i') }}'
+                                 }">
+                                <img src="{{ $item->url }}" alt=""
+                                     class="w-full h-full object-cover">
                             </div>
 
-                            {{-- Info + actions --}}
+                            {{-- Info --}}
                             <div class="p-2">
-                                <div class="text-xs text-slate-500 truncate">{{ $media->user?->name ?? 'Unknown' }}</div>
-                                <div class="text-xs text-slate-400 truncate">{{ $media->event?->name ?? '' }}</div>
-                                <div class="flex gap-2 mt-2">
-                                    <form method="POST" action="{{ route('management.media.approve', $media) }}" class="flex-1">
-                                        @csrf
-                                        <button type="submit" class="w-full text-center text-xs uppercase font-bold tracking-widest text-green-600 hover:text-green-500 transition-all py-1">
-                                            <i class="fa-solid fa-check"></i> Accept
-                                        </button>
-                                    </form>
-                                    <form method="POST" action="{{ route('management.media.refuse', $media) }}" class="flex-1"
-                                          onsubmit="return confirm('Refuse this photo? The original file will be deleted.')">
-                                        @csrf
-                                        <button type="submit" class="w-full text-center text-xs uppercase font-bold tracking-widest text-red-500 hover:text-red-400 transition-all py-1">
-                                            <i class="fa-solid fa-xmark"></i> Refuse
-                                        </button>
-                                    </form>
-                                </div>
+                                <div class="text-xs text-slate-300 truncate">{{ $item->user->name ?? 'Unknown' }}</div>
+                                <div class="text-[11px] text-slate-500 truncate">{{ $item->event->name ?? '' }}</div>
+                            </div>
+
+                            {{-- Actions --}}
+                            <div class="flex border-t border-slate-700">
+                                <form method="POST" action="{{ route('management.media.approve', $item) }}" class="flex-1">
+                                    @csrf
+                                    <button type="submit"
+                                            class="w-full py-1.5 text-xs text-emerald-400 hover:bg-emerald-900/40 transition-colors">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                </form>
+                                <form method="POST" action="{{ route('management.media.refuse', $item) }}" class="flex-1 border-l border-slate-700">
+                                    @csrf
+                                    <button type="submit"
+                                            class="w-full py-1.5 text-xs text-red-400 hover:bg-red-900/40 transition-colors">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     @endforeach
                 </div>
-            @else
-                <div class="flex flex-col items-center justify-center py-24">
-                    <div class="text-4xl text-slate-300 mb-4"><i class="fa-solid fa-inbox"></i></div>
-                    <div class="text-2xl text-slate-400 uppercase font-bold -tracking-[0.04em]">Inbox empty</div>
-                    <div class="text-sm text-slate-300 uppercase tracking-widest mt-1">No pending media to review</div>
-                </div>
-            @endif
 
-            {{-- Preview overlay --}}
-            <div x-show="preview" x-transition
-                 class="fixed inset-0 bg-slate-800/95 z-50 flex items-center justify-center p-4"
-                 @click.self="closePreview()" @keydown.escape.window="closePreview()"
-                 style="display: none;">
-                <div class="bg-white rounded shadow-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto" @click.stop>
-                    <template x-if="preview">
-                        <div>
-                            <div class="bg-slate-700 text-white p-4 flex items-center justify-between">
-                                <div class="text-sm uppercase tracking-widest font-bold" x-text="preview.event"></div>
-                                <button @click="closePreview()" class="text-white text-xl hover:text-slate-300">
-                                    <i class="fa-solid fa-xmark"></i>
-                                </button>
-                            </div>
-                            <div class="p-4">
-                                <img :src="preview.full || preview.thumb" class="w-full max-h-[60vh] object-contain bg-slate-100 rounded mb-4" />
-                                <div class="flex flex-col gap-1 text-sm text-slate-600 mb-4">
-                                    <div><span class="uppercase tracking-widest text-slate-400 font-bold">By</span> <span x-text="preview.user"></span></div>
-                                    <div><span class="uppercase tracking-widest text-slate-400 font-bold">Date</span> <span x-text="preview.date"></span></div>
-                                    <div x-show="preview.legend"><span class="uppercase tracking-widest text-slate-400 font-bold">Legend</span> <span x-text="preview.legend"></span></div>
+                {{-- Preview overlay --}}
+                <div x-show="preview" x-cloak
+                     class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+                     @click.self="preview = null"
+                     @keydown.escape.window="preview = null">
+                    <div class="bg-slate-800 border border-slate-700 rounded-lg max-w-3xl w-full max-h-[90vh] overflow-auto"
+                         x-show="preview" x-transition>
+                        <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700">
+                            <h3 class="text-sm font-medium text-white">Preview</h3>
+                            <button @click="preview = null" class="text-slate-400 hover:text-white">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <img :src="preview?.src" alt="" class="max-w-full max-h-[60vh] mx-auto rounded">
+                            <div class="mt-4 space-y-1 text-sm text-slate-300">
+                                <div><span class="text-slate-500">User:</span> <span x-text="preview?.user"></span></div>
+                                <div><span class="text-slate-500">Event:</span> <span x-text="preview?.event"></span></div>
+                                <div x-show="preview?.legend">
+                                    <span class="text-slate-500">Legend:</span> <span x-text="preview?.legend"></span>
                                 </div>
-                                <div class="flex gap-3">
-                                    <form method="POST" :action="'{{ url('/management/media') }}/' + preview.id + '/approve'">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success text-lg">
-                                            <i class="fa-solid fa-check mr-1"></i>Accept
-                                        </button>
-                                    </form>
-                                    <form method="POST" :action="'{{ url('/management/media') }}/' + preview.id + '/refuse'"
-                                          onsubmit="return confirm('Refuse this photo? The original file will be deleted.')">
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger text-lg">
-                                            <i class="fa-solid fa-xmark mr-1"></i>Refuse
-                                        </button>
-                                    </form>
-                                </div>
+                                <div><span class="text-slate-500">Date:</span> <span x-text="preview?.date"></span></div>
                             </div>
                         </div>
-                    </template>
+                        <div class="flex gap-2 px-4 py-3 border-t border-slate-700">
+                            <form :action="'/management/media/' + preview?.id + '/approve'" method="POST" class="flex-1">
+                                @csrf
+                                <button type="submit"
+                                        class="w-full py-2 text-sm font-medium rounded bg-emerald-700 hover:bg-emerald-600 text-white">
+                                    <i class="fas fa-check mr-1"></i> Approve
+                                </button>
+                            </form>
+                            <form :action="'/management/media/' + preview?.id + '/refuse'" method="POST" class="flex-1">
+                                @csrf
+                                <button type="submit"
+                                        class="w-full py-2 text-sm font-medium rounded bg-red-700 hover:bg-red-600 text-white">
+                                    <i class="fas fa-times mr-1"></i> Refuse
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
+
+            </div>
+        @endif
+
+    {{-- ============================================================ --}}
+    {{-- APPROVED TAB                                                  --}}
+    {{-- ============================================================ --}}
+    @elseif ($tab === 'approved')
+
+        @if ($media->isEmpty())
+            <div class="text-center py-16 text-slate-500">
+                <i class="fas fa-check-circle text-4xl mb-3"></i>
+                <p class="text-sm">No approved media.</p>
+            </div>
+        @else
+            <div class="space-y-2">
+                @foreach ($media as $item)
+                    <div class="flex items-center gap-4 bg-slate-800 border border-slate-700 rounded-lg p-3">
+                        {{-- Thumbnail --}}
+                        <div class="w-16 h-16 flex-shrink-0 rounded overflow-hidden">
+                            <img src="{{ $item->url }}" alt="" class="w-full h-full object-cover">
+                        </div>
+
+                        {{-- Info --}}
+                        <div class="flex-1 min-w-0">
+                            <div class="text-sm text-white truncate">{{ $item->user->name ?? 'Unknown' }}</div>
+                            <div class="text-xs text-slate-400 truncate">{{ $item->event->name ?? '' }}</div>
+                            <div class="text-[11px] text-slate-500 mt-0.5">{{ $item->created_at->format('Y-m-d H:i') }}</div>
+                        </div>
+
+                        {{-- Actions --}}
+                        <div class="flex items-center gap-2 flex-shrink-0">
+                            <form method="POST" action="{{ route('management.media.refuse', $item) }}"
+                                  onsubmit="return confirm('Re-refuse this media? The original file will be permanently deleted.')">
+                                @csrf
+                                <button type="submit"
+                                        class="px-3 py-1.5 text-xs font-medium rounded bg-amber-700 hover:bg-amber-600 text-white">
+                                    <i class="fas fa-undo mr-1"></i> Re-refuse
+                                </button>
+                            </form>
+                            <form method="POST" action="{{ route('management.media.destroy', $item) }}"
+                                  onsubmit="return confirm('Permanently delete this media?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                        class="px-3 py-1.5 text-xs font-medium rounded bg-red-700 hover:bg-red-600 text-white">
+                                    <i class="fas fa-trash mr-1"></i> Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+
+    {{-- ============================================================ --}}
+    {{-- REFUSED TAB                                                   --}}
+    {{-- ============================================================ --}}
+    @elseif ($tab === 'refused')
+
+        @if ($media->isEmpty())
+            <div class="text-center py-16 text-slate-500">
+                <i class="fas fa-ban text-4xl mb-3"></i>
+                <p class="text-sm">No refused media.</p>
+            </div>
+        @else
+            <div class="mb-4 px-3 py-2 rounded bg-slate-800 border border-slate-700 text-xs text-slate-400">
+                <i class="fas fa-info-circle mr-1"></i>
+                Refused media cannot be re-approved &mdash; the original file has been deleted.
             </div>
 
+            <div class="space-y-2">
+                @foreach ($media as $item)
+                    <div class="flex items-center gap-4 bg-slate-800 border border-slate-700 rounded-lg p-3 opacity-60">
+                        {{-- Thumbnail (greyed) --}}
+                        <div class="w-16 h-16 flex-shrink-0 rounded overflow-hidden grayscale">
+                            <img src="{{ $item->url }}" alt="" class="w-full h-full object-cover">
+                        </div>
+
+                        {{-- Info --}}
+                        <div class="flex-1 min-w-0">
+                            <div class="text-sm text-white truncate">{{ $item->user->name ?? 'Unknown' }}</div>
+                            <div class="text-xs text-slate-400 truncate">{{ $item->event->name ?? '' }}</div>
+                            <div class="text-[11px] text-slate-500 mt-0.5">{{ $item->created_at->format('Y-m-d H:i') }}</div>
+                        </div>
+
+                        {{-- Actions --}}
+                        <div class="flex-shrink-0">
+                            <form method="POST" action="{{ route('management.media.destroy', $item) }}"
+                                  onsubmit="return confirm('Permanently delete this media record?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                        class="px-3 py-1.5 text-xs font-medium rounded bg-red-700 hover:bg-red-600 text-white">
+                                    <i class="fas fa-trash mr-1"></i> Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+
+    @endif
+
+    {{-- Pagination --}}
+    @if ($media->hasPages())
+        <div class="mt-6">
+            {{ $media->appends(['tab' => $tab])->links() }}
         </div>
-    </main>
-</x-layouts.public>
+    @endif
+
+</x-layouts.management>

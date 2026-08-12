@@ -8,21 +8,38 @@ use App\Models\Media;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 class MediaModerationController extends Controller
 {
     /**
-     * Moderation inbox: pending media as a grid of thumbnails.
+     * Media management with tabs: Pending (inbox), Approved, Refused.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pending = Media::where('status', MediaStatus::Pending)
+        $tab = $request->query('tab', 'pending');
+        $status = match ($tab) {
+            'approved' => MediaStatus::Approved,
+            'refused' => MediaStatus::Refused,
+            default => MediaStatus::Pending,
+        };
+
+        $media = Media::where('status', $status)
             ->with(['user', 'event'])
-            ->orderBy('created_at')
-            ->get();
+            ->orderByDesc('created_at')
+            ->paginate(40)
+            ->withQueryString();
+
+        $counts = [
+            'pending' => Media::where('status', MediaStatus::Pending)->count(),
+            'approved' => Media::where('status', MediaStatus::Approved)->count(),
+            'refused' => Media::where('status', MediaStatus::Refused)->count(),
+        ];
 
         return view('management.media-moderation', [
-            'pending' => $pending,
+            'media' => $media,
+            'tab' => $tab,
+            'counts' => $counts,
         ]);
     }
 
@@ -48,6 +65,43 @@ class MediaModerationController extends Controller
         $media->refuse();
 
         return back()->with('status', 'media-refused');
+    }
+
+    /**
+     * Re-refuse an approved media item (e.g. content found inappropriate after initial approval).
+     * This deletes the original file and sets status to refused.
+     */
+    public function reRefuse(Media $media): RedirectResponse
+    {
+        Gate::authorize('update', $media);
+
+        if ($media->status !== MediaStatus::Approved) {
+            return back()->with('error', 'Only approved media can be re-refused.');
+        }
+
+        $media->refuse();
+
+        return back()->with('status', 'Approved media re-refused. Original file deleted.');
+    }
+
+    /**
+     * Delete a media record entirely (removes files from storage too).
+     */
+    public function destroy(Media $media): RedirectResponse
+    {
+        Gate::authorize('delete', $media);
+
+        // Clean up files
+        if ($media->path && Storage::disk('public')->exists($media->path)) {
+            Storage::disk('public')->delete($media->path);
+        }
+        if ($media->thumbnail_path && Storage::disk('public')->exists($media->thumbnail_path)) {
+            Storage::disk('public')->delete($media->thumbnail_path);
+        }
+
+        $media->delete();
+
+        return back()->with('status', 'Media deleted.');
     }
 
     /**
