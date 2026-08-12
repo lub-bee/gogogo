@@ -21,6 +21,7 @@ class DashboardController extends Controller
             ->where('start_at', '>=', Carbon::now())
             ->orderBy('start_at')
             ->with('location')
+            ->withCount('attendees')
             ->limit(5)
             ->get();
 

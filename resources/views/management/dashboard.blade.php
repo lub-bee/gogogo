@@ -69,6 +69,9 @@
                                     {{ $event->location->name }}
                                 </span>
                             @endif
+                            <span class="ml-3">
+                                <i class="fas fa-user mr-1"></i>{{ $event->attendees_count }}
+                            </span>
                         </div>
                     </li>
                 @empty

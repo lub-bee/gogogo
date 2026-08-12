@@ -134,18 +134,25 @@ class ManagementTest extends TestCase
             ->assertSee('3');
     }
 
-    public function test_dashboard_shows_upcoming_events(): void
+    public function test_dashboard_shows_upcoming_events_with_rsvp_count(): void
     {
         $admin = $this->admin();
-        Event::factory()->published()->for($admin)->create([
+        $event = Event::factory()->published()->for($admin)->create([
             'name' => 'Future Event',
             'start_at' => now()->addDays(5),
             'end_at' => now()->addDays(5)->addHours(2),
         ]);
 
-        $this->actingAs($admin)->get('/management')
-            ->assertOk()
-            ->assertSee('Future Event');
+        // Add 3 RSVPs
+        $members = User::factory()->member()->count(3)->create();
+        foreach ($members as $member) {
+            $event->attendees()->attach($member);
+        }
+
+        $response = $this->actingAs($admin)->get('/management');
+        $response->assertOk()
+            ->assertSee('Future Event')
+            ->assertSee('3'); // RSVP count visible
     }
 
     public function test_dashboard_shows_total_members_for_admin_only(): void
