@@ -34,6 +34,13 @@
                     @if(auth()->user()->isAdmin())
                         <x-management.nav-item route="management.users.index" icon="fa-users" label="Users" />
                     @endif
+
+                    {{-- Back to public site --}}
+                    <div class="border-t border-slate-700 mt-4 pt-4">
+                        <a href="{{ route('top') }}" class="flex items-center px-3 py-2 rounded text-sm font-bold uppercase tracking-widest text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
+                            <i class="fa-solid fa-arrow-left fa-fw mr-2 text-xs"></i>Back to site
+                        </a>
+                    </div>
                 </nav>
 
                 {{-- User footer --}}
@@ -78,6 +85,13 @@
                 @if(auth()->user()->isAdmin())
                     <x-management.nav-item route="management.users.index" icon="fa-users" label="Users" />
                 @endif
+
+                {{-- Back to public site --}}
+                <div class="border-t border-slate-700 mt-4 pt-4">
+                    <a href="{{ route('top') }}" class="flex items-center px-3 py-2 rounded text-sm font-bold uppercase tracking-widest text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
+                        <i class="fa-solid fa-arrow-left fa-fw mr-2 text-xs"></i>Back to site
+                    </a>
+                </div>
             </nav>
             <div class="px-4 py-3 bg-slate-900 border-t border-slate-700">
                 <div class="text-sm font-medium truncate">{{ Auth::user()->name }}</div>

@@ -120,6 +120,16 @@ class ManagementTest extends TestCase
         $this->actingAs($admin)->get('/management/users')->assertOk();
     }
 
+    public function test_sidebar_contains_back_to_site_link(): void
+    {
+        $admin = $this->admin();
+
+        $this->actingAs($admin)->get('/management')
+            ->assertOk()
+            ->assertSee('Back to site')
+            ->assertSee(route('top'));
+    }
+
     // ────────────────────────────────────────────
     // Dashboard
     // ────────────────────────────────────────────
