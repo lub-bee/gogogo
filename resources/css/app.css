@@ -91,7 +91,7 @@
 
     /* ── Form inputs ── */
     .form-input {
-        @apply w-full rounded border-slate-400 bg-white;
+        @apply w-full rounded border-slate-400 bg-white text-slate-900;
     }
 
     /* ── Formatted content (bilingual rich text from Topics) ── */
