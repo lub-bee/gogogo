@@ -19,6 +19,7 @@ class EventController extends Controller
         }
 
         $event->load(['topic', 'location', 'attendees']);
+        $event->loadCount('attendees');
 
         // Prev/Next among published events (chronological)
         $prev = Event::published()

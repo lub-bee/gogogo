@@ -61,11 +61,17 @@
                                     {{ $isAttending ? "I'm not going" : "I'm going" }}
                                 </div>
                             </button>
+                            @if($event->attendees_count > 0)
+                            <span class="ml-2 text-xs uppercase tracking-[0.15em] text-slate-400 font-bold">{{ $event->attendees_count }} going</span>
+                            @endif
                         </form>
                         @else
                         <a href="{{ route('login') }}" class="flex-1 flex items-center gap-4 group cursor-pointer">
                             <i class="fa-solid fa-person-hiking"></i>
                             <div class="bg-sky-200 leading-5 hover:bg-yellow-200 transition-all">I'm going</div>
+                            @if($event->attendees_count > 0)
+                            <span class="ml-2 text-xs uppercase tracking-[0.15em] text-slate-400 font-bold">{{ $event->attendees_count }} going</span>
+                            @endif
                         </a>
                         @endauth
                     </div>

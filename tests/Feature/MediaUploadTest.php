@@ -481,4 +481,48 @@ class MediaUploadTest extends TestCase
         $response->assertSee('fa-person-hiking', false);
         $response->assertDontSee('fa-flip-horizontal', false);
     }
+
+    // ------------------------------------------------------------------
+    // Engagement count
+    // ------------------------------------------------------------------
+
+    public function test_event_show_displays_engagement_count(): void
+    {
+        $event = Event::factory()->published()->create();
+        $users = User::factory()->member()->count(3)->create();
+        foreach ($users as $u) {
+            $event->attendees()->attach($u);
+        }
+
+        $response = $this->get(route('event.show', $event));
+        $response->assertOk();
+        $response->assertSee('3 going', false);
+    }
+
+    public function test_event_show_hides_count_at_zero(): void
+    {
+        $event = Event::factory()->published()->create();
+
+        $response = $this->get(route('event.show', $event));
+        $response->assertOk();
+        $response->assertDontSee('0 going', false);
+        // The engagement count span should not be rendered at all
+        $this->assertStringNotContainsString('going</span>', $response->getContent());
+    }
+
+    public function test_top_page_displays_engagement_count(): void
+    {
+        // Create a future event so it becomes the "upcoming" event on top page
+        $event = Event::factory()->published()->create([
+            'start_at' => now()->addDays(3),
+        ]);
+        $users = User::factory()->member()->count(5)->create();
+        foreach ($users as $u) {
+            $event->attendees()->attach($u);
+        }
+
+        $response = $this->get(route('top'));
+        $response->assertOk();
+        $response->assertSee('5 going', false);
+    }
 }

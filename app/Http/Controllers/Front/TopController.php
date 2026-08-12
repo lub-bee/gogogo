@@ -19,13 +19,15 @@ class TopController extends Controller
         $event = Event::published()
             ->where('start_at', '>=', now())
             ->orderBy('start_at')
-            ->with(['topic', 'location'])
+            ->with(['topic', 'location', 'attendees'])
+            ->withCount('attendees')
             ->first();
 
         if (! $event) {
             $event = Event::published()
                 ->orderByDesc('start_at')
-                ->with(['topic', 'location'])
+                ->with(['topic', 'location', 'attendees'])
+                ->withCount('attendees')
                 ->first();
         }
 
