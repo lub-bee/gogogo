@@ -391,4 +391,92 @@ class MediaUploadTest extends TestCase
         $response->assertOk();
         $response->assertSee(route('media.index', ['event' => $event->slug]));
     }
+
+    // ------------------------------------------------------------------
+    // Upload button visibility (date-gated)
+    // ------------------------------------------------------------------
+
+    public function test_upload_button_visible_on_past_event(): void
+    {
+        $user = User::factory()->member()->create();
+        // Event 3 days ago — clearly past in any timezone
+        $event = Event::factory()->published()->create([
+            'start_at' => now()->subDays(3),
+        ]);
+
+        $response = $this->actingAs($user)->get(route('event.show', $event));
+        $response->assertOk();
+        $response->assertSee('Upload');
+    }
+
+    public function test_upload_button_hidden_on_future_event(): void
+    {
+        $user = User::factory()->member()->create();
+        // Event 5 days from now — clearly future in any timezone
+        $event = Event::factory()->published()->create([
+            'start_at' => now()->addDays(5),
+        ]);
+
+        $response = $this->actingAs($user)->get(route('event.show', $event));
+        $response->assertOk();
+        $response->assertDontSee('Upload');
+    }
+
+    public function test_upload_button_hidden_for_guests(): void
+    {
+        $event = Event::factory()->published()->create([
+            'start_at' => now()->subDays(3),
+        ]);
+
+        $response = $this->get(route('event.show', $event));
+        $response->assertOk();
+        $response->assertDontSee('Upload');
+    }
+
+    // ------------------------------------------------------------------
+    // RSVP toggle label
+    // ------------------------------------------------------------------
+
+    public function test_rsvp_shows_im_going_when_not_attending(): void
+    {
+        $user = User::factory()->member()->create();
+        $event = Event::factory()->published()->create();
+
+        $response = $this->actingAs($user)->get(route('event.show', $event));
+        $response->assertOk();
+        $response->assertSee("I&#039;m going", false);
+        $response->assertDontSee("I&#039;m not going", false);
+    }
+
+    public function test_rsvp_shows_im_not_going_when_attending(): void
+    {
+        $user = User::factory()->member()->create();
+        $event = Event::factory()->published()->create();
+        $event->attendees()->attach($user);
+
+        $response = $this->actingAs($user)->get(route('event.show', $event));
+        $response->assertOk();
+        $response->assertSee("I&#039;m not going", false);
+    }
+
+    public function test_rsvp_icon_flipped_when_attending(): void
+    {
+        $user = User::factory()->member()->create();
+        $event = Event::factory()->published()->create();
+        $event->attendees()->attach($user);
+
+        $response = $this->actingAs($user)->get(route('event.show', $event));
+        $response->assertOk();
+        $response->assertSee('fa-flip-horizontal', false);
+    }
+
+    public function test_rsvp_icon_not_flipped_when_not_attending(): void
+    {
+        $user = User::factory()->member()->create();
+        $event = Event::factory()->published()->create();
+
+        $response = $this->actingAs($user)->get(route('event.show', $event));
+        $response->assertOk();
+        $response->assertDontSee('fa-flip-horizontal', false);
+    }
 }
