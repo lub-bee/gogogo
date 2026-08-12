@@ -1,8 +1,9 @@
 {{--
     Anchor menu — fixed right-side navigation.
-    Two modes:
-    - Full menu: pass :items="['top','event','agenda',...]" for snap-scroll sections
-    - Back link: pass :back="['url' => '...', 'label' => 'Back']" for sub-pages
+    Three modes:
+    - Full menu: pass :items for snap-scroll sections (with IntersectionObserver)
+    - Back + items: pass both :back and :items — back link as first entry, observer runs
+    - Back link only: pass :back alone for sub-pages (no observer)
 --}}
 @props([
     'items' => [],
@@ -10,14 +11,12 @@
     'back' => null,
 ])
 
-@if($back)
-    {{-- Single back-link variant (sub-pages) --}}
-    <aside class="anchor-menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-base">
-        <a href="{{ $back['url'] ?? '#' }}">&#8249; {{ $back['label'] ?? 'Back' }}</a>
-    </aside>
-@elseif(count($items) > 0)
-    {{-- Full section menu with IntersectionObserver --}}
+@if(count($items) > 0)
+    {{-- Full section menu (optionally with back link) + IntersectionObserver --}}
     <aside id="anchor-menu" class="anchor-menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-base">
+        @if($back)
+            <a href="{{ $back['url'] ?? '#' }}">&#8249; {{ $back['label'] ?? 'Back' }}</a>
+        @endif
         @foreach($items as $i => $item)
             <a href="#{{ $item }}">{{ $labels[$i] ?? ucfirst($item) }}</a>
         @endforeach
@@ -35,7 +34,7 @@
             const observer = new IntersectionObserver(function (entries) {
                 entries.forEach(function (entry) {
                     if (entry.isIntersecting) {
-                        menu.querySelectorAll('a').forEach(function (link) {
+                        menu.querySelectorAll('a[href^="#"]').forEach(function (link) {
                             link.classList.remove('active');
                         });
                         const active = menu.querySelector('a[href="#' + entry.target.id + '"]');
@@ -55,4 +54,9 @@
             });
         });
     </script>
+@elseif($back)
+    {{-- Back-link only (sub-pages without snap sections) --}}
+    <aside class="anchor-menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-base">
+        <a href="{{ $back['url'] ?? '#' }}">&#8249; {{ $back['label'] ?? 'Back' }}</a>
+    </aside>
 @endif
