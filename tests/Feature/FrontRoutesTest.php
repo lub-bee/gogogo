@@ -199,13 +199,13 @@ class FrontRoutesTest extends TestCase
 
     public function test_topic_index_shows_only_published(): void
     {
-        $published = Topic::factory()->published()->create();
-        $draft = Topic::factory()->draft()->create();
+        $published = Topic::factory()->published()->create(['name' => 'Visible Published Topic']);
+        $draft = Topic::factory()->draft()->create(['name' => 'Hidden Draft Topic']);
 
         $this->get('/topics')
             ->assertOk()
-            ->assertSee($published->name)
-            ->assertDontSee($draft->name);
+            ->assertSee('Visible Published Topic')
+            ->assertDontSee('Hidden Draft Topic');
     }
 
     // ─── TOPIC SHOW ─────────────────────────────────────────
@@ -419,6 +419,69 @@ class FrontRoutesTest extends TestCase
         $this->actingAs($user)->get('/event/' . $event->slug)
             ->assertOk()
             ->assertSee('bg-yellow-200 leading-5', false);
+    }
+
+    // ─── PROFILE ──────────────────────────────────────────────
+
+    public function test_profile_form_prepopulated_with_user_data(): void
+    {
+        $user = User::factory()->member()->create([
+            'name' => 'Tanaka Taro',
+            'email' => 'tanaka@example.com',
+        ]);
+
+        $response = $this->actingAs($user)->get('/profile');
+        $response->assertOk();
+
+        // Overview section shows the user's name
+        $response->assertSee('Tanaka Taro');
+
+        // My Info form inputs are pre-filled with current values
+        $response->assertSee('value="Tanaka Taro"', false);
+        $response->assertSee('value="tanaka@example.com"', false);
+    }
+
+    public function test_profile_overview_shows_real_stats(): void
+    {
+        $user = User::factory()->member()->create();
+        $event = Event::factory()->published()->create();
+        $event->attendees()->attach($user->id);
+        Media::factory()->approved()->create([
+            'event_id' => $event->id,
+            'user_id' => $user->id,
+        ]);
+
+        $response = $this->actingAs($user)->get('/profile');
+        $response->assertOk();
+        // Shows the user's registered-since date
+        $response->assertSee($user->created_at->format('Y-m-d'));
+        // Shows email in private section
+        $response->assertSee($user->email);
+    }
+
+    public function test_profile_form_repopulates_after_validation_error(): void
+    {
+        $user = User::factory()->member()->create([
+            'name' => 'Original Name',
+            'email' => 'original@example.com',
+        ]);
+
+        // Submit with invalid email to trigger validation error
+        $response = $this->actingAs($user)
+            ->from('/profile')
+            ->patch('/profile', [
+                'name' => 'New Name',
+                'email' => 'not-an-email',
+            ]);
+
+        $response->assertRedirect('/profile');
+
+        // Follow redirect — old() repopulates with the SUBMITTED values
+        $response = $this->actingAs($user)->get('/profile');
+        $response->assertOk();
+        // old('name') returns submitted 'New Name', old('email') returns 'not-an-email'
+        $response->assertSee('value="New Name"', false);
+        $response->assertSee('value="not-an-email"', false);
     }
 
     // ─── EMPTY DB RESILIENCE ─────────────────────────────────

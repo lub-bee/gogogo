@@ -220,7 +220,7 @@
         </section>
 
         {{-- ===== SECTION 4: MY PASSWORD ===== --}}
-        <section id="profile-pwd" class="top-section bg-slate-700 text-white flex flex-col"
+        <section id="profile-pwd" class="top-section bg-white text-slate-700 flex flex-col"
             x-data="{
                 newPwd: '',
                 get hasLength() { return this.newPwd.length >= 8; },
@@ -228,14 +228,14 @@
                 get hasLower() { return /[a-z]/.test(this.newPwd); },
                 get hasNumber() { return /[0-9]/.test(this.newPwd); }
             }">
-            <x-front.section-header bg="bg-white" text="text-slate-700">My Password</x-front.section-header>
+            <x-front.section-header bg="bg-slate-700" text="text-white">My Password</x-front.section-header>
 
             <div class="flex-1 flex flex-col justify-center max-w-2xl mx-auto w-full px-4 md:px-8 py-8">
 
                 <div class="text-lg md:text-xl uppercase font-bold -tracking-[0.04em] mb-2">
                     You are about to modify your password.
                 </div>
-                <div class="text-sm uppercase text-white mb-8 -tracking-[0.02em]">
+                <div class="text-sm uppercase text-slate-500 mb-8 -tracking-[0.02em]">
                     パスワードを変更しようとしています。
                 </div>
 
@@ -300,7 +300,7 @@
                     <div class="mt-4 flex items-center gap-4">
                         <button type="submit" class="btn btn-main text-xl">Save</button>
                         @if(session('status') === 'password-updated')
-                            <span class="text-green-400 text-sm uppercase tracking-widest font-bold">Saved!</span>
+                            <span class="text-green-600 text-sm uppercase tracking-widest font-bold">Saved!</span>
                         @endif
                     </div>
 
@@ -327,17 +327,18 @@
                     </button>
                 </div>
 
-                {{-- Confirmation modal --}}
-                <div x-show="confirmOpen" x-transition class="mt-8 bg-white/10 p-6 rounded" style="display: none;">
+                {{-- Confirmation panel — white surface for legible contrast --}}
+                <div x-show="confirmOpen" x-transition class="mt-8 bg-white text-slate-700 p-6 rounded shadow-lg" style="display: none;">
                     <form method="POST" action="{{ route('profile.destroy') }}" class="flex flex-col gap-4">
                         @csrf
                         @method('DELETE')
-                        <div class="text-lg uppercase font-bold">Enter your password to confirm:</div>
+                        <div class="text-lg uppercase font-bold -tracking-[0.04em]">Enter your password to confirm:</div>
+                        <div class="text-sm text-slate-500 uppercase">パスワードを入力して確認してください</div>
                         <input type="password" name="password" class="form-input w-full" placeholder="password" required />
                         @error('password', 'userDeletion')
-                            <div class="text-yellow-200 text-sm">{{ $message }}</div>
+                            <div class="text-red-500 text-sm font-bold mt-1">{{ $message }}</div>
                         @enderror
-                        <div class="flex gap-4">
+                        <div class="flex gap-4 mt-2">
                             <button type="submit" class="btn btn-danger text-xl">Confirm deletion</button>
                             <button type="button" @click="confirmOpen = false" class="btn btn-main text-xl">Cancel</button>
                         </div>

@@ -30,7 +30,7 @@
             if (!menu || sections.length === 0) return;
 
             // Sections that get the reversed (white text) menu
-            const darkSections = ['agenda', 'media', 'profile-top', 'profile-info', 'profile-pwd'];
+            const darkSections = ['agenda', 'media', 'profile-top', 'profile-info'];
 
             const observer = new IntersectionObserver(function (entries) {
                 entries.forEach(function (entry) {
