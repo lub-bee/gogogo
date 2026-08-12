@@ -24,6 +24,22 @@
 
         <!-- FontAwesome (self-hosted, was cdnjs 6.5.1) -->
         <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" />
+
+        <!-- ── Mobile-only fixes ── -->
+        <style>
+            @media (max-width: 767px) {
+                .evt-nav {
+                    font-size: 2.5rem !important;
+                }
+                .evt-nav .evt-label {
+                    padding-left: 1rem;
+                    padding-right: 1rem;
+                }
+            }
+            .no-wrap {
+                white-space: nowrap;
+            }
+        </style>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
@@ -42,17 +58,17 @@
                     </header>
 
                     <!-- x-event.event-navigation -->
-                    <nav class="text-slate-900 flex static md:absolute top-[8rem] right-0 text-[3.5rem] md:text-[7rem] leading-[2.3rem] md:leading-[4.5rem] uppercase  cursor-pointer">
-                        <a href="event.html" class='flex-1 md:block relative group pl-4 md:pl-0 bg-pink-200 md:bg-transparent'>
+                    <nav class="evt-nav text-slate-900 flex static md:absolute top-[8rem] right-0 text-[3.5rem] md:text-[7rem] leading-[2.3rem] md:leading-[4.5rem] uppercase  cursor-pointer">
+                        <a href="event.html" class='evt-prev flex-1 md:block relative group pl-4 md:pl-0 bg-pink-200 md:bg-transparent'>
                             <div class='hidden md:block absolute top-0 left-0 h-full w-full bg-pink-200 group-hover:bg-yellow-100 group-hover:scale-x-[10%] transform group-hover:rotate-[-30deg] transition-all'></div>
-                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all'>
+                            <div class='evt-label relative z-10 px-8 md:px-8 group-hover:scale-x-105 transition-all no-wrap'>
                                 Prev
                             </div>
                         </a>
 
-                        <div class='flex-1 md:block relative group pr-4 md:pr-0 text-right bg-pink-200 md:bg-transparent'>
+                        <div class='evt-next flex-1 md:block relative group pr-4 md:pr-0 text-right bg-pink-200 md:bg-transparent'>
                             <div class='hidden md:block absolute top-0 left-0 h-full w-full bg-pink-200 group-hover:bg-yellow-100 group-hover:scale-x-[10%] transform group-hover:rotate-[30deg] transition-all'></div>
-                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all'>
+                            <div class='evt-label relative z-10 px-8 md:px-8 group-hover:scale-x-105 transition-all no-wrap'>
                                 Next
                             </div>
                         </div>

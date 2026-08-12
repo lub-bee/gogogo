@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="STATIC-PLACEHOLDER">
+
+        <!-- favicon -->
+        <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+        <link rel="manifest" href="images/favicon/site.webmanifest">
+
+        <title>GoGoGo — Topic Section Draft</title>
+
+        <!-- Fonts (self-hosted) -->
+        <link href="assets/fonts/figtree.css" rel="stylesheet" />
+
+        <!-- Compiled Tailwind CSS -->
+        <link rel="stylesheet" href="assets/app.css">
+        <!-- Bundled Alpine.js -->
+        <script defer src="assets/app.js"></script>
+
+        <!-- FontAwesome (self-hosted) -->
+        <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" />
+
+        <!-- ── Namespaced styles: ts2-* (topic section v2 — accordion) ── -->
+        <style>
+            /* Reproduce .top header (scoped to .top in app.css) */
+            .ts2-header {
+                height: 4rem;
+                overflow: hidden;
+                padding-left: 1rem;
+                font-size: 4rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                line-height: 2.7rem;
+                letter-spacing: -0.12em;
+                flex-shrink: 0;
+            }
+            @media (min-width: 640px) {
+                .ts2-header {
+                    height: 7rem;
+                    font-size: 5rem;
+                    line-height: 6rem;
+                }
+            }
+            @media (min-width: 768px) {
+                .ts2-header {
+                    margin-top: -1rem;
+                    height: 9rem;
+                    padding-left: 0;
+                    font-size: 10rem;
+                    line-height: 9rem;
+                }
+            }
+
+            /* Diagonal nav band — yellow initial, blue hover */
+            .ts2-band {
+                background-color: #fef9c3;
+            }
+            .group:hover .ts2-band {
+                background-color: #b7d7fc !important;
+            }
+            .ts2-bg-yellow {
+                background-color: #fef9c3;
+            }
+            @media (min-width: 768px) {
+                .ts2-bg-yellow { background-color: transparent; }
+            }
+
+            .no-wrap { white-space: nowrap; }
+
+            /* ── Rows container ── */
+            .ts2-rows {
+                flex: 1;
+                min-height: 0;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+                padding: 0 1rem;
+            }
+            @media (min-width: 768px) {
+                .ts2-rows { padding: 0 2rem; }
+            }
+            @media (min-width: 1024px) {
+                .ts2-rows {
+                    padding: 0 4rem;
+                    max-width: 72rem;
+                    margin: 0 auto;
+                    width: 100%;
+                }
+            }
+
+            /* ── Individual row ── */
+            .ts2-row {
+                border-bottom: 1px solid #cbd5e1;
+                cursor: pointer;
+            }
+            @media (min-width: 768px) {
+                .ts2-row {
+                    border-bottom: 4px solid #334155;
+                }
+            }
+
+            /* Title bar: title left, chevron right */
+            .ts2-title-bar {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                padding: 0.8rem 0;
+            }
+            @media (min-width: 768px) {
+                .ts2-title-bar { padding: 1rem 0; }
+            }
+
+            /* Row icon — visible when closed, fades+collapses when open */
+            .ts2-row-icon {
+                flex-shrink: 0;
+                width: 1.6rem;
+                font-size: 1.2rem;
+                color: #64748b;
+                opacity: 1;
+                transition: opacity 250ms ease, width 350ms ease, margin 350ms ease;
+                overflow: hidden;
+                margin-right: 0.4rem;
+            }
+            @media (min-width: 640px) {
+                .ts2-row-icon { width: 2rem; font-size: 1.5rem; }
+            }
+            @media (min-width: 768px) {
+                .ts2-row-icon { width: 2.4rem; font-size: 1.8rem; }
+            }
+            .ts2-row.ts2-open .ts2-row-icon,
+            .ts2-row:hover .ts2-row-icon {
+                opacity: 0;
+                width: 0;
+                margin-right: 0;
+            }
+
+            /* Title — closed state */
+            a.ts2-title {
+                text-decoration: none;
+                color: inherit;
+                display: block;
+            }
+            .ts2-title {
+                flex: 1;
+                min-width: 0;
+                font-size: 1.3rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: -0.08em;
+                line-height: 1.2;
+                transition: font-size 350ms ease, letter-spacing 400ms ease;
+            }
+            @media (min-width: 640px) {
+                .ts2-title { font-size: 1.8rem; }
+            }
+            @media (min-width: 768px) {
+                .ts2-title { font-size: 2.2rem; }
+            }
+            .ts2-row:hover .ts2-title {
+                letter-spacing: -0.02em;
+            }
+
+            /* Title — open state (bigger) */
+            .ts2-row.ts2-open .ts2-title {
+                font-size: 1.6rem;
+            }
+            @media (min-width: 640px) {
+                .ts2-row.ts2-open .ts2-title { font-size: 2.2rem; }
+            }
+            @media (min-width: 768px) {
+                .ts2-row.ts2-open .ts2-title { font-size: 2.8rem; }
+            }
+
+            /* Chevron — visible only when open */
+            .ts2-chevron {
+                flex-shrink: 0;
+                font-size: 1.4rem;
+                color: #334155;
+                opacity: 0;
+                transform: translateX(-0.5rem);
+                transition: opacity 300ms ease, transform 300ms ease, color 200ms ease;
+                padding: 0.4rem;
+            }
+            @media (min-width: 768px) {
+                .ts2-chevron { font-size: 2rem; padding: 0.5rem 0.8rem; }
+            }
+            .ts2-row.ts2-open .ts2-chevron {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            .ts2-chevron:hover {
+                color: #b7d7fc;
+            }
+
+            /* ── Accordion panel (grid 0fr/1fr technique) ── */
+            .ts2-panel {
+                display: grid;
+                grid-template-rows: 0fr;
+                transition: grid-template-rows 350ms ease-in-out;
+            }
+            .ts2-row.ts2-open .ts2-panel {
+                grid-template-rows: 1fr;
+            }
+            .ts2-panel-inner {
+                overflow: hidden;
+                min-height: 0;
+            }
+
+            /* ── Language rail (inside the panel, aligned with title) ── */
+            .ts2-rail {
+                display: flex;
+                flex-direction: row;
+                gap: 0.6rem;
+                align-items: center;
+                padding: 0.4rem 0 0.5rem 0.5rem;
+                flex-wrap: wrap;
+            }
+            .ts2-date {
+                margin-left: auto;
+                font-size: 0.75rem;
+                font-weight: 700;
+                letter-spacing: 0.08em;
+                color: #94a3b8;
+                white-space: nowrap;
+            }
+            @media (min-width: 768px) {
+                .ts2-date { font-size: 0.85rem; }
+            }
+            .ts2-lang {
+                position: relative;
+                font-size: 0.8rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+                cursor: pointer;
+                padding: 0.15rem 0.5rem;
+                z-index: 1;
+                transition: color 0.25s ease;
+                user-select: none;
+                display: flex;
+                align-items: center;
+                gap: 0.3rem;
+                color: #334155;
+            }
+            @media (min-width: 768px) {
+                .ts2-lang { font-size: 1rem; }
+            }
+            .ts2-lang.ts2-off { color: #94a3b8; }
+            .ts2-lang::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: #334155;
+                transform: skewX(-8deg) scaleX(0);
+                transform-origin: left center;
+                transition: transform 0.3s ease;
+                z-index: -1;
+            }
+            .ts2-lang:hover::before { transform: skewX(-8deg) scaleX(1); }
+            .ts2-lang:hover { color: #fff; }
+            .ts2-lang .ts2-eye { font-size: 0.7em; opacity: 0.5; }
+
+            /* ── Excerpt ── */
+            .ts2-excerpt {
+                display: flex;
+                flex-direction: column;
+                gap: 0.4rem;
+                padding-bottom: 0.8rem;
+            }
+            @media (min-width: 768px) {
+                .ts2-excerpt.ts2-dual {
+                    flex-direction: row;
+                    gap: 2rem;
+                }
+                .ts2-excerpt.ts2-dual > .ts2-ex-col {
+                    flex: 1;
+                    min-width: 0;
+                }
+            }
+
+            .ts2-ex-col {
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                -webkit-line-clamp: 4;
+                font-size: 0.9rem;
+                line-height: 1.6;
+                color: #475569;
+            }
+            @media (min-width: 640px) {
+                .ts2-ex-col {
+                    font-size: 1rem;
+                    -webkit-line-clamp: 5;
+                }
+            }
+            @media (min-width: 768px) {
+                .ts2-ex-col {
+                    font-size: 1.05rem;
+                    -webkit-line-clamp: 6;
+                }
+            }
+
+            /* Mobile: overflow containment */
+            @media (max-width: 767px) {
+                .ts2-section {
+                    overflow: hidden !important;
+                }
+            }
+        </style>
+    </head>
+    <body class="font-sans antialiased">
+        <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'>
+            <a href="index.html#topic">&#8249; Back</a>
+        </aside>
+
+        <div class="min-h-screen bg-gray-100">
+            <main class="top h-screen">
+
+                <!-- ===== section: topic (v2 — accordion) ===== -->
+                <section id="topic" class="ts2-section top-section bg-white flex flex-col"
+                         x-data="{
+                            showEn: true,
+                            showJa: true,
+                            open: 1,
+                            toggleEn() { this.showEn = !this.showEn; if (!this.showEn && !this.showJa) this.showJa = true; },
+                            toggleJa() { this.showJa = !this.showJa; if (!this.showEn && !this.showJa) this.showEn = true; },
+                            toggle(id) { if (id !== this.open) this.open = id; }
+                         }">
+
+                    <div class='ts2-header bg-slate-200 text-slate-700'>
+                        Topic
+                    </div>
+
+                    <!-- See all — yellow-to-blue diagonal nav -->
+                    <nav class="flex-none flex justify-end text-[3.5rem] md:text-[7rem] leading-[2.3rem] md:leading-[4.5rem] uppercase cursor-pointer text-[#111725]">
+                        <a href="topic-all.html" class='w-full md:w-[45%] md:block relative group pr-4 md:pr-0 text-center ts2-bg-yellow'>
+                            <div class='hidden md:block absolute top-0 left-0 h-full w-full ts2-band group-hover:scale-x-[10%] transform group-hover:rotate-[30deg] transition-all'></div>
+                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all no-wrap'>
+                                See all
+                            </div>
+                        </a>
+                    </nav>
+
+                    <!-- Topic rows -->
+                    <div class="ts2-rows flex-1">
+
+                        <!-- Row 1 -->
+                        <div class="ts2-row" :class="open === 1 && 'ts2-open'" @click="toggle(1)">
+                            <div class="ts2-title-bar">
+                                <span class="ts2-row-icon"><i class="fa-solid fa-align-left fa-fw"></i></span>
+                                <a href="topic-show.html" class="ts2-title" @click.stop="if (open !== 1) { $event.preventDefault(); toggle(1); }">
+                                    I went to a crocodile park and was attacked by a baby one
+                                </a>
+                                <span class="ts2-chevron">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </div>
+                            <div class="ts2-panel">
+                                <div class="ts2-panel-inner">
+                                    <div class="ts2-rail" @click.stop>
+                                        <span class="ts2-lang" :class="!showEn && 'ts2-off'" @click="toggleEn()">
+                                            <i class="ts2-eye fa-solid" :class="showEn ? 'fa-eye' : 'fa-eye-slash'"></i> EN
+                                        </span>
+                                        <span class="ts2-lang" :class="!showJa && 'ts2-off'" @click="toggleJa()">
+                                            <i class="ts2-eye fa-solid" :class="showJa ? 'fa-eye' : 'fa-eye-slash'"></i> 日本語
+                                        </span>
+                                        <span class="ts2-date">2024-09-22</span>
+                                    </div>
+                                    <div class="ts2-excerpt" :class="showEn && showJa && 'ts2-dual'">
+                                        <div class="ts2-ex-col" x-show="showEn">
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora consequuntur, libero cumque inventore saepe ad molestias sunt facilis error est iste. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                        </div>
+                                        <div class="ts2-ex-col" x-show="showJa">
+                                            これは、いつものように、猫を飼っている猿が、鶏を餌にしていることを知っています。フォースの力だけでイワシを焼く方法は、古くからジェダイの間で伝えられてきた秘伝の技術です。この技術を習得するには、まずフォースとの深い繋がりを築く必要があります。瞑想を通じて内なる力を呼び覚まし、それを熱エネルギーに変換する訓練を行います。
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Row 2 -->
+                        <div class="ts2-row" :class="open === 2 && 'ts2-open'" @click="toggle(2)">
+                            <div class="ts2-title-bar">
+                                <span class="ts2-row-icon"><i class="fa-solid fa-align-left fa-fw"></i></span>
+                                <a href="topic-show.html" class="ts2-title" @click.stop="if (open !== 2) { $event.preventDefault(); toggle(2); }">
+                                    The perfect onigiri does not exist and here is why
+                                </a>
+                                <span class="ts2-chevron">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </div>
+                            <div class="ts2-panel">
+                                <div class="ts2-panel-inner">
+                                    <div class="ts2-rail" @click.stop>
+                                        <span class="ts2-lang" :class="!showEn && 'ts2-off'" @click="toggleEn()">
+                                            <i class="ts2-eye fa-solid" :class="showEn ? 'fa-eye' : 'fa-eye-slash'"></i> EN
+                                        </span>
+                                        <span class="ts2-lang" :class="!showJa && 'ts2-off'" @click="toggleJa()">
+                                            <i class="ts2-eye fa-solid" :class="showJa ? 'fa-eye' : 'fa-eye-slash'"></i> 日本語
+                                        </span>
+                                        <span class="ts2-date">2024-09-15</span>
+                                    </div>
+                                    <div class="ts2-excerpt" :class="showEn && showJa && 'ts2-dual'">
+                                        <div class="ts2-ex-col" x-show="showEn">
+                                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur.
+                                        </div>
+                                        <div class="ts2-ex-col" x-show="showJa">
+                                            重要なのは、フォースの温度制御です。高すぎると焦げてしまい、低すぎると生焼けになります。理想的な温度は約175度で、これをフォースの集中力だけで維持するのは高度な技術を要します。多くのパダワンがこの段階で挫折しますが、忍耐強く練習を続けることが成功の鍵です。フォースの使い方を間違えると、大変なことになります。
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Row 3 -->
+                        <div class="ts2-row" :class="open === 3 && 'ts2-open'" @click="toggle(3)">
+                            <div class="ts2-title-bar">
+                                <span class="ts2-row-icon"><i class="fa-solid fa-align-left fa-fw"></i></span>
+                                <a href="topic-show.html" class="ts2-title" @click.stop="if (open !== 3) { $event.preventDefault(); toggle(3); }">
+                                    My neighbor's cat is plotting something against me
+                                </a>
+                                <span class="ts2-chevron">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </div>
+                            <div class="ts2-panel">
+                                <div class="ts2-panel-inner">
+                                    <div class="ts2-rail" @click.stop>
+                                        <span class="ts2-lang" :class="!showEn && 'ts2-off'" @click="toggleEn()">
+                                            <i class="ts2-eye fa-solid" :class="showEn ? 'fa-eye' : 'fa-eye-slash'"></i> EN
+                                        </span>
+                                        <span class="ts2-lang" :class="!showJa && 'ts2-off'" @click="toggleJa()">
+                                            <i class="ts2-eye fa-solid" :class="showJa ? 'fa-eye' : 'fa-eye-slash'"></i> 日本語
+                                        </span>
+                                        <span class="ts2-date">2024-09-08</span>
+                                    </div>
+                                    <div class="ts2-excerpt" :class="showEn && showJa && 'ts2-dual'">
+                                        <div class="ts2-ex-col" x-show="showEn">
+                                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.
+                                        </div>
+                                        <div class="ts2-ex-col" x-show="showJa">
+                                            フォースによる調理中は、ダークサイドに引き寄せられないよう注意してください。怒りや恐れの感情がフォースの温度を不安定にし、イワシだけでなく周囲の環境にも悪影響を及ぼす可能性があります。常に心の平静を保ち、フォースとの調和を維持することが重要です。これは非常に大切なポイントです。
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Row 4 -->
+                        <div class="ts2-row" :class="open === 4 && 'ts2-open'" @click="toggle(4)">
+                            <div class="ts2-title-bar">
+                                <span class="ts2-row-icon"><i class="fa-solid fa-align-left fa-fw"></i></span>
+                                <a href="topic-show.html" class="ts2-title" @click.stop="if (open !== 4) { $event.preventDefault(); toggle(4); }">
+                                    Best convenience store food ranking of all time
+                                </a>
+                                <span class="ts2-chevron">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </div>
+                            <div class="ts2-panel">
+                                <div class="ts2-panel-inner">
+                                    <div class="ts2-rail" @click.stop>
+                                        <span class="ts2-lang" :class="!showEn && 'ts2-off'" @click="toggleEn()">
+                                            <i class="ts2-eye fa-solid" :class="showEn ? 'fa-eye' : 'fa-eye-slash'"></i> EN
+                                        </span>
+                                        <span class="ts2-lang" :class="!showJa && 'ts2-off'" @click="toggleJa()">
+                                            <i class="ts2-eye fa-solid" :class="showJa ? 'fa-eye' : 'fa-eye-slash'"></i> 日本語
+                                        </span>
+                                        <span class="ts2-date">2024-08-25</span>
+                                    </div>
+                                    <div class="ts2-excerpt" :class="showEn && showJa && 'ts2-dual'">
+                                        <div class="ts2-ex-col" x-show="showEn">
+                                            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit. Sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
+                                        </div>
+                                        <div class="ts2-ex-col" x-show="showJa">
+                                            この技術は特にヨーダマスターが得意としていたと言われています。彼の小さな手でも、フォースを使えば大量のイワシを一度に焼くことができました。現代のジェダイも同様の技術を使い、銀河中でこの料理法を広めています。これは宇宙の真理として広く受け入れられています。
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </main>
+        </div>
+    </body>
+</html>
