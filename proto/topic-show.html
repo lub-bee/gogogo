@@ -273,14 +273,25 @@
                 border-bottom: none;
             }
 
-            /* #3 Download diagonal nav — pink-200 band, mobile-only bg */
-            .tsd-dl-band {
-                background-color: #fbcfe8;
+            /* Download link in the rail */
+            .tsd-download {
+                display: flex;
+                align-items: center;
+                gap: 0.4rem;
+                font-size: 0.85rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+                text-decoration: none;
+                color: inherit;
+                margin-top: 0.3rem;
+                cursor: pointer;
             }
             @media (min-width: 768px) {
-                .tsd-dl-band { background-color: transparent; }
-                /* Re-apply on the band div (not the anchor) */
-                div.tsd-dl-band { background-color: #fbcfe8; }
+                .tsd-download { font-size: 1rem; margin-top: 0.5rem; }
+            }
+            .tsd-download-label {
+                transition: background-color 200ms ease;
             }
             .no-wrap {
                 white-space: nowrap;
@@ -303,16 +314,6 @@
             <!-- ===== #1 Section header (inline CSS reproduces .top header) ===== -->
             <div class="tsd-header">Topic</div>
 
-            <!-- ===== Download — diagonal nav, right-aligned ===== -->
-            <nav class="flex-none flex justify-end text-[3.5rem] md:text-[7rem] leading-[2.3rem] md:leading-[4.5rem] uppercase cursor-pointer text-[#111725]">
-                <a href="#" class='w-full md:w-[45%] md:block relative group pr-4 md:pr-0 text-center tsd-dl-band'>
-                    <div class='hidden md:block absolute top-0 left-0 h-full w-full tsd-dl-band group-hover:bg-yellow-100 group-hover:scale-x-[10%] transform group-hover:rotate-[30deg] transition-all'></div>
-                    <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all no-wrap'>
-                        Download
-                    </div>
-                </a>
-            </nav>
-
             <!-- ===== #4 Title (wraps naturally, clamp sizing) ===== -->
             <div class="flex-none px-4 md:px-8 lg:px-16 pt-6 pb-4">
                 <div class="max-w-6xl mx-auto">
@@ -326,7 +327,7 @@
             <div class="tsd-body px-4 md:px-8 lg:px-16 pb-8">
                 <div class="max-w-6xl mx-auto tsd-content-area">
 
-                    <!-- #5 Left rail — language tabs -->
+                    <!-- Left rail — language tabs + download -->
                     <div class="tsd-rail">
                         <span class="tsd-lang-tab" :class="!showEn && 'tsd-hidden-lang'" @click="toggleEn()">
                             <i class="tsd-eye fa-solid" :class="showEn ? 'fa-eye' : 'fa-eye-slash'"></i>
@@ -336,6 +337,10 @@
                             <i class="tsd-eye fa-solid" :class="showJa ? 'fa-eye' : 'fa-eye-slash'"></i>
                             日本語
                         </span>
+                        <a href="#" class="tsd-download">
+                            <i class="fa-solid fa-file-arrow-down fa-fw"></i>
+                            <span class="tsd-download-label bg-sky-200 hover:bg-yellow-200 transition-all" style="line-height:1.4;padding:0 0.2rem">Download</span>
+                        </a>
                     </div>
 
                     <div class="tsd-columns" :class="showEn && showJa ? 'tsd-dual' : ''">
