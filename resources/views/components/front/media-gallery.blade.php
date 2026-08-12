@@ -2,27 +2,18 @@
     Media gallery strip — horizontally scrollable photo tiles with hover title/date and lightbox.
     Usage: <x-front.media-gallery :photos="$photos" />
 
-    Each photo: ['title', 'date', 'width', 'height', 'bg', 'icon']
+    Each photo: ['title', 'date', 'thumb', 'full', 'legend']
+    - thumb: URL to thumbnail image (or null for placeholder)
+    - full: URL to full-size image (or null)
 --}}
 @props([
-    'photos' => [
-        ['title' => 'Gogogo at The Mall', 'date' => '22 SEP 2024', 'width' => 280, 'height' => 200, 'bg' => 'rgb(100 116 139)', 'icon' => 'fa-image'],
-        ['title' => 'Badminton night!', 'date' => '25 SEP 2024', 'width' => 160, 'height' => 240, 'bg' => 'linear-gradient(135deg, rgb(51 65 85), rgb(30 41 59))', 'icon' => 'fa-camera'],
-        ['title' => 'Gogogo at The Mall', 'date' => '22 SEP 2024', 'width' => 320, 'height' => 180, 'bg' => 'rgb(71 85 105)', 'icon' => 'fa-image'],
-        ['title' => 'Trip to Matsushima', 'date' => '07 OCT 2024', 'width' => 170, 'height' => 260, 'bg' => 'linear-gradient(to bottom, rgb(71 85 105), rgb(51 65 85))', 'icon' => 'fa-camera'],
-        ['title' => 'Oktoberfest at Nichikichou', 'date' => '29 SEP 2024', 'width' => 260, 'height' => 190, 'bg' => 'rgb(30 41 59)', 'icon' => 'fa-image'],
-        ['title' => 'Badminton night!', 'date' => '25 SEP 2024', 'width' => 210, 'height' => 210, 'bg' => 'rgb(51 65 85)', 'icon' => 'fa-image'],
-        ['title' => 'Trip to Matsushima', 'date' => '07 OCT 2024', 'width' => 300, 'height' => 200, 'bg' => 'linear-gradient(to right, rgb(100 116 139), rgb(71 85 105))', 'icon' => 'fa-image'],
-        ['title' => 'Gogogo at The Mall', 'date' => '22 SEP 2024', 'width' => 150, 'height' => 230, 'bg' => 'rgb(100 116 139 / 0.8)', 'icon' => 'fa-camera'],
-        ['title' => 'Oktoberfest at Nichikichou', 'date' => '29 SEP 2024', 'width' => 270, 'height' => 180, 'bg' => 'linear-gradient(135deg, rgb(30 41 59), rgb(71 85 105))', 'icon' => 'fa-image'],
-        ['title' => 'Badminton night!', 'date' => '25 SEP 2024', 'width' => 140, 'height' => 250, 'bg' => 'rgb(71 85 105)', 'icon' => 'fa-camera'],
-    ],
+    'photos' => [],
 ])
 
 <div x-data="{
     activeTitle: '', activeDate: '', displayTitle: '', displayDate: '',
     titleVisible: false, exitTimer: null,
-    expanded: false, expandTitle: '', expandDate: '', expandBg: '', photoEntered: false,
+    expanded: false, expandTitle: '', expandDate: '', expandSrc: '', photoEntered: false,
     showTitle(title, date) {
         clearTimeout(this.exitTimer);
         this.activeTitle = title; this.activeDate = date;
@@ -45,8 +36,8 @@
     get currentTitle() { return this.expandTitle || this.displayTitle || ' '; },
     get currentDate() { return this.expandDate || this.displayDate || ' '; },
     get isVisible() { return this.titleVisible || !!this.expandTitle; },
-    openPhoto(title, date, bg) {
-        this.expanded = true; this.expandTitle = title; this.expandDate = date; this.expandBg = bg;
+    openPhoto(title, date, src) {
+        this.expanded = true; this.expandTitle = title; this.expandDate = date; this.expandSrc = src;
         this.displayTitle = title; this.displayDate = date; this.titleVisible = true;
         this.photoEntered = false;
         this.$nextTick(() => { this.photoEntered = true; });
@@ -54,7 +45,7 @@
     closePhoto() {
         this.photoEntered = false;
         setTimeout(() => {
-            this.expanded = false; this.expandTitle = ''; this.expandDate = ''; this.expandBg = '';
+            this.expanded = false; this.expandTitle = ''; this.expandDate = ''; this.expandSrc = '';
             if (!this.activeTitle) {
                 this.titleVisible = false;
                 setTimeout(() => {
@@ -81,15 +72,23 @@
     <div class="flex-1 flex flex-col justify-center px-4 md:px-8 lg:px-16 relative overflow-hidden">
         <div class="max-w-7xl mx-auto w-full">
             <div class="gallery-strip">
-                @foreach($photos as $photo)
+                @forelse($photos as $photo)
                     <div class="photo-tile"
-                         style="width: {{ $photo['width'] }}px; height: {{ $photo['height'] }}px; background: {{ $photo['bg'] }};"
+                         style="width: 260px; height: 200px; background: rgb(71 85 105);"
                          @mouseenter="showTitle('{{ addslashes($photo['title']) }}', '{{ $photo['date'] }}')"
                          @mouseleave="hideTitle()"
-                         @click="openPhoto('{{ addslashes($photo['title']) }}', '{{ $photo['date'] }}', '{{ addslashes($photo['bg']) }}')">
-                        <div class="tile-icon"><i class="fa-solid {{ $photo['icon'] }}"></i></div>
+                         @click="openPhoto('{{ addslashes($photo['title']) }}', '{{ $photo['date'] }}', '{{ $photo['full'] ?? '' }}')">
+                        @if($photo['thumb'])
+                            <img src="{{ $photo['thumb'] }}" alt="{{ $photo['title'] }}" class="w-full h-full object-cover" loading="lazy" />
+                        @else
+                            <div class="tile-icon"><i class="fa-solid fa-image"></i></div>
+                        @endif
                     </div>
-                @endforeach
+                @empty
+                    <div class="flex items-center justify-center w-full py-8">
+                        <div class="text-xl text-slate-400 uppercase font-light">No photos yet</div>
+                    </div>
+                @endforelse
             </div>
         </div>
 
@@ -104,11 +103,20 @@
                 <div class="media-lightbox-close" @click="closePhoto()">
                     <i class="fa-solid fa-xmark"></i>
                 </div>
-                <div class="media-lightbox-photo"
-                     :style="'width: 70vw; height: 60vh; background: ' + expandBg + '; transform: scale(' + (photoEntered ? '1' : '0.7') + '); opacity: ' + (photoEntered ? '0.2' : '0')"
-                     @click.stop>
-                    <i class="fa-solid fa-image"></i>
-                </div>
+                <template x-if="expandSrc">
+                    <img :src="expandSrc"
+                         class="media-lightbox-photo max-w-[85vw] max-h-[85vh] object-contain"
+                         :style="'transform: scale(' + (photoEntered ? '1' : '0.7') + '); opacity: ' + (photoEntered ? '1' : '0')"
+                         @click.stop />
+                </template>
+                <template x-if="!expandSrc">
+                    <div class="media-lightbox-photo"
+                         style="width: 70vw; height: 60vh;"
+                         :style="'background: rgb(71 85 105); transform: scale(' + (photoEntered ? '1' : '0.7') + '); opacity: ' + (photoEntered ? '0.2' : '0')"
+                         @click.stop>
+                        <i class="fa-solid fa-image"></i>
+                    </div>
+                </template>
             </div>
         </div>
     </div>

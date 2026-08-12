@@ -80,7 +80,7 @@ class TopController extends Controller
             ])
             ->all();
 
-        // Photos: latest approved media
+        // Photos: latest approved media (real images when available)
         $photos = Media::where('status', MediaStatus::Approved)
             ->with('event')
             ->orderByDesc('created_at')
@@ -88,11 +88,10 @@ class TopController extends Controller
             ->get()
             ->map(fn ($m) => [
                 'title' => $m->event?->name ?? 'Photo',
-                'date' => $m->created_at->format('d M Y'),
-                'width' => rand(150, 320),
-                'height' => rand(180, 260),
-                'bg' => 'rgb(71 85 105)',
-                'icon' => 'fa-image',
+                'date' => strtoupper($m->created_at->format('d M Y')),
+                'thumb' => $m->thumbnail_path ? asset('storage/' . $m->thumbnail_path) : null,
+                'full' => $m->path ? asset('storage/' . $m->path) : null,
+                'legend' => $m->legend,
             ])
             ->all();
 

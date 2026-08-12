@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\MediaStatus;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Event;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +25,7 @@ class ProfileController extends Controller
             'mediaCount' => $user->media()->where('status', MediaStatus::Approved)->count(),
             'attendanceCount' => $user->attendingEvents()->count(),
             'userMedia' => $user->media()->orderByDesc('created_at')->get(),
+            'publishedEvents' => Event::published()->orderByDesc('start_at')->get(),
         ]);
     }
 

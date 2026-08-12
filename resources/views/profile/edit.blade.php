@@ -92,22 +92,82 @@
         <section id="profile-media" class="top-section bg-white flex flex-col"
             x-data="{
                 lightbox: false,
-                lightboxBg: '',
+                lightboxSrc: '',
                 entered: false,
-                open(bg) {
+                uploadOpen: false,
+                open(src) {
+                    if (!src) return;
                     this.lightbox = true;
-                    this.lightboxBg = bg;
+                    this.lightboxSrc = src;
                     this.entered = false;
                     this.$nextTick(() => { this.entered = true; });
                 },
                 close() {
                     this.entered = false;
-                    setTimeout(() => { this.lightbox = false; this.lightboxBg = ''; }, 300);
+                    setTimeout(() => { this.lightbox = false; this.lightboxSrc = ''; }, 300);
                 }
             }">
             <x-front.section-header bg="bg-slate-700" text="text-white">My Media</x-front.section-header>
 
-            <div class="flex-1 flex flex-col justify-center max-w-6xl mx-auto w-full px-4 md:px-8 py-8">
+            <div class="flex-1 flex flex-col justify-center max-w-6xl mx-auto w-full px-4 md:px-8 py-8 overflow-y-auto">
+                {{-- Upload button --}}
+                <div class="flex items-center justify-between mb-4">
+                    <div class="text-xs uppercase tracking-[0.15em] text-slate-400 font-bold">
+                        {{ count($userMedia) }} upload{{ count($userMedia) !== 1 ? 's' : '' }}
+                    </div>
+                    <button @click="uploadOpen = !uploadOpen" class="btn btn-success text-lg">
+                        <i class="fa-solid fa-plus fa-fw mr-1"></i>Upload
+                    </button>
+                </div>
+
+                {{-- Upload form (collapsible) --}}
+                <div x-show="uploadOpen" x-transition class="mb-6 bg-slate-100 p-4 rounded" style="display: none;">
+                    <form method="POST" action="{{ route('media.upload') }}" enctype="multipart/form-data" class="flex flex-col gap-4">
+                        @csrf
+                        <div>
+                            <label class="text-xs uppercase tracking-[0.15em] text-slate-500 font-bold mb-1 block">
+                                Event <span class="text-slate-400">イベント</span>
+                            </label>
+                            <select name="event_id" class="form-input" required>
+                                <option value="">-- Select an event --</option>
+                                @foreach($publishedEvents as $evt)
+                                    <option value="{{ $evt->id }}">{{ $evt->name }} ({{ $evt->start_at->format('Y-m-d') }})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs uppercase tracking-[0.15em] text-slate-500 font-bold mb-1 block">
+                                Images <span class="text-slate-400">画像</span>
+                            </label>
+                            <input type="file" name="images[]" multiple accept="image/jpeg,image/png,image/webp,image/heic" class="form-input" required />
+                            <div class="text-xs text-slate-400 mt-1">JPEG, PNG, WebP or HEIC. Max 20 MB each, up to 10 files.</div>
+                        </div>
+                        <div>
+                            <label class="text-xs uppercase tracking-[0.15em] text-slate-500 font-bold mb-1 block">
+                                Legend <span class="text-slate-400">キャプション (任意)</span>
+                            </label>
+                            <input type="text" name="legend" class="form-input" placeholder="Optional caption" maxlength="255" />
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-main text-lg">Submit</button>
+                        </div>
+                    </form>
+                    @if($errors->any())
+                        <div class="mt-2 text-red-500 text-sm">
+                            @foreach($errors->all() as $error)
+                                <div>{{ $error }}</div>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+
+                @if(session('status') === 'media-uploaded')
+                    <div class="mb-4 text-green-600 text-sm uppercase tracking-widest font-bold">
+                        <i class="fa-solid fa-check mr-1"></i>Upload successful! Your photos are pending review.
+                    </div>
+                @endif
+
+                {{-- Media grid --}}
                 @if(count($userMedia) > 0)
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
                     @foreach($userMedia as $media)
@@ -126,14 +186,19 @@
                                 'pending' => 'Pending',
                                 'refused' => 'Refused',
                             };
-                            $bg = 'rgb(71 85 105)';
+                            $thumbUrl = $media->thumbnail_path ? asset('storage/' . $media->thumbnail_path) : null;
+                            $fullUrl = $media->path ? asset('storage/' . $media->path) : null;
                         @endphp
                         <div class="profile-media-tile {{ $statusClass }} aspect-[4/3]"
-                             style="background: {{ $bg }};"
-                             @if($media->status->value !== 'refused')
-                             @click="open('{{ $bg }}')"
+                             style="background: rgb(71 85 105);"
+                             @if($media->status->value !== 'refused' && $fullUrl)
+                             @click="open('{{ $fullUrl }}')"
                              @endif>
-                            <div class="tile-icon"><i class="fa-solid fa-image"></i></div>
+                            @if($thumbUrl)
+                                <img src="{{ $thumbUrl }}" alt="{{ $media->legend ?? 'Photo' }}" class="w-full h-full object-cover" loading="lazy" />
+                            @else
+                                <div class="tile-icon"><i class="fa-solid fa-image"></i></div>
+                            @endif
                             <div class="media-status-word {{ $statusColor }}">{{ $statusLabel }}</div>
                         </div>
                     @endforeach
@@ -160,11 +225,10 @@
                 <div class="profile-lightbox-close" @click="close()">
                     <i class="fa-solid fa-xmark"></i>
                 </div>
-                <div class="profile-lightbox-photo"
-                     :style="'width: 70vw; height: 60vh; background: ' + lightboxBg + '; transform: scale(' + (entered ? '1' : '0.7') + '); opacity: ' + (entered ? '0.2' : '0')"
-                     @click.stop>
-                    <i class="fa-solid fa-image"></i>
-                </div>
+                <img :src="lightboxSrc"
+                     class="profile-lightbox-photo max-w-[85vw] max-h-[85vh] object-contain"
+                     :style="'transform: scale(' + (entered ? '1' : '0.7') + '); opacity: ' + (entered ? '1' : '0')"
+                     @click.stop />
             </div>
         </section>
 
