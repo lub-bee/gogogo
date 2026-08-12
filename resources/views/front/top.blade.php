@@ -138,7 +138,7 @@
                             <form method="POST" action="{{ route('event.rsvp', $event) }}" class="flex-1 flex items-center">
                                 @csrf
                                 <button type="submit" class="flex items-center gap-4 group cursor-pointer">
-                                    <i class="fa-solid fa-person-walking-luggage {{ $isAttendingTop ? 'fa-flip-horizontal' : '' }}"></i>
+                                    <i class="fa-solid {{ $isAttendingTop ? 'fa-person-walking-luggage fa-flip-horizontal' : 'fa-person-hiking' }}"></i>
                                     <div class="{{ $isAttendingTop ? 'bg-yellow-200' : 'bg-sky-200' }} leading-5 hover:bg-yellow-200 transition-all">
                                         {{ $isAttendingTop ? "I'm not going" : "I'm going" }}
                                     </div>
@@ -146,7 +146,7 @@
                             </form>
                             @else
                             <a href="{{ route('login') }}" class="flex-1 flex items-center gap-4 group cursor-pointer">
-                                <i class="fa-solid fa-person-walking-luggage"></i>
+                                <i class="fa-solid fa-person-hiking"></i>
                                 <div class="bg-sky-200 leading-5 hover:bg-yellow-200 transition-all">I'm going</div>
                             </a>
                             @endauth

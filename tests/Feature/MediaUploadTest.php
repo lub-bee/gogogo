@@ -459,7 +459,7 @@ class MediaUploadTest extends TestCase
         $response->assertSee("I&#039;m not going", false);
     }
 
-    public function test_rsvp_icon_flipped_when_attending(): void
+    public function test_rsvp_icon_walking_luggage_flipped_when_attending(): void
     {
         $user = User::factory()->member()->create();
         $event = Event::factory()->published()->create();
@@ -467,16 +467,18 @@ class MediaUploadTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('event.show', $event));
         $response->assertOk();
-        $response->assertSee('fa-flip-horizontal', false);
+        $response->assertSee('fa-person-walking-luggage fa-flip-horizontal', false);
+        $response->assertDontSee('fa-person-hiking', false);
     }
 
-    public function test_rsvp_icon_not_flipped_when_not_attending(): void
+    public function test_rsvp_icon_hiking_when_not_attending(): void
     {
         $user = User::factory()->member()->create();
         $event = Event::factory()->published()->create();
 
         $response = $this->actingAs($user)->get(route('event.show', $event));
         $response->assertOk();
+        $response->assertSee('fa-person-hiking', false);
         $response->assertDontSee('fa-flip-horizontal', false);
     }
 }
