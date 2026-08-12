@@ -136,6 +136,62 @@
         @apply text-green-500;
     }
 
+    /* ── Profile: media tiles ── */
+    .profile-media-tile {
+        @apply relative overflow-hidden rounded-sm cursor-pointer transition-transform duration-300;
+    }
+    .profile-media-tile:hover {
+        transform: scale(1.03);
+    }
+    .profile-media-tile .tile-icon {
+        @apply absolute inset-0 flex items-center justify-center text-white text-2xl pointer-events-none;
+        opacity: 0.12;
+    }
+    .profile-media-tile::after {
+        content: '';
+        @apply absolute bottom-0 left-0 right-0;
+        height: 3px;
+        background: rgb(255 255 255);
+        transform: scaleX(0) skewX(-20deg);
+        transform-origin: left;
+        transition: transform 350ms ease;
+    }
+    .profile-media-tile:hover::after {
+        transform: scaleX(1) skewX(-20deg);
+    }
+    .profile-media-tile.refused {
+        filter: grayscale(1);
+        opacity: 0.35;
+        @apply cursor-default pointer-events-none;
+    }
+    .media-status-word {
+        @apply absolute text-2xl uppercase font-black pointer-events-none;
+        bottom: -0.1em;
+        left: 0.3rem;
+        letter-spacing: -0.06em;
+        line-height: 1;
+    }
+
+    /* ── Profile: lightbox ── */
+    .profile-lightbox-overlay {
+        @apply fixed inset-0 flex items-center justify-center z-[60] cursor-pointer;
+        background: rgb(71 85 105);
+    }
+    .profile-lightbox-photo {
+        @apply rounded-sm flex items-center justify-center text-white text-6xl;
+        opacity: 0.2;
+        transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1), opacity 300ms ease;
+    }
+    .profile-lightbox-close {
+        @apply absolute top-6 right-6 text-white text-3xl cursor-pointer z-[70] font-bold;
+        opacity: 0.5;
+        transition: opacity 200ms, transform 200ms;
+    }
+    .profile-lightbox-close:hover {
+        @apply opacity-100;
+        transform: scale(1.1);
+    }
+
     /* ── Slot-machine logo ── */
     .slot .letters div {
         @apply py-2;

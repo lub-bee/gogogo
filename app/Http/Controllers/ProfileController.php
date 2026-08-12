@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MediaStatus;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,12 +13,17 @@ use Illuminate\View\View;
 class ProfileController extends Controller
 {
     /**
-     * Display the user's profile form.
+     * Display the user's profile area (snap-scroll sequence).
      */
     public function edit(Request $request): View
     {
+        $user = $request->user();
+
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $user,
+            'mediaCount' => $user->media()->where('status', MediaStatus::Approved)->count(),
+            'attendanceCount' => $user->attendingEvents()->count(),
+            'userMedia' => $user->media()->orderByDesc('created_at')->get(),
         ]);
     }
 

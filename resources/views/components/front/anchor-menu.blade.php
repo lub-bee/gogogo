@@ -6,6 +6,7 @@
 --}}
 @props([
     'items' => [],
+    'labels' => [],
     'back' => null,
 ])
 
@@ -17,8 +18,8 @@
 @elseif(count($items) > 0)
     {{-- Full section menu with IntersectionObserver --}}
     <aside id="anchor-menu" class="anchor-menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-base">
-        @foreach($items as $item)
-            <a href="#{{ $item }}">{{ ucfirst($item) }}</a>
+        @foreach($items as $i => $item)
+            <a href="#{{ $item }}">{{ $labels[$i] ?? ucfirst($item) }}</a>
         @endforeach
     </aside>
 
@@ -29,7 +30,7 @@
             if (!menu || sections.length === 0) return;
 
             // Sections that get the reversed (white text) menu
-            const darkSections = ['agenda', 'media', 'profile-top', 'profile-info', 'profile-delete'];
+            const darkSections = ['agenda', 'media', 'profile-top', 'profile-info', 'profile-pwd'];
 
             const observer = new IntersectionObserver(function (entries) {
                 entries.forEach(function (entry) {

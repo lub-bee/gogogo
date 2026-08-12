@@ -19,7 +19,7 @@
         <div class="min-h-screen bg-gray-100">
 
             {{-- Right-side anchor menu --}}
-            <x-front.anchor-menu :items="$menuItems ?? []" :back="$menuBack ?? null" />
+            <x-front.anchor-menu :items="$menuItems ?? []" :labels="$menuLabels ?? []" :back="$menuBack ?? null" />
 
             {{-- Page content --}}
             {{ $slot }}
