@@ -341,4 +341,54 @@ class MediaUploadTest extends TestCase
         Storage::disk('public')->assertMissing('media/a.webp');
         Storage::disk('public')->assertMissing('media/b.webp');
     }
+
+    // ------------------------------------------------------------------
+    // Gallery event filter
+    // ------------------------------------------------------------------
+
+    public function test_media_index_filters_by_event_slug(): void
+    {
+        $event1 = Event::factory()->published()->create();
+        $event2 = Event::factory()->published()->create();
+
+        Media::factory()->approved()->for(User::factory()->member())
+            ->for($event1)->create();
+        Media::factory()->approved()->for(User::factory()->member())
+            ->for($event1)->create();
+        Media::factory()->approved()->for(User::factory()->member())
+            ->for($event2)->create();
+
+        // Unfiltered: all 3
+        $response = $this->get(route('media.index'));
+        $response->assertOk();
+        $this->assertCount(3, $response->viewData('photos'));
+
+        // Filtered by event1 slug: only 2
+        $response = $this->get(route('media.index', ['event' => $event1->slug]));
+        $response->assertOk();
+        $this->assertCount(2, $response->viewData('photos'));
+        $this->assertNotNull($response->viewData('filteredEvent'));
+        $this->assertEquals($event1->id, $response->viewData('filteredEvent')->id);
+    }
+
+    public function test_media_index_shows_filter_indicator(): void
+    {
+        $event = Event::factory()->published()->create(['name' => 'BBQ Party']);
+        Media::factory()->approved()->for(User::factory()->member())
+            ->for($event)->create();
+
+        $response = $this->get(route('media.index', ['event' => $event->slug]));
+        $response->assertOk();
+        $response->assertSee('BBQ Party');
+        $response->assertSee(route('media.index'));  // "See all" link present
+    }
+
+    public function test_event_show_media_button_links_to_filtered_gallery(): void
+    {
+        $event = Event::factory()->published()->create();
+
+        $response = $this->get(route('event.show', $event));
+        $response->assertOk();
+        $response->assertSee(route('media.index', ['event' => $event->slug]));
+    }
 }

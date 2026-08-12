@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Enums\MediaStatus;
 use App\Http\Controllers\Controller;
+use App\Models\Event;
 use App\Models\Media;
 use Illuminate\Http\Request;
 
@@ -15,8 +16,13 @@ class MediaController extends Controller
             ->with('event')
             ->orderByDesc('created_at');
 
-        if ($request->has('event')) {
-            $query->whereHas('event', fn ($q) => $q->where('slug', $request->input('event')));
+        $filteredEvent = null;
+
+        if ($request->filled('event')) {
+            $filteredEvent = Event::where('slug', $request->input('event'))->first();
+            if ($filteredEvent) {
+                $query->where('event_id', $filteredEvent->id);
+            }
         }
 
         $mediaItems = $query->paginate(30);
@@ -34,6 +40,7 @@ class MediaController extends Controller
         return view('front.media-index', [
             'photos' => $photos,
             'mediaItems' => $mediaItems,
+            'filteredEvent' => $filteredEvent,
         ]);
     }
 }
