@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- static snapshot: csrf token placeholder -->
+        <meta name="csrf-token" content="STATIC-PLACEHOLDER">
+
+        <!-- favicon -->
+        <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+        <link rel="manifest" href="images/favicon/site.webmanifest">
+
+        <title>Laravel</title>
+
+        <!-- Fonts (self-hosted, was fonts.bunny.net) -->
+        <link href="assets/fonts/figtree.css" rel="stylesheet" />
+
+        <!-- Compiled Tailwind CSS (was @vite resources/css/app.css) -->
+        <link rel="stylesheet" href="assets/app.css">
+        <!-- Bundled Alpine.js + slot animation (was @vite resources/js/app.js) -->
+        <script defer src="assets/app.js"></script>
+
+        <!-- FontAwesome (self-hosted, was cdnjs 6.5.1) -->
+        <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" />
+
+        <!-- ── Fix: location-show inline overrides ── -->
+        <style>
+            /* #1 Title: keep overflow-hidden for scroll containment, add bottom padding for descenders */
+            .ls-title {
+                padding-bottom: 0.15em;
+            }
+            /* #2 Remove border before the "Past" label so the last upcoming row has no trailing border */
+            .ls-section-label {
+                border-top: none !important;
+            }
+            /* #3 Fixed-width date column for vertical alignment */
+            .ls-date {
+                flex: 0 0 7rem;
+            }
+            @media (min-width: 640px) {
+                .ls-date { flex: 0 0 10rem; }
+            }
+            /* #4 Hide map attribution — clip iframe bottom */
+            .ls-map-wrap {
+                position: relative;
+                overflow: hidden;
+            }
+            .ls-map-wrap iframe {
+                display: block;
+                height: calc(100% + 26px);
+            }
+        </style>
+    </head>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-gray-100">
+
+            <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'>
+                <a href="index.html#location">&#8249; Back</a>
+            </aside>
+
+            <!-- Page Content -->
+            <main class="top relativerelative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
+
+                <!-- ===== section: location ===== -->
+                <section id="location" class="top-section bg-slate-200 flex flex-col" x-data="{ showEmpty: false }">
+                    <header class='bg-slate-700 text-white flex-none'>
+                        Location
+                    </header>
+
+
+                    <div class='flex-1 min-h-0 max-w-6xl mx-auto flex flex-col gap-6 w-full px-4 py-8 justify-start overflow-y-auto'>
+
+                        <!-- Location name (event-title scale) -->
+                        <div class='text-[calc(2.5rem-2px)] xl:text-[calc(5rem-2px)] leading-[2.5rem] xl:leading-[5rem] lg:tracking-tight font-bold uppercase overflow-hidden ls-title'>
+                            The Mall Sendai Nagamachi
+                        </div>
+
+                        <div class='flex flex-col lg:flex-row gap-8 lg:gap-14 items-start flex-1'>
+
+                        <!-- LEFT: map + address -->
+                        <div class='w-full lg:w-[38%] flex flex-col gap-4 flex-shrink-0'>
+                            <div class='ls-map-wrap w-full aspect-[4/3] overflow-hidden'>
+                                <iframe
+                                    width="100%"
+                                    height="100%"
+                                    frameborder="0"
+                                    scrolling="no"
+                                    marginheight="0"
+                                    marginwidth="0"
+                                    style="border:0; background-color: #334155;"
+                                    src="https://www.openstreetmap.org/export/embed.html?bbox=140.8650%2C38.2580%2C140.8850%2C38.2680&layer=mapnik&marker=38.2630%2C140.8750"
+                                    loading="lazy"
+                                    title="Location map — The Mall Sendai Nagamachi"
+                                ></iframe>
+                            </div>
+
+                            <div class='flex flex-col gap-1'>
+                                <div class='text-lg md:text-xl uppercase font-bold -tracking-[0.08em]'>
+                                    3F Community Room
+                                </div>
+                                <div class='text-base md:text-lg uppercase text-slate-500'>
+                                    3F コミュニティルーム
+                                </div>
+                                <div class='text-base text-slate-600 mt-1'>
+                                    7-20-3 Nagamachi, Taihaku-ku, Sendai, Miyagi 982-0011
+                                </div>
+                                <div class='text-base text-slate-500'>
+                                    〒982-0011 宮城県仙台市太白区長町7丁目20-3
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT: events at this location -->
+                        <div class='w-full lg:flex-1 flex flex-col gap-4 overflow-y-auto max-h-[65vh]'>
+                            <!-- === Events list (populated state) ===-->
+                            <div x-show="!showEmpty" class='text-[2rem] sm:text-[2.5rem] leading-[3rem] sm:leading-[4.5rem] flex flex-col divide-y lg:divide-y-4 divide-slate-700'>
+
+                                <!-- upcoming -->
+                                <div class='text-xs uppercase tracking-widest text-slate-500 pt-2 pb-1 font-bold'>Upcoming</div>
+                                <a class='flex gap-8 group' href="event-show.html">
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>AUG 17</div>
+                                    <div class=''><i class="fas fa-book fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo Friday</div>
+                                </a>
+                                <a class='flex gap-8 group' href="event-show.html">
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>AUG 24</div>
+                                    <div class=''><i class="fas fa-book fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo at The Mall</div>
+                                </a>
+                                <a class='flex gap-8 group' href="event-show.html">
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>SEPT 07</div>
+                                    <div class=''><i class="fas fa-book fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo Friday</div>
+                                </a>
+
+                                <!-- past -->
+                                <div class='ls-section-label text-xs uppercase tracking-widest text-slate-500 pt-4 pb-1 font-bold'>Past</div>
+                                <a class='flex gap-8 group text-slate-500' href="event-show.html">
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>AUG 10</div>
+                                    <div class=''><i class="fas fa-book fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo Friday</div>
+                                </a>
+                                <a class='flex gap-8 group text-slate-500' href="event-show.html">
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>JUL 27</div>
+                                    <div class=''><i class="fas fa-mug-hot fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Summer BBQ</div>
+                                </a>
+                                <a class='flex gap-8 group text-slate-500' href="event-show.html">
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>JUL 20</div>
+                                    <div class=''><i class="fas fa-book fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo at The Mall</div>
+                                </a>
+                                <a class='flex gap-8 group text-slate-500' href="event-show.html">
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>JUL 06</div>
+                                    <div class=''><i class="fas fa-book fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo Friday</div>
+                                </a>
+                                <a class='flex gap-8 group text-slate-500' href="event-show.html">
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>JUN 29</div>
+                                    <div class=''><i class="fas fa-mug-hot fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Tanabata Festival Outing</div>
+                                </a>
+                                <a class='flex gap-8 group text-slate-500' href="event-show.html">
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>JUN 22</div>
+                                    <div class=''><i class="fas fa-book fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo at The Mall</div>
+                                </a>
+                                <a class='flex gap-8 group text-slate-500' href="event-show.html">
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>JUN 08</div>
+                                    <div class=''><i class="fas fa-book fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo Friday</div>
+                                </a>
+                                <a class='flex gap-8 group text-slate-500' href="event-show.html">
+                                    <div class='ls-date font-bold tracking-widest text-nowrap'>MAY 25</div>
+                                    <div class=''><i class="fas fa-book fa-fw"></i></div>
+                                    <div class='-tracking-[0.08em] font-light group-hover:tracking-tight transition-all text-nowrap'>Gogogo at The Mall</div>
+                                </a>
+                            </div>
+
+                            <!-- === Empty state (hidden by default, toggle with Alpine for review) === -->
+                            <div x-show="showEmpty" class='flex flex-col items-start gap-2 py-8'>
+                                <div class='text-xl md:text-2xl uppercase font-light -tracking-[0.08em] text-slate-600'>
+                                    No event has taken place here yet.
+                                </div>
+                                <div class='text-lg md:text-xl uppercase font-light text-slate-500'>
+                                    ここではまだイベントが開催されていません。
+                                </div>
+                            </div>
+
+                            <!-- Debug toggle for empty state (remove in production) -->
+                            <!-- <button @click="showEmpty = !showEmpty" class="btn btn-main text-sm mt-4">Toggle empty state</button> -->
+                        </div>
+
+                    </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </body>
+</html>

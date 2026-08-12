@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+    <title>GoGoGo — snapshot statique du front</title>
+    <link href="assets/fonts/figtree.css" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/app.css">
+</head>
+<body class="font-sans antialiased bg-gray-100 text-slate-700">
+    <div class="max-w-3xl mx-auto p-8">
+        <h1 class="text-4xl font-bold uppercase mb-2 normal-case" style="line-height:1.2; letter-spacing:normal; overflow:visible;">五語Go — snapshot statique</h1>
+        <p class="mb-8 text-slate-500">
+            Snapshot HTML/CSS/JS du front public Laravel (branche <code>prod-backup-20260710</code>, généré le 2026-08-10).
+            Blade résolu à la main, données dynamiques remplacées par des placeholders représentatifs.
+            Assets auto-hébergés dans <code>assets/</code> (Tailwind compilé, Alpine.js bundlé, Figtree, FontAwesome).
+        </p>
+
+        <h2 class="text-2xl font-bold mb-2">Écrans développés</h2>
+        <ul class="list-disc pl-6 mb-6 space-y-1">
+            <li><a class="link" href="index.html">Top / accueil</a> — <code>/</code> : logo animé, login, event à la une, agenda, about, media, topic (sections snap plein écran)</li>
+            <li><a class="link" href="event.html">Event show</a> — <code>/event/{slug}</code> : fiche événement (calendrier, liens liés, description EN/JA, nav Prev/Next)</li>
+        </ul>
+
+        <h2 class="text-2xl font-bold mb-2">Propositions design</h2>
+        <ul class="list-disc pl-6 mb-6 space-y-1">
+            <li><a class="link" href="top-in.html">Top — état connecté (simulation)</a> — version authentifiée de la page d'accueil (menu Dashboard/Discord/Line/Profile/Logout)</li>
+            <li><a class="link" href="media-section-draft.html">Media section (draft)</a> — galerie photo horizontale avec hover titre/date, lightbox</li>
+            <li><a class="link" href="profile-draft.html">Profile area (draft)</a> — profil overview, my media, my info avec toggles PRIVATE/PUBLIC</li>
+            <li><a class="link" href="topic-show.html">Topic show (reader)</a> — modale topic sombre/clair, tabs EN/JA, download</li>
+            <li><a class="link" href="topic-all.html">Topic All</a> — liste infinie des topics (scroll infini, cards roses staggered)</li>
+            <li><a class="link" href="agenda-all.html">Agenda All</a> — liste infinie des événements par mois (scroll infini, dark bg)</li>
+        </ul>
+
+        <h2 class="text-2xl font-bold mb-2">Documentation</h2>
+        <ul class="list-disc pl-6 mb-6 space-y-1">
+            <li><a class="link" href="UI-FEATURES.md">UI-FEATURES.md</a> — inventaire complet de l'UI et des features impliquées</li>
+            <li><a class="link" href="BRIEF-FEATURES.md">BRIEF-FEATURES.md</a> — brief produit : features cibles + direction artistique</li>
+        </ul>
+
+        <p class="text-sm text-slate-400">
+            Non couvert par ce snapshot : espace <code>/management</code> (admin), pages auth (login/register/profile de Breeze),
+            état connecté de la page Top (menu Dashboard/Discord/Line/Profile/Logout).
+        </p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="STATIC-PLACEHOLDER">
+
+        <!-- favicon -->
+        <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+        <link rel="manifest" href="images/favicon/site.webmanifest">
+
+        <title>GoGoGo — Topic</title>
+
+        <!-- Fonts (self-hosted) -->
+        <link href="assets/fonts/figtree.css" rel="stylesheet" />
+
+        <!-- Compiled Tailwind CSS -->
+        <link rel="stylesheet" href="assets/app.css">
+        <!-- Bundled Alpine.js -->
+        <script defer src="assets/app.js"></script>
+
+        <!-- FontAwesome (self-hosted) -->
+        <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" />
+
+        <!-- ── Namespaced styles for topic-show-draft (tsd-*) ── -->
+        <style>
+            /* Page shell */
+            .tsd-page {
+                display: flex;
+                flex-direction: column;
+                height: 100vh;
+                background: #fff;
+                color: #334155;
+                font-family: 'Figtree', sans-serif;
+            }
+
+            /* #1 Header — reproduce .top header rules (scoped to .top in app.css) */
+            .tsd-header {
+                height: 4rem;
+                overflow: hidden;
+                padding-left: 1rem;
+                font-size: 4rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                line-height: 2.7rem;
+                letter-spacing: -0.12em;
+                background-color: #334155;
+                color: #fff;
+                flex-shrink: 0;
+            }
+            @media (min-width: 640px) {
+                .tsd-header {
+                    height: 7rem;
+                    font-size: 5rem;
+                    line-height: 6rem;
+                }
+            }
+            @media (min-width: 768px) {
+                .tsd-header {
+                    margin-top: -1rem;
+                    height: 9rem;
+                    padding-left: 0;
+                    font-size: 10rem;
+                    line-height: 9rem;
+                }
+            }
+
+            /* #4 Title — clamp + wrapping line-height */
+            .tsd-title {
+                font-size: clamp(2rem, 5vw, 4.5rem);
+                font-weight: 700;
+                line-height: 1.15;
+                text-transform: uppercase;
+                letter-spacing: -0.04em;
+            }
+
+            /* #5 Left rail — language tabs */
+            .tsd-rail {
+                flex-shrink: 0;
+                display: flex;
+                flex-direction: row;
+                gap: 1rem;
+                align-items: center;
+            }
+            @media (min-width: 768px) {
+                .tsd-rail {
+                    flex-direction: column;
+                    gap: 0.6rem;
+                    align-items: flex-start;
+                    min-width: 180px;
+                    padding-top: 0.5rem;
+                }
+            }
+            .tsd-lang-tab {
+                position: relative;
+                font-size: 1.2rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.01em;
+                cursor: pointer;
+                padding: 0.3rem 0.8rem;
+                z-index: 1;
+                transition: color 0.25s ease;
+                user-select: none;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                color: #334155;
+            }
+            @media (min-width: 768px) {
+                .tsd-lang-tab {
+                    font-size: 2rem;
+                }
+            }
+            .tsd-lang-tab.tsd-hidden-lang {
+                color: #94a3b8;
+            }
+            .tsd-lang-tab::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: #334155;
+                transform: skewX(-8deg) scaleX(0);
+                transform-origin: left center;
+                transition: transform 0.3s ease;
+                z-index: -1;
+            }
+            .tsd-lang-tab:hover::before {
+                transform: skewX(-8deg) scaleX(1);
+            }
+            .tsd-lang-tab:hover {
+                color: #fff;
+            }
+            .tsd-lang-tab .tsd-eye {
+                font-size: 0.8em;
+                opacity: 0.6;
+            }
+
+            /* Content area: rail + columns */
+            .tsd-content-area {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                flex: 1;
+                min-height: 0;
+            }
+            @media (min-width: 768px) {
+                .tsd-content-area {
+                    flex-direction: row;
+                    gap: 2rem;
+                }
+            }
+
+            /* Content columns */
+            .tsd-columns {
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+                flex: 1;
+                min-width: 0;
+            }
+            @media (min-width: 768px) {
+                .tsd-columns.tsd-dual {
+                    flex-direction: row;
+                    gap: 3rem;
+                }
+                .tsd-columns.tsd-dual > .tsd-col {
+                    flex: 1;
+                    min-width: 0;
+                }
+            }
+
+            /* Content column */
+            .tsd-col {
+                flex: 1;
+                min-width: 0;
+            }
+
+            /* Scrollable body */
+            .tsd-body {
+                flex: 1;
+                overflow-y: auto;
+                min-height: 0;
+                scrollbar-width: thin;
+                scrollbar-color: #94a3b8 transparent;
+            }
+            .tsd-body::-webkit-scrollbar { width: 6px; }
+            .tsd-body::-webkit-scrollbar-track { background: transparent; }
+            .tsd-body::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
+
+            /* Column divider */
+            .tsd-divider {
+                display: none;
+            }
+            @media (min-width: 768px) {
+                .tsd-divider {
+                    display: block;
+                    width: 1px;
+                    background: #cbd5e1;
+                    flex-shrink: 0;
+                    align-self: stretch;
+                }
+            }
+
+            /* Typography */
+            .tsd-col .t1 {
+                font-size: 1.5rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.02em;
+                margin-bottom: 0.6rem;
+                border-bottom: 2px solid #334155;
+                padding-bottom: 0.3rem;
+                display: inline-block;
+            }
+            .tsd-col .sub {
+                font-size: 1.2rem;
+                font-weight: 700;
+                margin-bottom: 0.3rem;
+                color: #334155;
+            }
+            .tsd-col .subsub {
+                font-size: 1.05rem;
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+                color: #475569;
+            }
+            .tsd-col .normal {
+                font-size: 0.95rem;
+                line-height: 1.7;
+                margin-bottom: 0.8rem;
+                color: #475569;
+            }
+            .tsd-col ol {
+                list-style: decimal;
+                padding-left: 1.5rem;
+                margin-bottom: 1rem;
+                font-size: 0.95rem;
+                line-height: 1.7;
+                color: #475569;
+            }
+            .tsd-col .rich-line {
+                font-size: 0.95rem;
+                line-height: 1.7;
+                margin-bottom: 1.5rem;
+                color: #475569;
+            }
+            .tsd-col .rich-line a {
+                text-decoration: underline;
+                color: #334155;
+            }
+            .tsd-col table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 0.95rem;
+                margin-bottom: 1.2rem;
+            }
+            .tsd-col table th {
+                font-weight: 700;
+                text-align: left;
+                padding: 0.5rem 0.8rem;
+                border-bottom: 2px solid #334155;
+                color: #334155;
+            }
+            .tsd-col table td {
+                padding: 0.45rem 0.8rem;
+                border-bottom: 1px solid #e2e8f0;
+                color: #475569;
+            }
+            .tsd-col table tr:last-child td {
+                border-bottom: none;
+            }
+
+            /* Download — icon-only with sky highlight */
+            .tsd-download {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.1rem;
+                text-decoration: none;
+                color: #334155;
+                margin-top: 0.3rem;
+                cursor: pointer;
+                padding: 0.4rem 0.5rem;
+                background-color: #bae6fd;
+                transition: background-color 200ms ease;
+            }
+            .tsd-download:hover {
+                background-color: #fef08a;
+            }
+            @media (min-width: 768px) {
+                .tsd-download { font-size: 1.3rem; margin-top: 0.5rem; padding: 0.5rem 0.6rem; }
+            }
+            .no-wrap {
+                white-space: nowrap;
+            }
+            /* Mobile: hide eye icons, exclusive tab style */
+            @media (max-width: 767px) {
+                .tsd-eye { display: none; }
+                .tsd-lang-tab.tsd-hidden-lang {
+                    opacity: 0.4;
+                }
+            }
+        </style>
+    </head>
+    <body class="font-sans antialiased">
+        <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'>
+            <a href="index.html#topic">&#8249; Back</a>
+        </aside>
+
+        <div class="tsd-page"
+             x-data="{
+                showEn: true,
+                showJa: true,
+                get mob() { return window.innerWidth < 768; },
+                toggleEn() {
+                    if (this.mob) { this.showEn = true; this.showJa = false; }
+                    else { this.showEn = !this.showEn; if (!this.showEn && !this.showJa) this.showJa = true; }
+                },
+                toggleJa() {
+                    if (this.mob) { this.showJa = true; this.showEn = false; }
+                    else { this.showJa = !this.showJa; if (!this.showEn && !this.showJa) this.showEn = true; }
+                },
+                init() { if (this.mob) { this.showJa = false; } }
+             }">
+
+            <!-- ===== #1 Section header (inline CSS reproduces .top header) ===== -->
+            <div class="tsd-header">Topic</div>
+
+            <!-- ===== #4 Title (wraps naturally, clamp sizing) ===== -->
+            <div class="flex-none px-4 md:px-8 lg:px-16 pt-6 pb-4">
+                <div class="max-w-6xl mx-auto">
+                    <div class='tsd-title'>
+                        How to grill sardines only using the power of the Force.
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== Scrollable body: #5 rail + columns ===== -->
+            <div class="tsd-body px-4 md:px-8 lg:px-16 pb-8">
+                <div class="max-w-6xl mx-auto tsd-content-area">
+
+                    <!-- Left rail — language tabs + download -->
+                    <div class="tsd-rail">
+                        <span class="tsd-lang-tab" :class="!showEn && 'tsd-hidden-lang'" @click="toggleEn()">
+                            <i class="tsd-eye fa-solid" :class="showEn ? 'fa-eye' : 'fa-eye-slash'"></i>
+                            English
+                        </span>
+                        <span class="tsd-lang-tab" :class="!showJa && 'tsd-hidden-lang'" @click="toggleJa()">
+                            <i class="tsd-eye fa-solid" :class="showJa ? 'fa-eye' : 'fa-eye-slash'"></i>
+                            日本語
+                        </span>
+                        <a href="#" class="tsd-download" title="Download">
+                            <i class="fa-solid fa-file-arrow-down fa-fw"></i>
+                        </a>
+                    </div>
+
+                    <div class="tsd-columns" :class="showEn && showJa ? 'tsd-dual' : ''">
+
+                        <!-- ── EN column ── -->
+                        <div class="tsd-col" x-show="showEn" x-transition.opacity.duration.200ms>
+                            <div class="t1">Title 1</div>
+
+                            <div class="sub">Subtitle</div>
+
+                            <div class="subsub">Subsubtitle</div>
+
+                            <div class="normal">Normal text</div>
+
+                            <ol>
+                                <li>First item in the numbered list</li>
+                                <li>Second item in the numbered list</li>
+                                <li>Third item in the numbered list</li>
+                                <li>Fourth item in the numbered list</li>
+                                <li>Fifth item in the numbered list</li>
+                            </ol>
+
+                            <ol>
+                                <li>Another first item</li>
+                                <li>Another second item</li>
+                                <li>Another third item</li>
+                                <li>Another fourth item</li>
+                                <li>Another fifth item</li>
+                            </ol>
+
+                            <div class="rich-line">
+                                <a href="#">Some link here</a>, some <strong>bold text</strong>, some <u>underlined</u> and some <em>italic</em> there.
+                            </div>
+
+                            <div class="sub">Vocabulary list</div>
+
+                            <table>
+                                <thead>
+                                    <tr><th>English</th><th>日本語</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Sardine</td><td>イワシ</td></tr>
+                                    <tr><td>Grill</td><td>焼く</td></tr>
+                                    <tr><td>Force</td><td>フォース</td></tr>
+                                    <tr><td>Levitation</td><td>浮遊</td></tr>
+                                    <tr><td>Seasoning</td><td>調味料</td></tr>
+                                    <tr><td>Crispy</td><td>カリカリ</td></tr>
+                                </tbody>
+                            </table>
+
+                            <div class="t1">Additional section</div>
+
+                            <div class="sub">More details below</div>
+
+                            <div class="normal">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                            </div>
+
+                            <div class="normal">
+                                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+                            </div>
+
+                            <div class="subsub">Technical notes</div>
+
+                            <ol>
+                                <li>Preheat the Force to approximately 350 degrees</li>
+                                <li>Lay the sardines in a single layer on the levitation grid</li>
+                                <li>Apply a steady telekinetic rotation every 3 minutes</li>
+                                <li>Season with salt using precision Force-grip</li>
+                                <li>Serve immediately once the scales achieve golden crispiness</li>
+                            </ol>
+
+                            <div class="normal">
+                                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.
+                            </div>
+
+                            <div class="sub">Safety warnings</div>
+
+                            <div class="normal">
+                                At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
+                            </div>
+
+                            <div class="normal">
+                                Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.
+                            </div>
+                        </div>
+
+                        <!-- Vertical divider (visible in dual mode on md+) -->
+                        <div class="tsd-divider" x-show="showEn && showJa"></div>
+
+                        <!-- ── JA column ── -->
+                        <div class="tsd-col" x-show="showJa" x-transition.opacity.duration.200ms>
+                            <div class="t1">タイトル 1</div>
+
+                            <div class="sub">サブタイトル</div>
+
+                            <div class="subsub">サブサブタイトル</div>
+
+                            <div class="normal">通常のテキスト</div>
+
+                            <ol>
+                                <li>番号付きリストの最初の項目</li>
+                                <li>番号付きリストの2番目の項目</li>
+                                <li>番号付きリストの3番目の項目</li>
+                                <li>番号付きリストの4番目の項目</li>
+                                <li>番号付きリストの5番目の項目</li>
+                            </ol>
+
+                            <ol>
+                                <li>もう一つの最初の項目</li>
+                                <li>もう一つの2番目の項目</li>
+                                <li>もう一つの3番目の項目</li>
+                                <li>もう一つの4番目の項目</li>
+                                <li>もう一つの5番目の項目</li>
+                            </ol>
+
+                            <div class="rich-line">
+                                <a href="#">リンクはこちら</a>、<strong>太字テキスト</strong>、<u>下線付き</u>、そして<em>イタリック</em>もあります。
+                            </div>
+
+                            <div class="sub">語彙リスト</div>
+
+                            <table>
+                                <thead>
+                                    <tr><th>English</th><th>日本語</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Sardine</td><td>イワシ</td></tr>
+                                    <tr><td>Grill</td><td>焼く</td></tr>
+                                    <tr><td>Force</td><td>フォース</td></tr>
+                                    <tr><td>Levitation</td><td>浮遊</td></tr>
+                                    <tr><td>Seasoning</td><td>調味料</td></tr>
+                                    <tr><td>Crispy</td><td>カリカリ</td></tr>
+                                </tbody>
+                            </table>
+
+                            <div class="t1">追加セクション</div>
+
+                            <div class="sub">詳細情報</div>
+
+                            <div class="normal">
+                                フォースの力だけでイワシを焼く方法は、古くからジェダイの間で伝えられてきた秘伝の技術です。この技術を習得するには、まずフォースとの深い繋がりを築く必要があります。瞑想を通じて内なる力を呼び覚まし、それを熱エネルギーに変換する訓練を行います。
+                            </div>
+
+                            <div class="normal">
+                                重要なのは、フォースの温度制御です。高すぎると焦げてしまい、低すぎると生焼けになります。理想的な温度は約175度で、これをフォースの集中力だけで維持するのは高度な技術を要します。多くのパダワンがこの段階で挫折しますが、忍耐強く練習を続けることが成功の鍵です。
+                            </div>
+
+                            <div class="subsub">技術的な注意事項</div>
+
+                            <ol>
+                                <li>フォースを約175度に予熱する</li>
+                                <li>浮遊グリッドにイワシを一列に並べる</li>
+                                <li>3分ごとにテレキネシスで回転させる</li>
+                                <li>フォースグリップで精密に塩を振る</li>
+                                <li>鱗が黄金色のカリカリになったらすぐに提供する</li>
+                            </ol>
+
+                            <div class="normal">
+                                この技術は特にヨーダマスターが得意としていたと言われています。彼の小さな手でも、フォースを使えば大量のイワシを一度に焼くことができました。現代のジェダイも同様の技術を使い、銀河中でこの料理法を広めています。
+                            </div>
+
+                            <div class="sub">安全上の警告</div>
+
+                            <div class="normal">
+                                フォースによる調理中は、ダークサイドに引き寄せられないよう注意してください。怒りや恐れの感情がフォースの温度を不安定にし、イワシだけでなく周囲の環境にも悪影響を及ぼす可能性があります。常に心の平静を保ち、フォースとの調和を維持することが重要です。
+                            </div>
+
+                            <div class="normal">
+                                また、フォースの使用は周囲の人々への影響も考慮する必要があります。テレキネシスの制御が不十分な場合、イワシが飛び散る事故が報告されています。十分な訓練を積んでから実践することを強くお勧めします。
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </body>
+</html>

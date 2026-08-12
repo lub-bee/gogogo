@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="STATIC-PLACEHOLDER">
+
+        <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+        <link rel="manifest" href="images/favicon/site.webmanifest">
+
+        <title>GoGoGo — Profile Draft</title>
+
+        <link href="assets/fonts/figtree.css" rel="stylesheet" />
+        <link rel="stylesheet" href="assets/app.css">
+        <script defer src="assets/app.js"></script>
+        <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" />
+
+        <style>
+            /* Visibility toggle — type-driven, no background, input-height text */
+            .vis-toggle {
+                cursor: pointer;
+                user-select: none;
+                text-transform: uppercase;
+                font-weight: 700;
+                font-size: 2.2rem;
+                line-height: 1;
+                padding: 0;
+                background: none;
+                transition: letter-spacing 350ms ease, color 300ms ease;
+            }
+            .vis-toggle.private {
+                letter-spacing: 0.02em;
+                color: rgb(239 68 68); /* red-500 */
+            }
+            .vis-toggle.public {
+                letter-spacing: 0.08em;
+                color: rgb(34 197 94); /* green-500 */
+            }
+
+            /* Media tile placeholders — no border */
+            .profile-media-tile {
+                position: relative;
+                overflow: hidden;
+                border-radius: 2px;
+                cursor: pointer;
+                transition: transform 300ms ease;
+            }
+            .profile-media-tile:hover {
+                transform: scale(1.03);
+            }
+            .profile-media-tile .tile-icon {
+                position: absolute;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0.12;
+                font-size: 2rem;
+                color: white;
+                pointer-events: none;
+            }
+            .profile-media-tile::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background: rgb(255 255 255);
+                transform: scaleX(0) skewX(-20deg);
+                transform-origin: left;
+                transition: transform 350ms ease;
+            }
+            .profile-media-tile:hover::after {
+                transform: scaleX(1) skewX(-20deg);
+            }
+            /* Refused tile — greyed out, same size, not clickable, no hover */
+            .profile-media-tile.refused {
+                filter: grayscale(1);
+                opacity: 0.35;
+                cursor: default;
+                pointer-events: none;
+            }
+
+            /* Status word on media tiles — giant bold type, slightly clipped at bottom */
+            .media-status-word {
+                position: absolute;
+                bottom: -0.1em;
+                left: 0.3rem;
+                font-size: 1.5rem;
+                text-transform: uppercase;
+                font-weight: 900;
+                letter-spacing: -0.06em;
+                line-height: 1;
+                pointer-events: none;
+            }
+
+            /* Profile media lightbox */
+            .profile-lightbox-overlay {
+                position: fixed;
+                inset: 0;
+                background: rgb(71 85 105);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 60;
+                cursor: pointer;
+            }
+            .profile-lightbox-photo {
+                border-radius: 2px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 4rem;
+                opacity: 0.2;
+                transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1), opacity 300ms ease;
+            }
+            .profile-lightbox-close {
+                position: absolute;
+                top: 1.5rem;
+                right: 1.5rem;
+                color: white;
+                font-size: 1.8rem;
+                cursor: pointer;
+                z-index: 70;
+                opacity: 0.5;
+                transition: opacity 200ms, transform 200ms;
+                font-weight: bold;
+            }
+            .profile-lightbox-close:hover {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        </style>
+    </head>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-gray-100">
+
+            <!-- Profile side menu -->
+            <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'>
+                <a href="#top">&#x276E; Back</a>
+                <a href="#profile-top">Profile</a>
+                <a href="#profile-media">My Media</a>
+                <a href="#profile-info">My Info</a>
+                <a href="#profile-pwd">My Pwd</a>
+                <a href="#profile-account">My Account</a>
+            </aside>
+
+            <script>
+                window.onload = function(){
+                    const sections = document.querySelectorAll(".top-section");
+                    const menu = document.querySelector(".menu");
+                    const options = { root: null, rootMargin: "0px", threshold: 0.5 };
+                    const callback = (entries) => {
+                        entries.forEach((entry) => {
+                            if (entry.isIntersecting) {
+                                document.querySelectorAll('.menu a').forEach((link) => link.classList.remove("active"));
+                                const target = document.querySelector('a[href="#' + entry.target.id + '"]');
+                                if (target) target.classList.add("active");
+                                switch (entry.target.id) {
+                                    case "profile-top":
+                                    case "profile-info":
+                                    case "profile-pwd":
+                                        menu.classList.add("reversed");
+                                        break;
+                                    case "profile-media":
+                                    case "profile-account":
+                                    default:
+                                        menu.classList.remove("reversed");
+                                        break;
+                                }
+                            }
+                        });
+                    };
+                    const intersectionObserver = new IntersectionObserver(callback, options);
+                    sections.forEach((section) => { intersectionObserver.observe(section); });
+                }
+            </script>
+
+            <main class="top relativerelative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
+
+                <!-- ========================================================= -->
+                <!-- SECTION 1: PROFILE OVERVIEW                               -->
+                <!-- ========================================================= -->
+                <section id="profile-top" class="top-section bg-slate-700 text-white flex flex-col">
+                    <header class='bg-white text-slate-700'>
+                        Profile
+                    </header>
+
+                    <div class="flex-1 flex flex-col justify-center max-w-6xl mx-auto w-full px-4 md:px-8">
+
+                        <!-- Two-column split with bold vertical divider -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 divide-y-4 lg:divide-y-0 lg:divide-x-4 divide-slate-500 gap-0">
+
+                            <!-- PUBLIC half -->
+                            <div class="py-8 lg:py-0 lg:pr-12 flex flex-col justify-center gap-6 md:gap-8">
+                                <div class="text-xs uppercase tracking-[0.2em] text-slate-400 font-bold">
+                                    Public <span class="text-slate-500 ml-2">公開</span>
+                                </div>
+
+                                <!-- Pseudo -->
+                                <div>
+                                    <div class="text-xs uppercase tracking-[0.15em] text-slate-400 font-bold">Pseudo</div>
+                                    <div class="text-[3rem] md:text-[5rem] lg:text-[6rem] leading-[3rem] md:leading-[4.5rem] lg:leading-[5.5rem] font-bold uppercase -tracking-[0.12em]">
+                                        Ludo
+                                    </div>
+                                </div>
+
+                                <!-- Registered since -->
+                                <div>
+                                    <div class="text-xs uppercase tracking-[0.15em] text-slate-400 font-bold">Registered since</div>
+                                    <div class="text-[2rem] md:text-[3rem] leading-[2rem] md:leading-[3rem] font-bold -tracking-[0.08em]">
+                                        2024-08-01
+                                    </div>
+                                </div>
+
+                                <!-- Stats row -->
+                                <div class="flex gap-8 md:gap-12">
+                                    <div>
+                                        <div class="text-xs uppercase tracking-[0.15em] text-slate-400 font-bold">Media published</div>
+                                        <div class="text-[3rem] md:text-[5rem] leading-[3rem] md:leading-[4.5rem] font-bold -tracking-[0.08em]">
+                                            12
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs uppercase tracking-[0.15em] text-slate-400 font-bold">Participations</div>
+                                        <div class="text-[3rem] md:text-[5rem] leading-[3rem] md:leading-[4.5rem] font-bold -tracking-[0.08em]">
+                                            8
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PRIVATE half -->
+                            <div class="py-8 lg:py-0 lg:pl-12 flex flex-col justify-center gap-6 md:gap-8">
+                                <div class="text-xs uppercase tracking-[0.2em] text-slate-400 font-bold">
+                                    Private <span class="text-slate-500 ml-2">非公開</span>
+                                </div>
+
+                                <!-- Email -->
+                                <div>
+                                    <div class="text-xs uppercase tracking-[0.15em] text-slate-400 font-bold">Email</div>
+                                    <div class="text-xl md:text-2xl font-light break-all">
+                                        ludovic.blervaque@lubbee.net
+                                    </div>
+                                </div>
+
+                                <!-- Action links -->
+                                <div class="flex flex-col gap-3 mt-2">
+                                    <a href="#profile-media" class="btn btn-success text-[1.5rem] md:text-[2rem] -tracking-[0.06em]">
+                                        <i class="fa-solid fa-images fa-fw text-base mr-2"></i>Media
+                                    </a>
+                                    <a href="#profile-info" class="btn btn-main text-[1.5rem] md:text-[2rem] -tracking-[0.06em]">
+                                        <i class="fa-solid fa-pen fa-fw text-base mr-2"></i>Edit info
+                                    </a>
+                                    <a href="#profile-pwd" class="btn btn-main text-[1.5rem] md:text-[2rem] -tracking-[0.06em]">
+                                        <i class="fa-solid fa-lock fa-fw text-base mr-2"></i>Edit pwd
+                                    </a>
+                                    <a href="#profile-account" class="btn btn-danger text-[1.5rem] md:text-[2rem] -tracking-[0.06em]">
+                                        <i class="fa-solid fa-triangle-exclamation fa-fw text-base mr-2"></i>Deletion
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ========================================================= -->
+                <!-- SECTION 2: MY MEDIA                                       -->
+                <!-- ========================================================= -->
+                <section id="profile-media" class="top-section bg-white flex flex-col"
+                    x-data="{
+                        lightbox: false,
+                        lightboxBg: '',
+                        entered: false,
+                        open(bg) {
+                            this.lightbox = true;
+                            this.lightboxBg = bg;
+                            this.entered = false;
+                            this.$nextTick(() => { this.entered = true; });
+                        },
+                        close() {
+                            this.entered = false;
+                            setTimeout(() => { this.lightbox = false; this.lightboxBg = ''; }, 300);
+                        }
+                    }">
+                    <header class='bg-slate-700 text-white'>
+                        My Media
+                    </header>
+
+                    <div class="flex-1 flex flex-col justify-center max-w-6xl mx-auto w-full px-4 md:px-8 py-8">
+
+                        <!-- Media grid -->
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
+
+                            <!-- Accepted tile 1 -->
+                            <div class="profile-media-tile aspect-[4/3] bg-slate-500"
+                                 @click="open('rgb(100 116 139)')">
+                                <div class="tile-icon"><i class="fa-solid fa-image"></i></div>
+                                <div class="media-status-word text-green-500">Accepted</div>
+                            </div>
+
+                            <!-- Accepted tile 2 -->
+                            <div class="profile-media-tile aspect-[4/3] bg-gradient-to-br from-slate-400 to-slate-600"
+                                 @click="open('linear-gradient(135deg, rgb(148 163 184), rgb(71 85 105))')">
+                                <div class="tile-icon"><i class="fa-solid fa-camera"></i></div>
+                                <div class="media-status-word text-green-500">Accepted</div>
+                            </div>
+
+                            <!-- Accepted tile 3 -->
+                            <div class="profile-media-tile aspect-[4/3] bg-slate-600"
+                                 @click="open('rgb(71 85 105)')">
+                                <div class="tile-icon"><i class="fa-solid fa-image"></i></div>
+                                <div class="media-status-word text-green-500">Accepted</div>
+                            </div>
+
+                            <!-- Pending tile 1 -->
+                            <div class="profile-media-tile aspect-[4/3] bg-slate-300"
+                                 @click="open('rgb(203 213 225)')">
+                                <div class="tile-icon"><i class="fa-solid fa-image"></i></div>
+                                <div class="media-status-word text-orange-500">Pending</div>
+                            </div>
+
+                            <!-- Accepted tile 4 -->
+                            <div class="profile-media-tile aspect-[4/3] bg-gradient-to-tr from-slate-500 to-slate-400"
+                                 @click="open('linear-gradient(to right, rgb(100 116 139), rgb(148 163 184))')">
+                                <div class="tile-icon"><i class="fa-solid fa-camera"></i></div>
+                                <div class="media-status-word text-green-500">Accepted</div>
+                            </div>
+
+                            <!-- Pending tile 2 -->
+                            <div class="profile-media-tile aspect-[4/3] bg-slate-200"
+                                 @click="open('rgb(226 232 240)')">
+                                <div class="tile-icon" style="color: rgb(71 85 105);"><i class="fa-solid fa-image"></i></div>
+                                <div class="media-status-word text-orange-500">Pending</div>
+                            </div>
+
+                            <!-- Refused tile 1 — same size, greyed out, not clickable -->
+                            <div class="profile-media-tile refused aspect-[4/3] bg-slate-500">
+                                <div class="tile-icon"><i class="fa-solid fa-image"></i></div>
+                                <div class="media-status-word text-white">Refused</div>
+                            </div>
+
+                            <!-- Refused tile 2 — same size, greyed out, not clickable -->
+                            <div class="profile-media-tile refused aspect-[4/3] bg-gradient-to-b from-slate-400 to-slate-600">
+                                <div class="tile-icon"><i class="fa-solid fa-image"></i></div>
+                                <div class="media-status-word text-white">Refused</div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Lightbox -->
+                    <div class="profile-lightbox-overlay"
+                         x-show="lightbox"
+                         x-transition:enter="transition ease-out duration-300"
+                         x-transition:enter-start="opacity-0"
+                         x-transition:enter-end="opacity-100"
+                         x-transition:leave="transition ease-in duration-300"
+                         x-transition:leave-start="opacity-100"
+                         x-transition:leave-end="opacity-0"
+                         @click.self="close()"
+                         style="display: none;">
+                        <div class="profile-lightbox-close" @click="close()">
+                            <i class="fa-solid fa-xmark"></i>
+                        </div>
+                        <div class="profile-lightbox-photo"
+                             :style="'width: 70vw; height: 60vh; background: ' + lightboxBg + '; transform: scale(' + (entered ? '1' : '0.7') + '); opacity: ' + (entered ? '0.2' : '0')"
+                             @click.stop>
+                            <i class="fa-solid fa-image"></i>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ========================================================= -->
+                <!-- SECTION 3: MY INFO (EDIT)                                 -->
+                <!-- ========================================================= -->
+                <section id="profile-info" class="top-section bg-slate-700 text-white flex flex-col"
+                    x-data="{
+                        fields: {
+                            name:  { value: 'Ludo',     vis: 'private' },
+                            line:  { value: 'ludo_line', vis: 'private' },
+                            email: { value: 'ludovic.blervaque@lubbee.net', vis: 'private' }
+                        },
+                        toggle(field) {
+                            this.fields[field].vis = this.fields[field].vis === 'private' ? 'public' : 'private';
+                        }
+                    }">
+                    <header class='bg-white text-slate-700'>
+                        My Info
+                    </header>
+
+                    <div class="flex-1 flex flex-col justify-center max-w-2xl mx-auto w-full px-4 md:px-8 py-8">
+
+                        <!-- Intro warning -->
+                        <div class="text-lg md:text-xl uppercase font-bold -tracking-[0.04em] mb-2">
+                            You are about to modify your profile information.
+                        </div>
+                        <div class="text-sm uppercase text-white mb-8 -tracking-[0.02em]">
+                            プロフィール情報を変更しようとしています。
+                        </div>
+
+                        <!-- Form fields — on lg+: two-column grid (input left, toggle right aligned) -->
+                        <form class="flex flex-col gap-6">
+
+                            <!-- Public name -->
+                            <div class="lg:grid lg:grid-cols-[1fr_auto] lg:gap-6 lg:items-end">
+                                <div>
+                                    <div class="flex items-center justify-between mb-1 lg:justify-start">
+                                        <label class="text-xs uppercase tracking-[0.15em] text-slate-400 font-bold">
+                                            Public name <span class="text-slate-500">表示名</span>
+                                        </label>
+                                        <div class="vis-toggle lg:hidden"
+                                             :class="fields.name.vis === 'private' ? 'private' : 'public'"
+                                             @click="toggle('name')"
+                                             x-text="fields.name.vis">
+                                        </div>
+                                    </div>
+                                    <input type="text" value="Ludo" class="form-input w-full" />
+                                </div>
+                                <div class="vis-toggle hidden lg:block lg:text-base lg:min-w-[7rem] lg:text-center lg:mb-1"
+                                     :class="fields.name.vis === 'private' ? 'private' : 'public'"
+                                     @click="toggle('name')"
+                                     x-text="fields.name.vis">
+                                </div>
+                            </div>
+
+                            <!-- LINE pseudo -->
+                            <div class="lg:grid lg:grid-cols-[1fr_auto] lg:gap-6 lg:items-end">
+                                <div>
+                                    <div class="flex items-center justify-between mb-1 lg:justify-start">
+                                        <label class="text-xs uppercase tracking-[0.15em] text-slate-400 font-bold">
+                                            LINE pseudo <span class="text-slate-500">LINE名</span>
+                                        </label>
+                                        <div class="vis-toggle lg:hidden"
+                                             :class="fields.line.vis === 'private' ? 'private' : 'public'"
+                                             @click="toggle('line')"
+                                             x-text="fields.line.vis">
+                                        </div>
+                                    </div>
+                                    <input type="text" value="ludo_line" class="form-input w-full" />
+                                </div>
+                                <div class="vis-toggle hidden lg:block lg:text-base lg:min-w-[7rem] lg:text-center lg:mb-1"
+                                     :class="fields.line.vis === 'private' ? 'private' : 'public'"
+                                     @click="toggle('line')"
+                                     x-text="fields.line.vis">
+                                </div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="lg:grid lg:grid-cols-[1fr_auto] lg:gap-6 lg:items-end">
+                                <div>
+                                    <div class="flex items-center justify-between mb-1 lg:justify-start">
+                                        <label class="text-xs uppercase tracking-[0.15em] text-slate-400 font-bold">
+                                            Email <span class="text-slate-500">メール</span>
+                                        </label>
+                                        <div class="vis-toggle lg:hidden"
+                                             :class="fields.email.vis === 'private' ? 'private' : 'public'"
+                                             @click="toggle('email')"
+                                             x-text="fields.email.vis">
+                                        </div>
+                                    </div>
+                                    <input type="email" value="ludovic.blervaque@lubbee.net" class="form-input w-full" />
+                                </div>
+                                <div class="vis-toggle hidden lg:block lg:text-base lg:min-w-[7rem] lg:text-center lg:mb-1"
+                                     :class="fields.email.vis === 'private' ? 'private' : 'public'"
+                                     @click="toggle('email')"
+                                     x-text="fields.email.vis">
+                                </div>
+                            </div>
+
+                            <!-- Visibility hint -->
+                            <div class="flex items-start gap-2 text-xs uppercase tracking-[0.1em] text-slate-500 mt-2">
+                                <i class="fa-solid fa-eye-slash fa-fw mt-0.5"></i>
+                                <div>
+                                    <div>All fields are <span class="text-slate-300 font-bold">private by default</span>. Toggle to make visible to other members.</div>
+                                    <div class="mt-0.5">全ての項目はデフォルトで非公開です。他のメンバーに公開するにはトグルを切り替えてください。</div>
+                                </div>
+                            </div>
+
+                            <!-- Save -->
+                            <div class="mt-4">
+                                <button type="button" class="btn btn-main text-xl">Save</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </section>
+
+                <!-- ========================================================= -->
+                <!-- SECTION 4: MY PASSWORD                                    -->
+                <!-- ========================================================= -->
+                <section id="profile-pwd" class="top-section bg-slate-700 text-white flex flex-col"
+                    x-data="{
+                        newPwd: '',
+                        get hasLength() { return this.newPwd.length >= 8; },
+                        get hasUpper() { return /[A-Z]/.test(this.newPwd); },
+                        get hasLower() { return /[a-z]/.test(this.newPwd); },
+                        get hasNumber() { return /[0-9]/.test(this.newPwd); }
+                    }">
+                    <header class='bg-white text-slate-700'>
+                        My Password
+                    </header>
+
+                    <div class="flex-1 flex flex-col justify-center max-w-2xl mx-auto w-full px-4 md:px-8 py-8">
+
+                        <!-- Intro -->
+                        <div class="text-lg md:text-xl uppercase font-bold -tracking-[0.04em] mb-2">
+                            You are about to modify your password.
+                        </div>
+                        <div class="text-sm uppercase text-white mb-8 -tracking-[0.02em]">
+                            パスワードを変更しようとしています。
+                        </div>
+
+                        <form class="flex flex-col gap-6">
+
+                            <!-- Current password -->
+                            <div>
+                                <label class="text-xs uppercase tracking-[0.15em] text-slate-400 font-bold mb-1 block">
+                                    Current Password
+                                </label>
+                                <input type="password" class="form-input w-full" placeholder="current password" />
+                            </div>
+
+                            <!-- New password -->
+                            <div>
+                                <label class="text-xs uppercase tracking-[0.15em] text-slate-400 font-bold mb-1 block">
+                                    New Password
+                                </label>
+                                <input type="password" class="form-input w-full" placeholder="new password" x-model="newPwd" />
+                            </div>
+
+                            <!-- Confirm password -->
+                            <div>
+                                <label class="text-xs uppercase tracking-[0.15em] text-slate-400 font-bold mb-1 block">
+                                    Confirm Password
+                                </label>
+                                <input type="password" class="form-input w-full" placeholder="confirm password" />
+                            </div>
+
+                            <!-- Live password conditions checklist -->
+                            <div class="flex flex-col gap-1 mt-2">
+                                <div class="text-xs uppercase tracking-[0.15em] text-slate-400 font-bold mb-2">
+                                    Password requirements
+                                </div>
+                                <div class="text-sm uppercase font-bold -tracking-[0.02em] transition-all duration-300"
+                                     :class="hasLength ? 'text-green-500' : 'text-slate-500'">
+                                    <i class="fa-solid fa-fw" :class="hasLength ? 'fa-check' : 'fa-circle text-[0.4rem] align-middle'"></i>
+                                    At least 8 characters
+                                </div>
+                                <div class="text-sm uppercase font-bold -tracking-[0.02em] transition-all duration-300"
+                                     :class="hasUpper ? 'text-green-500' : 'text-slate-500'">
+                                    <i class="fa-solid fa-fw" :class="hasUpper ? 'fa-check' : 'fa-circle text-[0.4rem] align-middle'"></i>
+                                    At least 1 uppercase letter
+                                </div>
+                                <div class="text-sm uppercase font-bold -tracking-[0.02em] transition-all duration-300"
+                                     :class="hasLower ? 'text-green-500' : 'text-slate-500'">
+                                    <i class="fa-solid fa-fw" :class="hasLower ? 'fa-check' : 'fa-circle text-[0.4rem] align-middle'"></i>
+                                    At least 1 lowercase letter
+                                </div>
+                                <div class="text-sm uppercase font-bold -tracking-[0.02em] transition-all duration-300"
+                                     :class="hasNumber ? 'text-green-500' : 'text-slate-500'">
+                                    <i class="fa-solid fa-fw" :class="hasNumber ? 'fa-check' : 'fa-circle text-[0.4rem] align-middle'"></i>
+                                    At least 1 number
+                                </div>
+                            </div>
+
+                            <!-- Save -->
+                            <div class="mt-4">
+                                <button type="button" class="btn btn-main text-xl">Save</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </section>
+
+                <!-- ========================================================= -->
+                <!-- SECTION 5: MY ACCOUNT (DANGER ZONE)                       -->
+                <!-- ========================================================= -->
+                <section id="profile-account" class="top-section bg-red-500 text-white flex flex-col">
+                    <header class='bg-white text-red-500'>
+                        My Account
+                    </header>
+
+                    <div class="flex-1 flex flex-col justify-center max-w-3xl mx-auto w-full px-4 md:px-8 py-8">
+                        <div class="text-xl md:text-2xl uppercase font-bold -tracking-[0.04em] mb-1" style="color: rgba(255,255,255,0.7);">
+                            Ouhhh, you are sure about that?
+                        </div>
+                        <div class="text-xl md:text-2xl uppercase font-bold -tracking-[0.04em] mb-6" style="color: rgba(255,255,255,0.7);">
+                            Once deleted, there is no way back, so be careful.
+                        </div>
+                        <div>
+                            <a href="#" class="btn text-[1.5rem] md:text-[2rem] font-bold uppercase -tracking-[0.06em] text-slate-900 hover:text-white transition-all">
+                                Delete account
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </body>
+</html>

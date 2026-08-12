@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- static snapshot: csrf token placeholder -->
+        <meta name="csrf-token" content="STATIC-PLACEHOLDER">
+
+        <!-- favicon -->
+        <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+        <link rel="manifest" href="images/favicon/site.webmanifest">
+
+        <title>Laravel</title>
+
+        <!-- Fonts (self-hosted, was fonts.bunny.net) -->
+        <link href="assets/fonts/figtree.css" rel="stylesheet" />
+
+        <!-- Compiled Tailwind CSS (was @vite resources/css/app.css) -->
+        <link rel="stylesheet" href="assets/app.css">
+        <!-- Bundled Alpine.js + slot animation (was @vite resources/js/app.js) -->
+        <script defer src="assets/app.js"></script>
+
+        <!-- FontAwesome (self-hosted, was cdnjs 6.5.1) -->
+        <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" />
+
+        <!-- ── Fix: classes missing from precompiled Tailwind ── -->
+        <style>
+            .no-wrap {
+                white-space: nowrap;
+            }
+            .group:hover .see-white {
+                color: #fff;
+            }
+            @media (max-width: 767px) {
+                .gallery-strip {
+                    scroll-snap-type: x mandatory;
+                }
+                .photo-tile {
+                    scroll-snap-align: center;
+                }
+            }
+        </style>
+
+        <style>
+            /* Media gallery — photo placeholder tiles */
+            .photo-tile {
+                position: relative;
+                overflow: hidden;
+                cursor: pointer;
+                flex-shrink: 0;
+                border-radius: 2px;
+                border: 2px solid transparent;
+                transition: transform 300ms ease, border-color 250ms ease;
+            }
+            .photo-tile:hover {
+                border-color: rgb(255 255 255);
+                transform: scale(1.04);
+            }
+            .photo-tile .tile-icon {
+                position: absolute;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0.12;
+                font-size: 2.5rem;
+                color: white;
+                pointer-events: none;
+                transition: opacity 300ms ease;
+            }
+            .photo-tile:hover .tile-icon {
+                opacity: 0.2;
+            }
+            .photo-tile::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: rgb(255 255 255);
+                transform: scaleX(0) skewX(-20deg);
+                transform-origin: left;
+                transition: transform 350ms ease;
+            }
+            .photo-tile:hover::after {
+                transform: scaleX(1) skewX(-20deg);
+            }
+            .gallery-strip {
+                display: flex;
+                gap: 0.75rem;
+                overflow-x: auto;
+                overflow-y: hidden;
+                align-items: center;
+                padding: 0.5rem 10px;
+                scrollbar-width: thin;
+                scrollbar-color: rgb(100 116 139) transparent;
+            }
+            .gallery-strip::-webkit-scrollbar { height: 6px; }
+            .gallery-strip::-webkit-scrollbar-track { background: transparent; }
+            .gallery-strip::-webkit-scrollbar-thumb { background: rgb(100 116 139); border-radius: 3px; }
+            .media-title-text { transition: letter-spacing 400ms ease, opacity 350ms ease; }
+            .media-date-text { transition: letter-spacing 350ms ease, opacity 350ms ease; }
+            .media-lightbox-overlay {
+                position: absolute;
+                inset: 0;
+                background: rgb(51 65 85);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 30;
+                cursor: pointer;
+            }
+            .media-lightbox-inner {
+                position: relative;
+                max-width: 85vw;
+                max-height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .media-lightbox-photo {
+                border-radius: 2px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 4rem;
+                opacity: 0.2;
+                transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1), opacity 300ms ease;
+            }
+            .media-lightbox-close {
+                position: absolute;
+                top: 1rem;
+                right: 1.5rem;
+                color: white;
+                font-size: 4.5rem;
+                cursor: pointer;
+                z-index: 40;
+                opacity: 0.5;
+                transition: opacity 200ms, transform 200ms;
+                font-weight: bold;
+                line-height: 1;
+            }
+            .media-lightbox-close:hover {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        </style>
+    </head>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-gray-100">
+
+            <aside class='menu hidden lg:flex flex-col items-end fixed bottom-4 right-0 p-4 text-right z-50 group/menu text-[1rem]'>
+                <a href="index.html#media">&#8249; Back</a>
+            </aside>
+
+            <!-- Page Content -->
+            <main class="top relativerelative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
+
+                <!-- ===== section: media ===== -->
+                <section id="media" class="top-section bg-slate-700 flex flex-col"
+                    x-data="{
+                        activeTitle: '',
+                        activeDate: '',
+                        displayTitle: '',
+                        displayDate: '',
+                        titleVisible: false,
+                        exitTimer: null,
+                        expanded: false,
+                        expandTitle: '',
+                        expandDate: '',
+                        expandBg: '',
+                        photoEntered: false,
+                        showTitle(title, date) {
+                            clearTimeout(this.exitTimer);
+                            this.activeTitle = title;
+                            this.activeDate = date;
+                            this.displayTitle = title;
+                            this.displayDate = date;
+                            this.titleVisible = true;
+                        },
+                        hideTitle() {
+                            this.activeTitle = '';
+                            this.activeDate = '';
+                            this.exitTimer = setTimeout(() => {
+                                if (!this.activeTitle && !this.expandTitle) {
+                                    this.titleVisible = false;
+                                    setTimeout(() => {
+                                        if (!this.activeTitle && !this.expandTitle) {
+                                            this.displayTitle = '';
+                                            this.displayDate = '';
+                                        }
+                                    }, 400);
+                                }
+                            }, 80);
+                        },
+                        get currentTitle() {
+                            return this.expandTitle || this.displayTitle || ' ';
+                        },
+                        get currentDate() {
+                            return this.expandDate || this.displayDate || ' ';
+                        },
+                        get isVisible() {
+                            return this.titleVisible || !!this.expandTitle;
+                        },
+                        openPhoto(title, date, bg) {
+                            this.expanded = true;
+                            this.expandTitle = title;
+                            this.expandDate = date;
+                            this.expandBg = bg;
+                            this.displayTitle = title;
+                            this.displayDate = date;
+                            this.titleVisible = true;
+                            this.photoEntered = false;
+                            this.$nextTick(() => { this.photoEntered = true; });
+                        },
+                        closePhoto() {
+                            this.photoEntered = false;
+                            setTimeout(() => {
+                                this.expanded = false;
+                                this.expandTitle = '';
+                                this.expandDate = '';
+                                this.expandBg = '';
+                                if (!this.activeTitle) {
+                                    this.titleVisible = false;
+                                    setTimeout(() => {
+                                        if (!this.activeTitle) {
+                                            this.displayTitle = '';
+                                            this.displayDate = '';
+                                        }
+                                    }, 400);
+                                }
+                            }, 300);
+                        }
+                    }">
+                    <header class='bg-white text-slate-700'>
+                        Media
+                    </header>
+
+                    <nav class="flex-none flex justify-end text-[3.5rem] md:text-[7rem] leading-[2.3rem] md:leading-[4.5rem] uppercase cursor-pointer text-[#111725]">
+                        <a href="media.html" class='w-full md:w-[45%] md:block relative group pr-4 md:pr-0 text-center bg-[#b7d7fc] md:bg-transparent'>
+                            <div class='hidden md:block absolute top-0 left-0 h-full w-full bg-[#b7d7fc] group-hover:bg-yellow-100 group-hover:scale-x-[10%] transform group-hover:rotate-[30deg] transition-all'></div>
+                            <div class='relative z-10 px-8 group-hover:scale-x-105 transition-all no-wrap see-white'>
+                                See all
+                            </div>
+                        </a>
+                    </nav>
+
+                    <!-- Title + date zone: invisible by default, animates in/out on hover -->
+                    <div class="flex-none px-4 md:px-8 lg:px-16 pt-6 pb-2 overflow-hidden" style="min-height: 5.5rem;">
+                        <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-baseline md:justify-between gap-1">
+                            <div class="media-title-text font-bold text-[2rem] sm:text-[3rem] lg:text-[4.5rem] leading-[1.8rem] sm:leading-[2.8rem] lg:leading-[4rem] uppercase text-white"
+                                 :style="'letter-spacing: ' + (isVisible ? '-0.04em' : '-0.12em') + '; opacity: ' + (isVisible ? '1' : '0')"
+                                 x-text="currentTitle">
+                            </div>
+                            <div class="media-date-text text-slate-400 text-lg sm:text-xl lg:text-2xl font-bold uppercase text-right"
+                                 :style="'letter-spacing: ' + (isVisible ? '0.15em' : '0.05em') + '; opacity: ' + (isVisible ? '1' : '0')"
+                                 x-text="currentDate">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gallery strip: horizontally scrolling, vertically centered -->
+                    <div class="flex-1 flex flex-col justify-center px-4 md:px-8 lg:px-16 relative overflow-hidden">
+                        <div class="max-w-7xl mx-auto w-full">
+                            <div class="gallery-strip">
+
+                                <div class="photo-tile"
+                                     style="width: 280px; height: 200px; background: rgb(100 116 139);"
+                                     @mouseenter="showTitle('Gogogo at The Mall', '22 SEP 2024')"
+                                     @mouseleave="hideTitle()"
+                                     @click="openPhoto('Gogogo at The Mall', '22 SEP 2024', 'rgb(100 116 139)')">
+                                    <div class="tile-icon"><i class="fa-solid fa-image"></i></div>
+                                </div>
+
+                                <div class="photo-tile"
+                                     style="width: 160px; height: 240px; background: linear-gradient(135deg, rgb(51 65 85), rgb(30 41 59));"
+                                     @mouseenter="showTitle('Badminton night!', '25 SEP 2024')"
+                                     @mouseleave="hideTitle()"
+                                     @click="openPhoto('Badminton night!', '25 SEP 2024', 'linear-gradient(135deg, rgb(51 65 85), rgb(30 41 59))')">
+                                    <div class="tile-icon"><i class="fa-solid fa-camera"></i></div>
+                                </div>
+
+                                <div class="photo-tile"
+                                     style="width: 320px; height: 180px; background: rgb(71 85 105);"
+                                     @mouseenter="showTitle('Gogogo at The Mall', '22 SEP 2024')"
+                                     @mouseleave="hideTitle()"
+                                     @click="openPhoto('Gogogo at The Mall', '22 SEP 2024', 'rgb(71 85 105)')">
+                                    <div class="tile-icon"><i class="fa-solid fa-image"></i></div>
+                                </div>
+
+                                <div class="photo-tile"
+                                     style="width: 170px; height: 260px; background: linear-gradient(to bottom, rgb(71 85 105), rgb(51 65 85));"
+                                     @mouseenter="showTitle('Trip to Matsushima', '07 OCT 2024')"
+                                     @mouseleave="hideTitle()"
+                                     @click="openPhoto('Trip to Matsushima', '07 OCT 2024', 'linear-gradient(to bottom, rgb(71 85 105), rgb(51 65 85))')">
+                                    <div class="tile-icon"><i class="fa-solid fa-camera"></i></div>
+                                </div>
+
+                                <div class="photo-tile"
+                                     style="width: 260px; height: 190px; background: rgb(30 41 59);"
+                                     @mouseenter="showTitle('Oktoberfest at Nichikichou', '29 SEP 2024')"
+                                     @mouseleave="hideTitle()"
+                                     @click="openPhoto('Oktoberfest at Nichikichou', '29 SEP 2024', 'rgb(30 41 59)')">
+                                    <div class="tile-icon"><i class="fa-solid fa-image"></i></div>
+                                </div>
+
+                                <div class="photo-tile"
+                                     style="width: 210px; height: 210px; background: rgb(51 65 85);"
+                                     @mouseenter="showTitle('Badminton night!', '25 SEP 2024')"
+                                     @mouseleave="hideTitle()"
+                                     @click="openPhoto('Badminton night!', '25 SEP 2024', 'rgb(51 65 85)')">
+                                    <div class="tile-icon"><i class="fa-solid fa-image"></i></div>
+                                </div>
+
+                                <div class="photo-tile"
+                                     style="width: 300px; height: 200px; background: linear-gradient(to right, rgb(100 116 139), rgb(71 85 105));"
+                                     @mouseenter="showTitle('Trip to Matsushima', '07 OCT 2024')"
+                                     @mouseleave="hideTitle()"
+                                     @click="openPhoto('Trip to Matsushima', '07 OCT 2024', 'linear-gradient(to right, rgb(100 116 139), rgb(71 85 105))')">
+                                    <div class="tile-icon"><i class="fa-solid fa-image"></i></div>
+                                </div>
+
+                                <div class="photo-tile"
+                                     style="width: 150px; height: 230px; background: rgb(100 116 139 / 0.8);"
+                                     @mouseenter="showTitle('Gogogo at The Mall', '22 SEP 2024')"
+                                     @mouseleave="hideTitle()"
+                                     @click="openPhoto('Gogogo at The Mall', '22 SEP 2024', 'rgb(100 116 139 / 0.8)')">
+                                    <div class="tile-icon"><i class="fa-solid fa-camera"></i></div>
+                                </div>
+
+                                <div class="photo-tile"
+                                     style="width: 270px; height: 180px; background: linear-gradient(135deg, rgb(30 41 59), rgb(71 85 105));"
+                                     @mouseenter="showTitle('Oktoberfest at Nichikichou', '29 SEP 2024')"
+                                     @mouseleave="hideTitle()"
+                                     @click="openPhoto('Oktoberfest at Nichikichou', '29 SEP 2024', 'linear-gradient(135deg, rgb(30 41 59), rgb(71 85 105))')">
+                                    <div class="tile-icon"><i class="fa-solid fa-image"></i></div>
+                                </div>
+
+                                <div class="photo-tile"
+                                     style="width: 140px; height: 250px; background: rgb(71 85 105);"
+                                     @mouseenter="showTitle('Badminton night!', '25 SEP 2024')"
+                                     @mouseleave="hideTitle()"
+                                     @click="openPhoto('Badminton night!', '25 SEP 2024', 'rgb(71 85 105)')">
+                                    <div class="tile-icon"><i class="fa-solid fa-camera"></i></div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Lightbox -->
+                        <div class="media-lightbox-overlay"
+                             x-show="expanded"
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0"
+                             x-transition:enter-end="opacity-100"
+                             x-transition:leave="transition ease-in duration-300"
+                             x-transition:leave-start="opacity-100"
+                             x-transition:leave-end="opacity-0"
+                             @click.self="closePhoto()"
+                             style="display: none;">
+                            <div class="media-lightbox-inner">
+                                <div class="media-lightbox-close" @click="closePhoto()">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </div>
+                                <div class="media-lightbox-photo"
+                                     :style="'width: 70vw; height: 60vh; background: ' + expandBg + '; transform: scale(' + (photoEntered ? '1' : '0.7') + '); opacity: ' + (photoEntered ? '0.2' : '0')"
+                                     @click.stop>
+                                    <i class="fa-solid fa-image"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </body>
+</html>
