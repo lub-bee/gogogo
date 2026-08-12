@@ -10,12 +10,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'rank'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    // Rank constants
+    public const RANK_ADMIN = 'admin';
+    public const RANK_SUPPORT = 'support';
+    public const RANK_MEMBER = 'member';
+
+    public const RANKS = [
+        self::RANK_ADMIN,
+        self::RANK_SUPPORT,
+        self::RANK_MEMBER,
+    ];
 
     /**
      * Get the attributes that should be cast.
@@ -28,5 +39,29 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Check if the user has the admin rank.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->rank === self::RANK_ADMIN;
+    }
+
+    /**
+     * Check if the user has the support rank.
+     */
+    public function isSupport(): bool
+    {
+        return $this->rank === self::RANK_SUPPORT;
+    }
+
+    /**
+     * Check if the user has any of the given ranks.
+     */
+    public function hasRank(string ...$ranks): bool
+    {
+        return in_array($this->rank, $ranks, true);
     }
 }
