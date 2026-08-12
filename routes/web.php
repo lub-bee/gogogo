@@ -6,6 +6,8 @@ use App\Http\Controllers\Front\LocationController;
 use App\Http\Controllers\Front\MediaController;
 use App\Http\Controllers\Front\TopController;
 use App\Http\Controllers\Front\TopicController;
+use App\Http\Controllers\Management\MediaModerationController;
+use App\Http\Controllers\MediaUploadController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +36,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Media upload (any authenticated user)
+    Route::post('/media/upload', [MediaUploadController::class, 'store'])->name('media.upload');
+});
+
+// --- Management area (admin / support) ---
+Route::prefix('management')->middleware(['auth', 'rank:admin,support'])->group(function () {
+    Route::get('/media', [MediaModerationController::class, 'index'])->name('management.media');
+    Route::post('/media/{media}/approve', [MediaModerationController::class, 'approve'])->name('management.media.approve');
+    Route::post('/media/{media}/refuse', [MediaModerationController::class, 'refuse'])->name('management.media.refuse');
+    Route::post('/media/bulk', [MediaModerationController::class, 'bulk'])->name('management.media.bulk');
 });
 
 require __DIR__.'/auth.php';
