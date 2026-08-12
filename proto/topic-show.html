@@ -98,11 +98,11 @@
                 font-size: 1.2rem;
                 font-weight: 700;
                 text-transform: uppercase;
-                letter-spacing: 0.04em;
+                letter-spacing: 0.01em;
                 cursor: pointer;
                 padding: 0.3rem 0.8rem;
                 z-index: 1;
-                transition: color 0.25s ease, letter-spacing 0.3s ease;
+                transition: color 0.25s ease;
                 user-select: none;
                 display: flex;
                 align-items: center;
@@ -273,28 +273,35 @@
                 border-bottom: none;
             }
 
-            /* Download link in the rail */
+            /* Download — icon-only with sky highlight */
             .tsd-download {
-                display: flex;
+                display: inline-flex;
                 align-items: center;
-                gap: 0.4rem;
-                font-size: 0.85rem;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: 0.04em;
+                justify-content: center;
+                font-size: 1.1rem;
                 text-decoration: none;
-                color: inherit;
+                color: #334155;
                 margin-top: 0.3rem;
                 cursor: pointer;
+                padding: 0.4rem 0.5rem;
+                background-color: #bae6fd;
+                transition: background-color 200ms ease;
+            }
+            .tsd-download:hover {
+                background-color: #fef08a;
             }
             @media (min-width: 768px) {
-                .tsd-download { font-size: 1rem; margin-top: 0.5rem; }
-            }
-            .tsd-download-label {
-                transition: background-color 200ms ease;
+                .tsd-download { font-size: 1.3rem; margin-top: 0.5rem; padding: 0.5rem 0.6rem; }
             }
             .no-wrap {
                 white-space: nowrap;
+            }
+            /* Mobile: hide eye icons, exclusive tab style */
+            @media (max-width: 767px) {
+                .tsd-eye { display: none; }
+                .tsd-lang-tab.tsd-hidden-lang {
+                    opacity: 0.4;
+                }
             }
         </style>
     </head>
@@ -307,8 +314,16 @@
              x-data="{
                 showEn: true,
                 showJa: true,
-                toggleEn() { this.showEn = !this.showEn; if (!this.showEn && !this.showJa) this.showJa = true; },
-                toggleJa() { this.showJa = !this.showJa; if (!this.showEn && !this.showJa) this.showEn = true; }
+                get mob() { return window.innerWidth < 768; },
+                toggleEn() {
+                    if (this.mob) { this.showEn = true; this.showJa = false; }
+                    else { this.showEn = !this.showEn; if (!this.showEn && !this.showJa) this.showJa = true; }
+                },
+                toggleJa() {
+                    if (this.mob) { this.showJa = true; this.showEn = false; }
+                    else { this.showJa = !this.showJa; if (!this.showEn && !this.showJa) this.showEn = true; }
+                },
+                init() { if (this.mob) { this.showJa = false; } }
              }">
 
             <!-- ===== #1 Section header (inline CSS reproduces .top header) ===== -->
@@ -337,9 +352,8 @@
                             <i class="tsd-eye fa-solid" :class="showJa ? 'fa-eye' : 'fa-eye-slash'"></i>
                             日本語
                         </span>
-                        <a href="#" class="tsd-download">
+                        <a href="#" class="tsd-download" title="Download">
                             <i class="fa-solid fa-file-arrow-down fa-fw"></i>
-                            <span class="tsd-download-label bg-sky-200 hover:bg-yellow-200 transition-all" style="line-height:1.4;padding:0 0.2rem">Download</span>
                         </a>
                     </div>
 

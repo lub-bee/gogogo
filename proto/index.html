@@ -121,6 +121,13 @@
                 #topic {
                     overflow: hidden !important;
                 }
+                /* Media gallery: snap tiles to center on mobile */
+                .gallery-strip {
+                    scroll-snap-type: x mandatory;
+                }
+                .photo-tile {
+                    scroll-snap-align: center;
+                }
             }
         </style>
 

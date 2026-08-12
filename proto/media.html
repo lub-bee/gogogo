@@ -33,6 +33,14 @@
             .group:hover .see-white {
                 color: #fff;
             }
+            @media (max-width: 767px) {
+                .gallery-strip {
+                    scroll-snap-type: x mandatory;
+                }
+                .photo-tile {
+                    scroll-snap-align: center;
+                }
+            }
         </style>
 
         <style>
