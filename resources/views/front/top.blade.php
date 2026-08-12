@@ -43,16 +43,45 @@
                         </div>
                     </form>
                     @else
-                    <div class="h-full flex flex-col gap-4 p-4 justify-center sm:max-w-sm lg:max-w-full mx-auto bg-slate-200 lg:bg-transparent">
-                        <div class="text-2xl font-bold text-slate-700 uppercase">Hello, {{ auth()->user()->name }}!</div>
-                        <div class="flex flex-col gap-2">
-                            <a href="{{ route('dashboard') }}" class="btn btn-main">Dashboard</a>
-                            <a href="{{ route('profile.edit') }}" class="btn btn-main">Profile</a>
+                    <div class="h-full flex flex-col gap-2 p-4 justify-center sm:max-w-sm lg:max-w-full mx-auto bg-slate-200 lg:bg-transparent" x-data="{ mode: 'default' }">
+
+                        {{-- Greeting — random EN/JA casual hello with user name --}}
+                        <div class="text-2xl text-slate-700 mb-2">{{ $greeting }}</div>
+
+                        {{-- Menu links --}}
+                        <div class="flex flex-col gap-1" x-show="mode === 'default'">
+                            @if(auth()->user()->hasRank('admin', 'support'))
+                            <a href="{{ route('dashboard') }}" class="top-menu-link long group relative">
+                                <span class="relative group-hover:text-orange-500 transition-all">Dashboard</span>
+                            </a>
+                            @endif
+                            <div @click="mode = 'line'" class="top-menu-link line group relative cursor-pointer">
+                                <span class="relative transition-all">Line</span>
+                            </div>
+                            <a href="{{ route('profile.edit') }}" class="top-menu-link group relative">
+                                <span class="relative group-hover:text-slate-500 transition-all">Profile</span>
+                            </a>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" class="btn btn-danger">Log out</button>
+                                <button type="submit" class="top-menu-link group relative text-left">
+                                    <span class="relative group-hover:text-red-500 transition-all">Logout</span>
+                                </button>
                             </form>
                         </div>
+
+                        {{-- LINE panel --}}
+                        <div x-show="mode === 'line'" class="flex flex-col gap-4">
+                            <div @click="mode = 'default'" class="text-sm uppercase tracking-widest text-slate-500 cursor-pointer hover:text-slate-700 transition-all">
+                                <i class="fa-solid fa-arrow-left fa-fw"></i> Back
+                            </div>
+                            <div class="bg-slate-700 text-white p-8 text-center uppercase font-bold text-lg tracking-wide">
+                                line invitation
+                            </div>
+                            <div class="bg-slate-700 text-white p-8 text-center uppercase font-bold text-lg tracking-wide">
+                                line invitation
+                            </div>
+                        </div>
+
                     </div>
                     @endguest
                 </div>

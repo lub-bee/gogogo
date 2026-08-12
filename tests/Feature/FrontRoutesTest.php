@@ -47,9 +47,28 @@ class FrontRoutesTest extends TestCase
     public function test_top_page_shows_greeting_for_authenticated_user(): void
     {
         $user = User::factory()->member()->create();
+        $response = $this->actingAs($user)->get('/');
+        $response->assertOk();
+        // Greeting contains the user's name (randomized bilingual prefix)
+        $response->assertSee($user->name);
+        // Shows the giant menu links
+        $response->assertSee('top-menu-link', false);
+    }
+
+    public function test_top_page_dashboard_link_visible_to_admin(): void
+    {
+        $user = User::factory()->admin()->create();
         $this->actingAs($user)->get('/')
             ->assertOk()
-            ->assertSee('Hello, ' . $user->name);
+            ->assertSee('Dashboard');
+    }
+
+    public function test_top_page_dashboard_link_hidden_from_member(): void
+    {
+        $user = User::factory()->member()->create();
+        $this->actingAs($user)->get('/')
+            ->assertOk()
+            ->assertDontSee('Dashboard');
     }
 
     public function test_top_agenda_limits_to_9_events(): void

@@ -8,6 +8,7 @@ use App\Models\Location;
 use App\Models\Media;
 use App\Models\Topic;
 use App\Enums\MediaStatus;
+use App\Services\GreetingService;
 use Illuminate\Http\Request;
 
 class TopController extends Controller
@@ -108,6 +109,12 @@ class TopController extends Controller
             ])
             ->all();
 
+        // Greeting for authenticated user
+        $greeting = null;
+        if ($user = $request->user()) {
+            $greeting = GreetingService::random($user->name);
+        }
+
         return view('front.top', [
             'event' => $event,
             'prevEventUrl' => $prevEventUrl,
@@ -116,6 +123,7 @@ class TopController extends Controller
             'topics' => $topics,
             'photos' => $photos,
             'locations' => $locations,
+            'greeting' => $greeting,
         ]);
     }
 }

@@ -111,6 +111,31 @@
         @apply list-disc pl-4;
     }
 
+    /* ── Top page: logged-in menu links ── */
+    .top-menu-link {
+        @apply -ml-10 block cursor-pointer text-6xl lg:text-[6rem] font-bold uppercase leading-none text-gray-400 lg:text-slate-700 transition-all;
+        letter-spacing: -0.5rem;
+    }
+    .top-menu-link:hover,
+    .top-menu-link.active {
+        @apply -ml-28;
+        letter-spacing: -0.025em;
+    }
+    .top-menu-link.long:hover {
+        @apply -ml-40;
+    }
+    .top-menu-link.active {
+        @apply invisible lg:visible;
+    }
+    .top-menu-link.discord:hover,
+    .top-menu-link.discord.active {
+        @apply text-blue-500;
+    }
+    .top-menu-link.line:hover,
+    .top-menu-link.line.active {
+        @apply text-green-500;
+    }
+
     /* ── Slot-machine logo ── */
     .slot .letters div {
         @apply py-2;
